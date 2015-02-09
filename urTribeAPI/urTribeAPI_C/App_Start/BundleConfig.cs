@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace urTribeAPI_C
+namespace urTribeAPI
 {
     public class BundleConfig
     {

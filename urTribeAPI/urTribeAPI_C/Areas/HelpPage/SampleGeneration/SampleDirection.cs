@@ -1,4 +1,4 @@
-namespace urTribeAPI_C.Areas.HelpPage
+namespace urTribeAPI.Areas.HelpPage
 {
     /// <summary>
     /// Indicates whether the sample is used for request or response

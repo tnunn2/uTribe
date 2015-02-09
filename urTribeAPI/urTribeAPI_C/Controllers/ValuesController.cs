@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-namespace urTribeAPI_C.Controllers
+namespace urTribeAPI.Controllers
 {
     public class ValuesController : ApiController
     {

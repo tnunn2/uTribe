@@ -3,7 +3,7 @@ using System.Text;
 using System.Web;
 using System.Web.Http.Description;
 
-namespace urTribeAPI_C.Areas.HelpPage
+namespace urTribeAPI.Areas.HelpPage
 {
     public static class ApiDescriptionExtensions
     {

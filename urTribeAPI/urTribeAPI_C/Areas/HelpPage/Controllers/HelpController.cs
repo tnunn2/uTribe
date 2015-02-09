@@ -1,9 +1,9 @@
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using urTribeAPI_C.Areas.HelpPage.Models;
+using urTribeAPI.Areas.HelpPage.Models;
 
-namespace urTribeAPI_C.Areas.HelpPage.Controllers
+namespace urTribeAPI.Areas.HelpPage.Controllers
 {
     /// <summary>
     /// The controller that will handle requests for the help page.

@@ -7,9 +7,9 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Description;
-using urTribeAPI_C.Areas.HelpPage.Models;
+using urTribeAPI.Areas.HelpPage.Models;
 
-namespace urTribeAPI_C.Areas.HelpPage
+namespace urTribeAPI.Areas.HelpPage
 {
     public static class HelpPageConfigurationExtensions
     {

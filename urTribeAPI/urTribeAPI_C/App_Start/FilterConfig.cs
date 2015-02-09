@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace urTribeAPI_C
+namespace urTribeAPI
 {
     public class FilterConfig
     {

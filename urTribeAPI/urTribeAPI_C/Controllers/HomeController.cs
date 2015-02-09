@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace urTribeAPI_C.Controllers
+namespace urTribeAPI.Controllers
 {
     public class HomeController : Controller
     {
