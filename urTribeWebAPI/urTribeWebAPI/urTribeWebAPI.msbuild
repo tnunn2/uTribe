@@ -1,10 +1,12 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <BuildArtifactsDir Include="BuildArtifacts\" />
-    <SolutionFile Include="C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.sln" />
-    <NUnitConsole Include="C:\Program Files (x86)\NUnit 2.6.4\bin\nunit-console" />
-    <UnitTestsDLL Include="C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI\BuildArtifacts\urTribeWebAPI.Test.dll" />
-    <TestResultsPath Include="BuildArtifacts\TestResults.xml" />
+  
+    <SolutionFile Include="..\urTribeWebAPI.sln" />
+    <NUnitConsole Include="C:\Users\Thomas\Downloads\NUnit-3.0.0-alpha-5b\bin\nunit-console.exe" />
+    <UnitTestsDLL Include="BuildArtifacts\urTribeWebAPI.Test.dll" />
+    
+    <TestResultsPath Include="BuildArtifacts\testitt.xml" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -13,7 +15,7 @@
   </PropertyGroup>
 
   <Target Name="RunUnitTests" DependsOnTargets="Compile">
-    <Exec Command='"@(NUnitConsole)" @(UnitTestsDLL) /xml=@(TestResultsPath)' />
+    <Exec Command='"@(NUnitConsole)" "@(UnitTestsDLL)"' />
   </Target>
 
   <Target Name="Compile" DependsOnTargets="Init">
