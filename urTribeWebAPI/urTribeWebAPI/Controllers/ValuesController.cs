@@ -18,7 +18,7 @@ namespace urTribeWebAPI.Controllers
         // GET api/values/5
         public string Get(int id)
         {
-            return "valueTest1";
+            return "valueTest10";
         }
 
         // POST api/values
