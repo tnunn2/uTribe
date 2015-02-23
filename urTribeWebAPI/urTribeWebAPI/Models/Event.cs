@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Authentication.ExtendedProtection;
-using System.Web;
 
 namespace urTribeWebAPI.Models
 {
@@ -22,5 +19,4 @@ namespace urTribeWebAPI.Models
             throw new NotImplementedException();
         }
     }
-}
 }
