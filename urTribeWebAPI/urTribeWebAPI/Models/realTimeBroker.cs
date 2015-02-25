@@ -12,7 +12,7 @@ namespace urTribeWebAPI.Models
         private readonly static string appKey = "kSVcgZ";
         private readonly static string pKey = "bMsGyhCfuR0I";
 
-        public void CreateChannel(int eventID, User eventCreator, List<User> invitees)
+        public void CreateChannel(Guid eventID, User eventCreator, List<User> invitees)
         {
 
             
