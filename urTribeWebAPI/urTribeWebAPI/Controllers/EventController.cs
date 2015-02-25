@@ -25,10 +25,11 @@ namespace urTribeWebAPI.Controllers
 
             //TODO: get invitees from request body or subsequent put requests
 
-            int eventID = _repo.newEvent(creator, invitees);
+            Guid eventID = _repo.newEvent(creator, invitees);
             _broker.CreateChannel(eventID, creator, invitees);
 
             //TODO: return eventID to client in HTTP response
+            return "";
         }
 
         [HttpPut]

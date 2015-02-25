@@ -8,15 +8,9 @@ namespace urTribeWebAPI.Models
         //None of this is right I know
         public int Id { get; set; }
         public List<User> Participants { get; set; }
-        private int Channel { get; set; }
+        public int Channel { get; set; }
 
     }
 
-    public class User
-    {
-        public User(string name)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    
 }

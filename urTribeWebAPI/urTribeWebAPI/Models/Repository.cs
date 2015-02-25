@@ -7,13 +7,24 @@ namespace urTribeWebAPI.Models
 {
     public class Repository
     {
+        private Dictionary<Guid, User> users;
+        private Dictionary<Guid, Event> events;
+
+        public Repository()
+        {
+            users = new Dictionary<Guid, User>();
+            events = new Dictionary<Guid, Event>();
+        }
+
         public User findUserByID(Guid id)
         {
-            throw new NotImplementedException();
+            User result = null;
+            if (users.TryGetValue(id, out result)) return result;
+            else throw new ArgumentException();
         }
 
         //returns event ID
-        public int newEvent(User creator, List<User> invitees)
+        public Guid newEvent(User creator, List<User> invitees)
         {
             throw new NotImplementedException();
         }

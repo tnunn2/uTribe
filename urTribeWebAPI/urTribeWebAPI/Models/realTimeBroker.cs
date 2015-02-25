@@ -28,14 +28,15 @@ namespace urTribeWebAPI.Models
             return "fake-authenticated!";
         }
 
-        private string createMessageTable(int EventID)
+        private string createMessageTable(Guid EventID)
         {
-            
+
+            return "";
         }
 
         private string getTablesForUser(User creator)
         {
-            
+            return "";
         }
     }
 }
