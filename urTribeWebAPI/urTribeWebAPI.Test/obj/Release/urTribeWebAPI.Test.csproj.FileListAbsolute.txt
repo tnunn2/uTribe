@@ -1,5 +1,8 @@
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI\BuildArtifacts\urTribeWebAPI.Test.dll
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI\BuildArtifacts\urTribeWebAPI.Test.pdb
+C:\Users\Thomas\test\BuildArtifacts\urTribeWebAPI.Test.dll.config
+C:\Users\Thomas\test\BuildArtifacts\urTribeWebAPI.Test.dll
+C:\Users\Thomas\test\BuildArtifacts\urTribeWebAPI.Test.pdb
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\obj\Release\urTribeWebAPI.Test.csprojResolveAssemblyReference.cache
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\obj\Release\urTribeWebAPI.Test.dll
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\obj\Release\urTribeWebAPI.Test.pdb

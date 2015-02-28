@@ -20,7 +20,6 @@ C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWindo
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWindowService\bin\Debug\WebGrease.dll
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWindowService\bin\Debug\System.Web.WebPages.Deployment.dll
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWindowService\bin\Debug\Antlr3.Runtime.dll
-C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWindowService\bin\Debug\urTribeWebAPI.pdb
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWindowService\bin\Debug\Microsoft.Owin.xml
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWindowService\bin\Debug\Microsoft.Owin.Host.HttpListener.xml
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWindowService\bin\Debug\Microsoft.Owin.Hosting.xml

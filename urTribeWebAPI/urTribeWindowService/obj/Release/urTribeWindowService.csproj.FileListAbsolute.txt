@@ -1,0 +1,6 @@
+C:\Users\Thomas\test\BuildArtifacts\urTribeWindowService.exe.config
+C:\Users\Thomas\test\BuildArtifacts\urTribeWindowService.exe
+C:\Users\Thomas\test\BuildArtifacts\urTribeWindowService.pdb
+C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWindowService\obj\Release\urTribeWindowService.csprojResolveAssemblyReference.cache
+C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWindowService\obj\Release\urTribeWindowService.exe
+C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWindowService\obj\Release\urTribeWindowService.pdb
