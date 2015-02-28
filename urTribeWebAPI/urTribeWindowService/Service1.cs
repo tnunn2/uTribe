@@ -23,6 +23,7 @@ namespace urTribeWindowService
         {
             Console.WriteLine("Starting service...");
             string uri = "http://localhost:9058";
+
             WebApp.Start<Startup>(uri);
         }
 
