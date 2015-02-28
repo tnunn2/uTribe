@@ -11,7 +11,10 @@ namespace urTribeWebAPI
     {
         public void Configuration(IAppBuilder app)
         {
-           
+            app.Run(ctx =>
+            {
+                return ctx.Response.WriteAsync("Hello World");
+            });
             SetupWebAPI(app);
         }
 

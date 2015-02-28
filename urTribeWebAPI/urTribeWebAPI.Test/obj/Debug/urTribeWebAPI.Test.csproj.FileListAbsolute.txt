@@ -12,6 +12,7 @@ C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAP
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\bin\Debug\System.Web.Http.Tracing.dll
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\bin\Debug\System.Web.Http.WebHost.dll
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\bin\Debug\Microsoft.Owin.dll
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\bin\Debug\System.Web.Http.Owin.dll
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\bin\Debug\System.Web.Razor.dll
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\bin\Debug\System.Web.WebPages.Razor.dll
@@ -26,6 +27,7 @@ C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAP
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\bin\Debug\System.Web.Http.Tracing.xml
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\bin\Debug\System.Web.Http.WebHost.xml
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\bin\Debug\Microsoft.Owin.xml
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\bin\Debug\System.Web.Http.Owin.xml
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\bin\Debug\System.Web.Razor.xml
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI.Test\bin\Debug\System.Web.WebPages.Razor.xml
