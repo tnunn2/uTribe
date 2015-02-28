@@ -73,6 +73,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="DAL\FactoryTest.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -80,6 +81,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\urTribeWebAPI.Common\urTribeWebAPI.Common.csproj">
+      <Project>{d6e5d0b3-cd11-41bd-9e85-4e1c31401710}</Project>
+      <Name>urTribeWebAPI.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\urTribeWebAPI.DAL\urTribeWebAPI.DAL.csproj">
+      <Project>{5503f096-d876-480b-b05f-cfd91876786d}</Project>
+      <Name>urTribeWebAPI.DAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\urTribeWebAPI\urTribeWebAPI.csproj">
       <Project>{cc26760a-e958-4ac9-8fa4-1cec452e5db7}</Project>
       <Name>urTribeWebAPI</Name>
