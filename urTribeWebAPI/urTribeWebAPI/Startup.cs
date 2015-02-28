@@ -11,7 +11,11 @@ namespace urTribeWebAPI
     {
         public void Configuration(IAppBuilder app)
         {
-            SetupWebAPI(app);
+            var config = new HttpConfiguration();
+
+            config.Routes.MapHttpRoute("DefaultApi", "api/{controller}/{id}", new { id = RouteParameter.Optional });
+            app.UseWebApi(config);
+            //SetupWebAPI(app);
         }
 
         public void SetupWebAPI(IAppBuilder app)

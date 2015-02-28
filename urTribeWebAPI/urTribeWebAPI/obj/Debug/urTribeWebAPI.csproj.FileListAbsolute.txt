@@ -74,6 +74,6 @@ C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAP
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI\bin\ru\System.Spatial.resources.dll
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI\bin\zh-Hans\System.Spatial.resources.dll
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI\bin\zh-Hant\System.Spatial.resources.dll
+C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI\obj\Debug\urTribeWebAPI.csprojResolveAssemblyReference.cache
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI\obj\Debug\urTribeWebAPI.dll
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI\obj\Debug\urTribeWebAPI.pdb
-C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWebAPI\obj\Debug\urTribeWebAPI.csprojResolveAssemblyReference.cache
