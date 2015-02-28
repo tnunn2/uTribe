@@ -22,7 +22,7 @@ namespace urTribeWindowService
         protected override void OnStart(string[] args)
         {
             Console.WriteLine("Starting service...");
-            string uri = "http://localhost:8080";
+            string uri = "http://localhost:8081";
             WebApp.Start<Startup>(uri);
         }
 
