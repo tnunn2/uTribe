@@ -22,7 +22,7 @@ namespace urTribeWindowService
         protected override void OnStart(string[] args)
         {
             Console.WriteLine("Starting service...");
-            string uri = "http://localhost:9058";
+            string uri = "http://ec2-54-68-190-116.us-west-2.compute.amazonaws.com:9058";
 
             WebApp.Start<Startup>(uri);
         }
