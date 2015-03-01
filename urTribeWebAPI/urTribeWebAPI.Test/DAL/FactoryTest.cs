@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using urTribeWebAPI.Common;
 using urTribeWebAPI.DAL.Interfaces;
 using urTribeWebAPI.DAL.Factory;
-using urTribeWebAPI.DAL.Repositories;
+using urTribeWebAPI.Common.Concrete;
 using NUnit.Framework;
-using Moq;
 
 namespace urTribeWebAPI.Test.DAL
 {
@@ -21,6 +15,30 @@ namespace urTribeWebAPI.Test.DAL
             var factory = RepositoryFactory.Instance;
             IUserRepository userRepository = factory.Create<IUserRepository>();
             Assert.IsTrue(userRepository != null);
-        }           
+        }
+
+        [Test]
+        public void RepositoryAddUserNode()
+        {
+            var factory = RepositoryFactory.Instance;
+            IUserRepository userRepository = factory.Create<IUserRepository>();
+
+            User user = new User { ID = Guid.NewGuid()};
+            userRepository.Add(user);
+            Assert.IsTrue(userRepository != null);
+        }
+
+        [Test]
+        public void RepositoryMergeUserNode()
+        {
+            var factory = RepositoryFactory.Instance;
+            IUserRepository userRepository = factory.Create<IUserRepository>();
+
+            User user = new User { ID = new Guid("58770a88-ba50-4d1e-a6d8-d98a252427f1") };
+            userRepository.Add(user);
+            Assert.IsTrue(userRepository != null);
+
+        }
+
     }
 }
