@@ -7,6 +7,7 @@ using System.Web.Http;
 
 namespace urTribeWebAPI.Controllers
 {
+    [RoutePrefix("api/events")]
     public class EventsController : ApiController
     {
         // GET: api/Events
@@ -16,6 +17,8 @@ namespace urTribeWebAPI.Controllers
         }
 
         // GET: api/Events/5
+        [Route("Create/{id:int}")]
+        [HttpGet]
         public string GetCreate(int id)
         {
             return "value = " + id;
