@@ -62,13 +62,12 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="urTribeWebAPI.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\urTribeWebAPI.Common.dll</HintPath>
+    <Reference Include="urTribeWebAPI.Common">
+      <HintPath>..\urTribeWebAPI.Common\bin\Debug\urTribeWebAPI.Common.dll</HintPath>
     </Reference>
     <Reference Include="urTribeWebAPI.DAL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\urTribeWebAPI.DAL.dll</HintPath>
+      <HintPath>..\urTribeWebAPI.DAL\bin\Debug\urTribeWebAPI.DAL.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Choose>
@@ -99,9 +98,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="urTribeWebAPI.Common.dll" />
     <Content Include="urTribeWebAPI.DAL.dll" />
-    <Content Include="urTribeWebAPI.dll" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
