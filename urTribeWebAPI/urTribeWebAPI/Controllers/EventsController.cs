@@ -21,7 +21,7 @@ namespace urTribeWebAPI.Controllers
         [HttpGet]
         public string GetCreate(int id)
         {
-            return "value = " + id;
+            return "value test = " + id;
         }
 
         // POST: api/Events

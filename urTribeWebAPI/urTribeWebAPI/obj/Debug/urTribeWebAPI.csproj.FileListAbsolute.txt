@@ -152,6 +152,5 @@ D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWebAPI\bin\ko\System.Spatial.resou
 D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWebAPI\bin\ru\System.Spatial.resources.dll
 D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWebAPI\bin\zh-Hans\System.Spatial.resources.dll
 D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWebAPI\bin\zh-Hant\System.Spatial.resources.dll
-D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWebAPI\obj\Debug\urTribeWebAPI.csprojResolveAssemblyReference.cache
 D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWebAPI\obj\Debug\urTribeWebAPI.dll
 D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWebAPI\obj\Debug\urTribeWebAPI.pdb
