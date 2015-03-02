@@ -98,7 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="urTribeWebAPI.Common.dll" />
-    <Content Include="urTribeWebAPI.DAL.dll" />
+    <Content Include="urTribeWebAPI.dll" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
