@@ -12,3 +12,16 @@ C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWindo
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWindowService\obj\Debug\urTribeWindowService.csprojResolveAssemblyReference.cache
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWindowService\obj\Debug\urTribeWindowService.exe
 C:\Users\Thomas\Documents\Visual Studio 2013\Projects\urTribeWebAPI\urTribeWindowService\obj\Debug\urTribeWindowService.pdb
+D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWindowService\bin\Debug\urTribeWindowService.exe.config
+D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWindowService\bin\Debug\urTribeWindowService.exe
+D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWindowService\bin\Debug\urTribeWindowService.pdb
+D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWindowService\bin\Debug\Microsoft.Owin.dll
+D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWindowService\bin\Debug\Microsoft.Owin.Host.HttpListener.dll
+D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWindowService\bin\Debug\Microsoft.Owin.Hosting.dll
+D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWindowService\bin\Debug\Owin.dll
+D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWindowService\bin\Debug\Microsoft.Owin.xml
+D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWindowService\bin\Debug\Microsoft.Owin.Host.HttpListener.xml
+D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWindowService\bin\Debug\Microsoft.Owin.Hosting.xml
+D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWindowService\obj\Debug\urTribeWindowService.csprojResolveAssemblyReference.cache
+D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWindowService\obj\Debug\urTribeWindowService.exe
+D:\MyWork\utribe\urTribe\urTribeWebAPI\urTribeWindowService\obj\Debug\urTribeWindowService.pdb
