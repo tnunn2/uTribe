@@ -9,6 +9,7 @@ using urTribeWebAPI.Models;
 
 namespace urTribeWebAPI.Controllers
 {
+    [RoutePrefix("api/events")]
     public class EventController : ApiController
     {
         private readonly IMessageBroker _broker = new RealtimeBroker();
@@ -29,6 +30,13 @@ namespace urTribeWebAPI.Controllers
 
             //TODO: return eventID to client in HTTP response
             return "";
+        }
+
+        [Route("Create/{id:int}")]
+        [HttpGet]
+        public string GetCreate(int id)
+        {
+            return "value test = " + id;
         }
 
         [HttpPut]

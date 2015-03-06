@@ -1,12 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "urTribeWebAPI", "urTribeWebAPI\urTribeWebAPI.csproj", "{CC26760A-E958-4AC9-8FA4-1CEC452E5DB7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4B854902-D082-4787-9D8A-B9876EC42278}"
 	ProjectSection(SolutionItems) = preProject
+		urTribeWebAPI\urTriberServiceRegister.ps1 = urTribeWebAPI\urTriberServiceRegister.ps1
 		urTribeWebAPI\urTribeWebAPI.msbuild = urTribeWebAPI\urTribeWebAPI.msbuild
 	EndProjectSection
 EndProject
@@ -28,6 +29,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{63DABE
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "urTribeWindowService", "urTribeWindowService\urTribeWindowService.csproj", "{88EF48DC-FA8D-49CF-B19B-4F7A1F506C86}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CC26760A-E958-4AC9-8FA4-1CEC452E5DB7} = {CC26760A-E958-4AC9-8FA4-1CEC452E5DB7}
 	EndProjectSection
 EndProject
 Global
@@ -52,6 +58,10 @@ Global
 		{5503F096-D876-480B-B05F-CFD91876786D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5503F096-D876-480B-B05F-CFD91876786D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5503F096-D876-480B-B05F-CFD91876786D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88EF48DC-FA8D-49CF-B19B-4F7A1F506C86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88EF48DC-FA8D-49CF-B19B-4F7A1F506C86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88EF48DC-FA8D-49CF-B19B-4F7A1F506C86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88EF48DC-FA8D-49CF-B19B-4F7A1F506C86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
