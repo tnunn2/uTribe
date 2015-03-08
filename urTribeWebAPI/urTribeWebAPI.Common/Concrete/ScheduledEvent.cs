@@ -3,7 +3,7 @@ using urTribeWebAPI.Common.Interfaces;
 
 namespace urTribeWebAPI.Common.Concrete
 {
-    public class User : IUser
+    public class ScheduledEvent : IEvent
     {
         public Guid ID
         {

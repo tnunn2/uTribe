@@ -5,10 +5,9 @@ using urTribeWebAPI.Common.Interfaces;
 
 namespace urTribeWebAPI.DAL.Interfaces
 {
-    public interface IRepository <T> where T : IDBRepositoryObject
+    public interface IRepository <type> where type : IDBRepositoryObject
     {
-        void Add(T poco);
-        void Remove(T poco);
-        IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
+        void Remove(type poco);
+        IEnumerable<type> Find(Expression<Func<type, bool>> predicate);
     }
 }

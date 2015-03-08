@@ -65,10 +65,6 @@
     <Reference Include="urTribeWebAPI.Common">
       <HintPath>..\urTribeWebAPI.Common\bin\Debug\urTribeWebAPI.Common.dll</HintPath>
     </Reference>
-    <Reference Include="urTribeWebAPI.DAL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\urTribeWebAPI.DAL\bin\Debug\urTribeWebAPI.DAL.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -92,13 +88,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\urTribeWebAPI.DAL\urTribeWebAPI.DAL.csproj">
+      <Project>{5503f096-d876-480b-b05f-cfd91876786d}</Project>
+      <Name>urTribeWebAPI.DAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\urTribeWebAPI\urTribeWebAPI.csproj">
       <Project>{cc26760a-e958-4ac9-8fa4-1cec452e5db7}</Project>
       <Name>urTribeWebAPI</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="urTribeWebAPI.DAL.dll" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
