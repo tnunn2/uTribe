@@ -4,8 +4,12 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Web;
+using System.Web.Script.Serialization;
+// ReSharper disable SuggestVarOrType_SimpleTypes
+// ReSharper disable SuggestVarOrType_BuiltInTypes
 
 namespace urTribeWebAPI.Models
 {
@@ -26,12 +30,27 @@ namespace urTribeWebAPI.Models
             WebRequest myRequest = WebRequest.Create(CreateUrl);
             myRequest.Method = "POST";
             myRequest.ContentType = "application/json; charset=UTF-8";
-            string data = "{\"applicationKey\": \"" + AppKey + "\", ";
+            /* Spaces had to be removed
+             * string data = "{\"applicationKey\": \"" + AppKey + "\", ";
             data = data + "\"authenticationToken\": \"" + RTtoken + "\", ";
             data = data + "\"table\": \"" + tableName + "\", ";
             data = data + "\"key\": { \"primary\": { \"name\": \"id\", \"dataType\": \"string\"},";
             data = data + "\"secondary\": { \"name\": \"timestamp\", \"dataType\": \"string\"}},";
-            data = data + "\"provisionType\":1, \"provisionLoad\": 2}";
+            data = data + "\"provisionType\":1, \"provisionLoad\": 2}"; */
+            var serializer = new JavaScriptSerializer();
+            Key p = new Key() {name ="id", dataType = "string"};
+            Key s = new Key() {name = "timestamp", dataType = "string"};
+            TableSchema schema = new TableSchema() {primary = p, secondary = s};
+            CreateTableQuery q = new CreateTableQuery()
+            {
+                applicationKey = AppKey,
+                authenticationToken = RTtoken,
+                table = tableName,
+                key = schema,
+                provisionLoad = 1,
+                provisionType = 2
+            };
+            string data = serializer.Serialize(q);
 
             myRequest.ContentLength = data.Length;
             UTF8Encoding enc = new UTF8Encoding();
@@ -49,6 +68,14 @@ namespace urTribeWebAPI.Models
             authUser(tableName, userToken);
         }
 
+
+        /*TODO: 
+         * 1)get list of user's tables from repo & include those in what's to be auth.
+         * 2)write unit tests
+         * 3)exception handling
+         * 4)convert to JSSerializer
+         * 5)implement wait for resource busy "creating" state
+        */
         static void authUser(String tableName, String userToken)
         {
             bool busy = true;

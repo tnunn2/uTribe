@@ -62,6 +62,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="urTribeWebAPI.Common">
       <HintPath>..\urTribeWebAPI.Common\bin\Debug\urTribeWebAPI.Common.dll</HintPath>
     </Reference>
@@ -84,6 +85,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="DAL\FactoryTest.cs" />
+    <Compile Include="Messaging\RealTimeBrokerTests.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -100,6 +102,7 @@
   <ItemGroup>
     <Content Include="urTribeWebAPI.DAL.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
