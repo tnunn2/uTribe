@@ -7,31 +7,34 @@ using System.Web.Http;
 
 namespace urTribeWebAPI.Controllers
 {
-    public class ValuesController : ApiController
+    [RoutePrefix("api/events")]
+    public class EventsController : ApiController
     {
-        // GET api/values
+        // GET: api/Events
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value4" };
+            return new string[] { "value1", "value2" };
         }
 
-        // GET api/values/5
-        public string Get(int id)
+        // GET: api/Events/5
+        [Route("Create/{id:int}")]
+        [HttpGet]
+        public string GetCreate(int id)
         {
-            return "valueTest = " + id;
+            return "value test = " + id;
         }
 
-        // POST api/values
+        // POST: api/Events
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT api/values/5
+        // PUT: api/Events/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/values/5
+        // DELETE: api/Events/5
         public void Delete(int id)
         {
         }
