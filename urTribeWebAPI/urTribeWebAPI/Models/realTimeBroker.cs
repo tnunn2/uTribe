@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -22,35 +23,25 @@ namespace urTribeWebAPI.Models
         private const string authURL = "https://storage-backend-prd-useast1.realtime.co/authenticate";
         private const string TestRole = "testRole";
         private const long OneYearInMilliseconds = 31536000000;
+        private const int tablePLoad = 2;
+        private const int tablePType = 1;
 
-        public void CreateChannel(Guid eventID, User eventCreator, List<User> invitees)
-        {
-            
-            string tableName = "event" + eventID.ToString();
-            WebRequest myRequest = WebRequest.Create(CreateUrl);
-            myRequest.Method = "POST";
-            myRequest.ContentType = "application/json; charset=UTF-8";
-            /* Spaces had to be removed
+
+        /* Spaces had to be removed
              * string data = "{\"applicationKey\": \"" + AppKey + "\", ";
             data = data + "\"authenticationToken\": \"" + RTtoken + "\", ";
             data = data + "\"table\": \"" + tableName + "\", ";
             data = data + "\"key\": { \"primary\": { \"name\": \"id\", \"dataType\": \"string\"},";
             data = data + "\"secondary\": { \"name\": \"timestamp\", \"dataType\": \"string\"}},";
             data = data + "\"provisionType\":1, \"provisionLoad\": 2}"; */
-            var serializer = new JavaScriptSerializer();
-            Key p = new Key() {name ="id", dataType = "string"};
-            Key s = new Key() {name = "timestamp", dataType = "string"};
-            TableSchema schema = new TableSchema() {primary = p, secondary = s};
-            CreateTableQuery q = new CreateTableQuery()
-            {
-                applicationKey = AppKey,
-                authenticationToken = RTtoken,
-                table = tableName,
-                key = schema,
-                provisionLoad = 1,
-                provisionType = 2
-            };
-            string data = serializer.Serialize(q);
+        public void CreateChannel(Guid eventID, User eventCreator, List<User> invitees)
+        {
+            string tableName = "event" + eventID.ToString();
+            WebRequest myRequest = WebRequest.Create(CreateUrl);
+            myRequest.Method = "POST";
+            myRequest.ContentType = "application/json; charset=UTF-8";
+
+            string data = makeCreateString(tableName);
 
             myRequest.ContentLength = data.Length;
             UTF8Encoding enc = new UTF8Encoding();
@@ -65,9 +56,67 @@ namespace urTribeWebAPI.Models
             Console.WriteLine(content);
 
             string userToken = Guid.NewGuid().ToString();
-            authUser(tableName, userToken);
+            List<string> tables = new List<string>();
+            tables.Add(tableName);
+            authUser(tables, userToken);
         }
 
+        public string makeCreateString(string tname)
+        {
+            var serializer = new JavaScriptSerializer();
+            Key p = new Key() { name = "id", dataType = "string" };
+            Key s = new Key() { name = "timestamp", dataType = "string" };
+            TableSchema schema = new TableSchema() { primary = p, secondary = s };
+            CreateTableQuery q = new CreateTableQuery()
+            {
+                applicationKey = AppKey,
+                authenticationToken = RTtoken,
+                table = tname,
+                key = schema,
+                provisionLoad = tablePLoad,
+                provisionType = tablePType
+            };
+            return serializer.Serialize(q);
+        }
+
+        /*
+         * string data = "{\"applicationKey\": \"" + AppKey + "\", ";
+            data = data + "\"privateKey\": \"" + PKey + "\", ";
+            data = data + "\"authenticationToken\": \"" + userToken + "\", ";
+            data = data + "\"roles\": [\"" + TestRole + "\"],";
+            data = data + "\"timeout\": " + OneYearInMilliseconds + ", ";
+            data = data + "\"policies\": {\"database\": {\"listTables\": [], \"deleteTable\": [], \"createTable\": false, \"updateTable\": [] }, ";
+            data = data + "\"tables\": { \"";
+            data = data + tableName + "\": { \"allow\":\"RU\" }";
+            data = data + "}}}"; 
+         */
+        public string makeAuthString(List<string> tableNames, string userToken)
+        {
+            Policy p = new Policy() {
+                database = new DBPolicy() {
+                    listTables = new List<string>(),
+                    deleteTable = new List<string>(),
+                    createTable = false,
+                    updateTable = new List<string>()
+                },
+                tables = new Dictionary<string,TablePolicy>() 
+            };
+            foreach(string n in tableNames) {
+                p.tables.Add(n, new TablePolicy() { allow = "RU" });
+            }
+            List<string> r = new List<string>();
+            r.Add(TestRole);
+            AuthQuery q = new AuthQuery()
+            {
+                applicationKey = AppKey,
+                privateKey = PKey,
+                authenticationToken = userToken,
+                roles = r,
+                timeout = OneYearInMilliseconds,
+                policies = p
+            };
+            return JsonConvert.SerializeObject(q);
+        }
 
         /*TODO: 
          * 1)get list of user's tables from repo & include those in what's to be auth.
@@ -76,24 +125,14 @@ namespace urTribeWebAPI.Models
          * 4)convert to JSSerializer
          * 5)implement wait for resource busy "creating" state
         */
-        static void authUser(String tableName, String userToken)
+        public void authUser(List<string> tableNames, string userToken)
         {
-            bool busy = true;
-
-
+            //bool busy = true;
             WebRequest myRequest = WebRequest.Create(authURL);
             myRequest.Method = "POST";
             myRequest.ContentType = "application/json; charset=UTF-8";
-            string data = "{\"applicationKey\": \"" + AppKey + "\", ";
-            data = data + "\"privateKey\": \"" + PKey + "\", ";
-            data = data + "\"authenticationToken\": \"" + userToken + "\", ";
-            data = data + "\"roles\": [\"" + TestRole + "\"],";
-            data = data + "\"timeout\": " + OneYearInMilliseconds + ", ";
-            data = data + "\"policies\": {\"database\": {\"listTables\": [], \"deleteTable\": [], \"createTable\": false, \"updateTable\": [] }, ";
-            data = data + "\"tables\": { \"";
-            data = data + tableName + "\": { \"allow\":\"RU\" }";
-            data = data + "}}}";
 
+            string data = makeAuthString(tableNames, userToken);
             UTF8Encoding enc = new UTF8Encoding();
             using (Stream ds = myRequest.GetRequestStream())
             {

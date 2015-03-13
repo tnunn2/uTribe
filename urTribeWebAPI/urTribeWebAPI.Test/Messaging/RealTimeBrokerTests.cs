@@ -3,6 +3,7 @@ using System.Web.Script.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using urTribeWebAPI.Models;
 using Assert = NUnit.Framework.Assert;
+using System.Collections.Generic;
 // ReSharper disable SuggestVarOrType_BuiltInTypes
 
 namespace urTribeWebAPI.Test.Messaging
@@ -27,20 +28,36 @@ namespace urTribeWebAPI.Test.Messaging
             data = data + "\"secondary\":{\"name\":\"timestamp\",\"dataType\":\"string\"}},";
             data = data + "\"provisionType\":1,\"provisionLoad\":2}";
 
-            var serializer = new JavaScriptSerializer();
-            Key p = new Key() { name = "id", dataType = "string" };
-            Key s = new Key() { name = "timestamp", dataType = "string" };
-            TableSchema schema = new TableSchema() { primary = p, secondary = s };
-            CreateTableQuery q = new CreateTableQuery()
-            {
-                applicationKey = AppKey,
-                authenticationToken = RTtoken,
-                table = tableName,
-                key = schema,
-                provisionType = 1,
-                provisionLoad = 2,
-            };
-            string data2 = serializer.Serialize(q);
+            RealtimeBroker b = new RealtimeBroker();
+            string data2 = b.makeCreateString(tableName);
+            Assert.AreEqual(data, data2);
+        }
+
+        [TestMethod]
+        public void TestAuthUser()
+        {
+            string AppKey = "kSVcgZ";
+            string PKey = "bMsGyhCfuR0I";
+            // ReSharper disable once ConvertToConstant.Local
+            string tableName = "test001";
+            string userToken = "testToken";
+            string TestRole = "testRole";
+            long OneYearInMilliseconds = 31536000000;
+
+            string data = "{\"applicationKey\":\"" + AppKey + "\",";
+            data = data + "\"privateKey\":\"" + PKey + "\",";
+            data = data + "\"authenticationToken\":\"" + userToken + "\",";
+            data = data + "\"roles\":[\"" + TestRole + "\"],";
+            data = data + "\"timeout\":" + OneYearInMilliseconds + ",";
+            data = data + "\"policies\":{\"database\":{\"listTables\":[],\"deleteTable\":[],\"createTable\":false,\"updateTable\":[]},";
+            data = data + "\"tables\":{\"";
+            data = data + tableName + "\":{\"allow\":\"RU\"}";
+            data = data + "}}}";
+
+            List<string> names = new List<string>();
+            names.Add(tableName);
+            RealtimeBroker b = new RealtimeBroker();
+            string data2 = b.makeAuthString(names, userToken);
             Assert.AreEqual(data, data2);
         }
     }
