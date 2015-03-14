@@ -17,8 +17,6 @@ namespace urTribeWebAPI.Test.Messaging
         {
             string RTtoken = "babfbf3c-ba02-11e4-8dfc-aa07a5b093db";
             string AppKey = "kSVcgZ";
-            string PKey = "bMsGyhCfuR0I";
-            string CreateUrl = "https://storage-backend-prd-useast1.realtime.co/createTable";
             // ReSharper disable once ConvertToConstant.Local
             string tableName = "test001";
             string data = "{\"applicationKey\":\"" + AppKey + "\",";
@@ -29,7 +27,7 @@ namespace urTribeWebAPI.Test.Messaging
             data = data + "\"provisionType\":1,\"provisionLoad\":2}";
 
             RealtimeBroker b = new RealtimeBroker();
-            string data2 = b.makeCreateString(tableName);
+            string data2 = b.MakeCreateString(tableName);
             Assert.AreEqual(data, data2);
         }
 
@@ -54,10 +52,9 @@ namespace urTribeWebAPI.Test.Messaging
             data = data + tableName + "\":{\"allow\":\"RU\"}";
             data = data + "}}}";
 
-            List<string> names = new List<string>();
-            names.Add(tableName);
+            List<string> names = new List<string> {tableName};
             RealtimeBroker b = new RealtimeBroker();
-            string data2 = b.makeAuthString(names, userToken);
+            string data2 = b.MakeAuthString(names, userToken);
             Assert.AreEqual(data, data2);
         }
     }

@@ -5,7 +5,11 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.UI.WebControls;
+using urTribeWebAPI.Common.Interfaces;
+using urTribeWebAPI.DAL.Interfaces;
+using urTribeWebAPI.DAL.Repositories;
 using urTribeWebAPI.Models;
+using WebGrease.Css.Extensions;
 
 namespace urTribeWebAPI.Controllers
 {
@@ -13,38 +17,56 @@ namespace urTribeWebAPI.Controllers
     public class EventController : ApiController
     {
         private readonly IMessageBroker _broker = new RealtimeBroker();
-        private readonly Repository _repo = new Repository();
+        private readonly IRepository<IUser> _repo = new UserRepository();
 
 
+        
+        /*todo: 
+         * A)Get IUsers from repository
+         * 
+         * B)implement following responses:
+         *      1)If creator doesn't exist 
+         *          -- don't create, send error
+         *      2)If creator exists, but event creation is unsuccessful 
+         *          --send error
+         *      2.5)If 2 because event already exists 
+         *          -- redo with new GUID
+         *      3)If creator exists, event creation is successful, but authentication is not 
+         *          --don't create event, send appropriate messaging, delete event table from RTF
+         *      4)If above successful, but not all invitees valid
+         *          --create event, indicate what invitees invalid
+         *      5)If above successful, but not all invitees authenticated
+         *          --create event, but don't invite un-authenticated invitees
+         *      6)If everything successful
+         *          --send success
+         *      
+         * C)Once users authenticated, how are they subscribed?      
+         * 
+          */
         [HttpPut]
-        [ActionName("CreateEvent")]
-        public string PutEvent(Guid creatorGuid)
+        public string PutEvent(Guid creatorGuid, List<Guid> inviteeIDs )
         {
-            User creator = _repo.findUserByID(creatorGuid);
-            List < User > invitees = new List<User>();
+            IUser creator = _repo.Find(u => u.ID == creatorGuid).FirstOrDefault();
+            List<string> invalidIDs = new List<string>();
+            IEnumerable<IUser> invitees = _repo.Find(u => inviteeIDs.Contains(u.ID));
+            
 
-            //TODO: get invitees from request body or subsequent put requests
-
-            Guid eventID = _repo.newEvent(creator, invitees);
+            //Guid eventID = _repo.newEvent(creator, invitees);
+            //TODO fix this
+            Guid eventID = Guid.NewGuid();
             _broker.CreateChannel(eventID, creator, invitees);
 
-            //TODO: return eventID to client in HTTP response
-            return "";
+            //for now assuming #6
+            return eventID.ToString();
         }
 
-        [Route("Create/{id:int}")]
-        [HttpGet]
-        public string GetCreate(int id)
-        {
-            return "value test = " + id;
-        }
 
         [HttpPut]
         [ActionName("InviteTo")]
-        public void AddInvitee(Guid inviteeGuid, int eventID)
+        public void AddInvitee(List<Guid> inviteeGuids, Guid eventID)
         {
-            User invitee = _repo.findUserByID(inviteeGuid);
-            _broker.AddToChannel(invitee, eventID);
+            IEnumerable<IUser> invitees = _repo.Find(u => inviteeGuids.Contains(u.ID));
+            invitees.ForEach(u => _broker.AddToChannel(u, eventID));
         }
 
     }

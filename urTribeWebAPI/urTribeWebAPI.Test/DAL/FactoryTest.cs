@@ -1,8 +1,4 @@
-﻿using System;
-using urTribeWebAPI.DAL.Interfaces;
-using urTribeWebAPI.DAL.Factory;
-using urTribeWebAPI.Common.Concrete;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace urTribeWebAPI.Test.DAL
 {

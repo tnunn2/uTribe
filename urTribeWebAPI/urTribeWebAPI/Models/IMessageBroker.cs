@@ -4,13 +4,14 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using urTribeWebAPI.Common.Interfaces;
 
 namespace urTribeWebAPI.Models
 {
     interface IMessageBroker
     {
 
-        void CreateChannel(Guid eventID, User eventCreator, List<User> invitees);
-        void AddToChannel(User inviteeGuid, int eventId);
+        void CreateChannel(Guid eventID, IUser eventCreator, IEnumerable<IUser> invitees);
+        void AddToChannel(IUser user, Guid eventId);
     }
 }

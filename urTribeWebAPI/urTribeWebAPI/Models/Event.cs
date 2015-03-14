@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using urTribeWebAPI.Common.Interfaces;
 
 namespace urTribeWebAPI.Models
 {
@@ -7,7 +8,7 @@ namespace urTribeWebAPI.Models
     {
         //None of this is right I know
         public int Id { get; set; }
-        public List<User> Participants { get; set; }
+        public List<IUser> Participants { get; set; }
         public int Channel { get; set; }
 
     }

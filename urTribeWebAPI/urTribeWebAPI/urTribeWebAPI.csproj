@@ -201,7 +201,6 @@
     </Compile>
     <Compile Include="Models\Channel.cs" />
     <Compile Include="Models\RTFQueries.cs" />
-    <Compile Include="Models\User.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\IMessageBroker.cs" />
     <Compile Include="Models\realTimeBroker.cs" />
@@ -337,6 +336,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\urTribeWebAPI.Common\urTribeWebAPI.Common.csproj">
+      <Project>{D6E5D0B3-CD11-41BD-9E85-4E1C31401710}</Project>
+      <Name>urTribeWebAPI.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\urTribeWebAPI.DAL\urTribeWebAPI.DAL.csproj">
+      <Project>{5503F096-D876-480B-B05F-CFD91876786D}</Project>
+      <Name>urTribeWebAPI.DAL</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

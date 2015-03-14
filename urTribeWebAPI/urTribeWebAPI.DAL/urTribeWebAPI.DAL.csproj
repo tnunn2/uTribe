@@ -54,9 +54,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="urTribeWebAPI.Common">
-      <HintPath>..\urTribeWebAPI.Common\bin\Debug\urTribeWebAPI.Common.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Factory\RepositoryFactory.cs" />
@@ -70,6 +67,12 @@
     <Resource Include="RepositoryMap.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\urTribeWebAPI.Common\urTribeWebAPI.Common.csproj">
+      <Project>{D6E5D0B3-CD11-41BD-9E85-4E1C31401710}</Project>
+      <Name>urTribeWebAPI.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

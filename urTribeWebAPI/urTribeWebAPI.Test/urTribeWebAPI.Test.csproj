@@ -63,9 +63,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="urTribeWebAPI.Common">
-      <HintPath>..\urTribeWebAPI.Common\bin\Debug\urTribeWebAPI.Common.dll</HintPath>
-    </Reference>
     <Reference Include="urTribeWebAPI.DAL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\urTribeWebAPI.DAL\bin\Debug\urTribeWebAPI.DAL.dll</HintPath>
