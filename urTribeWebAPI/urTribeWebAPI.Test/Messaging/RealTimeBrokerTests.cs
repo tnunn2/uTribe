@@ -1,7 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿/*using Microsoft.VisualStudio.TestTools.UnitTesting;
 using urTribeWebAPI.Models;
 using Assert = NUnit.Framework.Assert;
-using System.Collections.Generic;
+using System.Collections.Generic; */
 // ReSharper disable SuggestVarOrType_BuiltInTypes
 
 namespace urTribeWebAPI.Test.Messaging
