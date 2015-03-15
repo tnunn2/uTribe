@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Concrete\Group.cs" />
+    <Compile Include="Concrete\ScheduledEvent.cs" />
     <Compile Include="Concrete\User.cs" />
     <Compile Include="Interfaces\IDBRepositoryObject.cs" />
     <Compile Include="Interfaces\IEvent.cs" />

@@ -1,3 +1,4 @@
 ﻿{
-  "urTribeWebAPI.DAL.Interfaces.IUserRepository, urTribeWebAPI.DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "urTribeWebAPI.DAL.Repositories.UserRepository, urTribeWebAPI.DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+  "urTribeWebAPI.DAL.Interfaces.IUserRepository, urTribeWebAPI.DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null":"urTribeWebAPI.DAL.Repositories.UserRepository`1[[urTribeWebAPI.Common.Concrete.User, urTribeWebAPI.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], urTribeWebAPI.DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", 
+  "urTribeWebAPI.DAL.Interfaces.IEventRepository, urTribeWebAPI.DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null":"urTribeWebAPI.DAL.Repositories.EventRepository`1[[urTribeWebAPI.Common.Concrete.ScheduledEvent, urTribeWebAPI.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], urTribeWebAPI.DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" 
 }

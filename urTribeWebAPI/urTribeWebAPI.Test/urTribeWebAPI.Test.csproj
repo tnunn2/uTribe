@@ -91,6 +91,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\urTribeWebAPI.DAL\urTribeWebAPI.DAL.csproj">
+      <Project>{5503f096-d876-480b-b05f-cfd91876786d}</Project>
+      <Name>urTribeWebAPI.DAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\urTribeWebAPI\urTribeWebAPI.csproj">
       <Project>{cc26760a-e958-4ac9-8fa4-1cec452e5db7}</Project>
       <Name>urTribeWebAPI</Name>
