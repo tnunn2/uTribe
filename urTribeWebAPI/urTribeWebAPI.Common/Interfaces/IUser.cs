@@ -1,4 +1,7 @@
 ﻿
+using System;
+using System.Collections.Generic;
+
 namespace urTribeWebAPI.Common.Interfaces
 {
     public interface IUser : IDBRepositoryObject

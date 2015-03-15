@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.UI.WebControls;
+using urTribeWebAPI.Common.Concrete;
 using urTribeWebAPI.Common.Interfaces;
 using urTribeWebAPI.DAL.Interfaces;
 using urTribeWebAPI.DAL.Repositories;
@@ -17,7 +18,7 @@ namespace urTribeWebAPI.Controllers
     public class EventController : ApiController
     {
         private readonly IMessageBroker _broker = new RealtimeBroker();
-        private readonly IRepository<IUser> _repo = new UserRepository();
+        private readonly IRepository<IUser> _repo = new UserRepository<User> ();
 
 
         
