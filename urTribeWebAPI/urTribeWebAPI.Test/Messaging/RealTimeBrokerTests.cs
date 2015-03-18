@@ -78,7 +78,8 @@ namespace urTribeWebAPI.Test.Messaging
                 IUser creator = new User()
                 {
                     ID = Guid.NewGuid(),
-                    Channels = new List<string>() { eventTable}
+                    Channels = new List<string>() { eventTable},
+                    Name = "Korra"
                 };
                 b.CreateEventChannel(eventTable, creator);
                 List<IUser> invitees = new List<IUser>();
@@ -96,7 +97,7 @@ namespace urTribeWebAPI.Test.Messaging
                 invitees.ForEach(u =>
                 {
                     b.AuthenticateUser(u, u.InvitesChannel);
-                    b.PutInvite(u, eventTable);
+                    b.PutInvite(u, eventTable, creator.Name);
                 });
                 
             }

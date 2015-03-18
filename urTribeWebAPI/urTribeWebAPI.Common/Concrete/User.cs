@@ -12,6 +12,8 @@ namespace urTribeWebAPI.Common.Concrete
             set;
         }
 
+        public string Name { get; set; }
+
         public string Token
         {
             get { return ID.ToString(); }

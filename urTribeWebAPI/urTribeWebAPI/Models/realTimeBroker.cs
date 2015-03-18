@@ -122,7 +122,7 @@ namespace urTribeWebAPI.Models
             return JsonConvert.SerializeObject(q);
         }
 
-        public string MakeInviteString(string userToken, string userTableName, string eventTableName)
+        public string MakeInviteString(string userToken, string userTableName, string eventTableName, string invitedBy)
         {
             PutItemQuery q = new PutItemQuery()
             {
@@ -133,7 +133,8 @@ namespace urTribeWebAPI.Models
                 item = new Dictionary<string, string>
                 {
                     { PrimaryKey, eventTableName },
-                    { SecondaryKey, GetTimestamp(DateTime.Now)}
+                    { SecondaryKey, GetTimestamp(DateTime.Now)},
+                    {"Invited By", invitedBy}
                 }
             };
             return JsonConvert.SerializeObject(q);
@@ -184,7 +185,7 @@ namespace urTribeWebAPI.Models
             foreach (IUser invitee in invitees)
             {
                 AuthenticateUser(invitee, tableName);
-                PutInvite(invitee, tableName);
+                PutInvite(invitee, tableName, eventCreator.Name);
             }
         }
 
@@ -266,11 +267,11 @@ namespace urTribeWebAPI.Models
         }
     
 
-        public bool PutInvite(IUser user, string eventTable)
+        public bool PutInvite(IUser user, string eventTable, string invitedBy)
         {
             string userToken = user.Token;
             string userTableName = user.InvitesChannel;
-            string data = MakeInviteString(userToken, userTableName, eventTable);
+            string data = MakeInviteString(userToken, userTableName, eventTable, invitedBy);
             try
             {
                 string result = SendRequest(putItemURL, data);

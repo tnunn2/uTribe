@@ -15,6 +15,7 @@ namespace urTribeWebAPI.Common.Interfaces
         }
 
         string Token { get; }
+        string Name { get; set; }
         string InvitesChannel { get; set; }
     }
 }
