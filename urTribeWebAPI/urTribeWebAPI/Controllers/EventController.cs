@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using System.Web.UI.WebControls;
 using urTribeWebAPI.Common.Concrete;
 using urTribeWebAPI.Common.Interfaces;
 using urTribeWebAPI.DAL.Interfaces;
@@ -55,11 +52,28 @@ namespace urTribeWebAPI.Controllers
             //Guid eventID = _repo.newEvent(creator, invitees);
             //TODO fix this
             Guid eventID = Guid.NewGuid();
-            _broker.CreateChannel(eventID, creator, invitees);
+            _broker.CreateEventChannel(eventID, creator, invitees);
 
             //for now assuming #6
             return eventID.ToString();
         }
+        /*
+        public string GetPretendevent(int numInvitees)
+        {
+            IMessageBroker b = new RealtimeBroker();
+            IUser creator = new User()
+            {
+                ID = Guid.NewGuid()
+            };
+            List<IUser> invitees = new List<IUser>();
+            for (int i = 0; i < numInvitees; i++)
+            {
+                invitees.Add(new User() {ID = Guid.NewGuid()}); 
+            }
+            invitees.ForEach(i => b.CreateUserChannel(i));
+            b.CreateEventChannel(Guid.NewGuid(), creator, invitees);
+            return "finished!";
+        } */
 
 
         [HttpPut]

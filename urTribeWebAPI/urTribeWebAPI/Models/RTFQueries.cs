@@ -15,6 +15,13 @@ namespace urTribeWebAPI.Models
         public TableSchema key { get; set; }
         public int provisionType { get; set; }
         public int provisionLoad { get; set; }
+        public Throughput throughput { get; set; }
+    }
+
+    public class Throughput 
+    {
+        public int read { get; set; }
+        public int write { get; set; }
     }
 
     public class TableSchema

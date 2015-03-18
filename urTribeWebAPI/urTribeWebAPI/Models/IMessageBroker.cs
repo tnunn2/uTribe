@@ -8,10 +8,12 @@ using urTribeWebAPI.Common.Interfaces;
 
 namespace urTribeWebAPI.Models
 {
-    interface IMessageBroker
+    public interface IMessageBroker
     {
 
-        void CreateChannel(Guid eventID, IUser eventCreator, IEnumerable<IUser> invitees);
+        void CreateEventChannel(Guid eventID, IUser eventCreator, IEnumerable<IUser> invitees);
+        void CreateAuthAndInvite(string eventID, IUser eventCreator, IEnumerable<IUser> invitees);
+        string CreateUserChannel(IUser user);
         void AddToChannel(IUser user, Guid eventId);
     }
 }

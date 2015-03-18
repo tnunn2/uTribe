@@ -1,15 +1,11 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Web;
 using System.Web.Script.Serialization;
-using System.Web.UI;
+using Newtonsoft.Json;
 using urTribeWebAPI.Common.Interfaces;
 
 // ReSharper disable SuggestVarOrType_SimpleTypes
@@ -24,7 +20,7 @@ namespace urTribeWebAPI.Models
         private const string AppKey = "kSVcgZ";
         private const string PrivateKey = "bMsGyhCfuR0I";
         private const string TypeJson = "application/json; charset=UTF-8";
-        private const string CreateUrl = "https://storage-backend-prd-useast1.realtime.co/createTable";
+        public const string CreateUrl = "https://storage-backend-prd-useast1.realtime.co/createTable";
         private const string AuthUrl = "https://storage-backend-prd-useast1.realtime.co/authenticate";
         private const string putItemURL = "https://storage-backend-prd-useast1.realtime.co/putItem";
 
@@ -39,7 +35,9 @@ namespace urTribeWebAPI.Models
         //The wisdom to know the difference
         private const long OneYearInMilliseconds = 31536000000;
         private const int TablePLoad = 2;
-        private const int TablePType = 1;
+        private const int TablePType = 5;
+        private const int ReadOps = 2;
+        private const int WriteOps = 2;
 
 
     //Helper methods section
@@ -75,7 +73,11 @@ namespace urTribeWebAPI.Models
                     }
                 },
                 provisionLoad = TablePLoad,
-                provisionType = TablePType
+                provisionType = TablePType,
+                throughput = new Throughput() {
+                    read = ReadOps,
+                    write = WriteOps
+            }
             };
             return serializer.Serialize(q);
         }
@@ -128,16 +130,27 @@ namespace urTribeWebAPI.Models
                 privateKey = PrivateKey,
                 authenticationToken = userToken,
                 table = userTableName,
-                item = new Dictionary<string, string> { { PrimaryKey, eventTableName } }
+                item = new Dictionary<string, string>
+                {
+                    { PrimaryKey, eventTableName },
+                    { SecondaryKey, GetTimestamp(DateTime.Now)}
+                }
             };
             return JsonConvert.SerializeObject(q);
         }
 
-        private string SendRequest(string url, string data)
+        public static String GetTimestamp(DateTime value)
+        {
+            return value.ToString("yyyyMMddHHmmssffff");
+        }
+
+        public string SendRequest(string url, string data)
         {
             WebRequest myRequest = WebRequest.Create(url);
-            myRequest.Method = "PUT";
-            myRequest.ContentType = TypeJson;
+            myRequest.Method = "POST";
+            myRequest.ContentType = "application/json; charset=UTF-8";
+            Debug.Print(data);
+            Debug.Print(""+ data.Length);
 
             UTF8Encoding enc = new UTF8Encoding();
             using (Stream ds = myRequest.GetRequestStream())
@@ -148,35 +161,62 @@ namespace urTribeWebAPI.Models
             Stream receiveStream = wr.GetResponseStream();
             StreamReader reader = new StreamReader(receiveStream, Encoding.UTF8);
             return reader.ReadToEnd();
+            //return "";
         }
-    //End helper section
-
-        private string eidToEtableName(Guid eventID)
+    
+        public string eidToEtableName(string eventID)
         {
-            string tableName = "event" + eventID;
-            return tableName;
+            return "event" + eventID;
         }
 
-        public void CreateChannel(Guid eventID, IUser eventCreator, IEnumerable<IUser> invitees)
+        public string userToTableName(IUser user)
+        {
+            return "user" + user.ID;
+        }
+
+        //End helper section
+
+        public void CreateAuthAndInvite(string eventID, IUser eventCreator, IEnumerable<IUser> invitees)
         {
             string tableName = eidToEtableName(eventID);
-            WebRequest myRequest = WebRequest.Create(CreateUrl);
-            myRequest.Method = "POST";
-            myRequest.ContentType = TypeJson;
+            CreateEventChannel(tableName, eventCreator);
+            AuthenticateUser(eventCreator, tableName);
+            foreach (IUser invitee in invitees)
+            {
+                AuthenticateUser(invitee, tableName);
+                PutInvite(invitee, tableName);
+            }
+        }
+
+        public void CreateEventChannel(string tableName, IUser eventCreator)
+        {
             string data = MakeCreateString(tableName);
 
             try {
                 string creationResult = SendRequest(CreateUrl, data);
             } catch (WebException e)
-                { throw new Exception("Table creation failed. Code " + e.Message); }
-
-            string result = AuthenticateUser(eventCreator, tableName);
-            if (result == tableName)
-                { foreach (IUser invitee in invitees) 
-                    {AuthenticateUser(invitee, tableName); }}
-            else throw new Exception("authentication failed. Code " + result);
+                { throw new Exception("Event table creation failed. Code " + e.Message); }
         }
-    
+
+        public void CreateEventChannel(Guid eventID, IUser eventCreator, IEnumerable<IUser> invitees)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string CreateUserChannel(IUser user)
+        {
+            string tableName = userToTableName(user);
+            string data = MakeCreateString(tableName);
+            Debug.Write(SendRequest(CreateUrl, data));
+            return tableName;
+        }
+
+        public void CreateUserChannel(string tableName)
+        { 
+            string data = MakeCreateString(tableName);
+            Debug.Write(SendRequest(CreateUrl, data));
+        }
+
         /*TODO: 
          * 1)DONE
          * 2)write unit tests --sorta done
@@ -201,28 +241,47 @@ namespace urTribeWebAPI.Models
 
         public void AddToChannel(IUser user, Guid eventId)
         {
-            AuthenticateUser(user, eidToEtableName(eventId));
+            AuthenticateUser(user, eidToEtableName(eventId.ToString()));
         }
 
         //Current implementation only allows for all users to have the same (RU) policy on table. 
         //Otherwise we have to store each policy in DB.
-        private string AuthenticateUser(IUser user, string tableName)
+        public string AuthenticateUser(IUser user, string tableName)
         {
             List<string> tableNames = user.Channels;
+            //List<string> tableNames = new List<string>();
             tableNames.Add(tableName);
             string userToken = user.Token;
-            string result = AuthUser(tableNames, userToken);
-            user.Channels.Add(tableName);
-            return result;
+            try
+            {
+                string result = AuthUser(tableNames, userToken);
+                user.Channels.Add(tableName);
+                return tableName;
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+
         }
+    
 
         public bool PutInvite(IUser user, string eventTable)
         {
             string userToken = user.Token;
             string userTableName = user.InvitesChannel;
             string data = MakeInviteString(userToken, userTableName, eventTable);
-            string result = SendRequest(putItemURL, data);
-            return true;
+            try
+            {
+                string result = SendRequest(putItemURL, data);
+                Debug.Write(result);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            
         }
 
         
