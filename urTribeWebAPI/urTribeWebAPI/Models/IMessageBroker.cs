@@ -11,7 +11,9 @@ namespace urTribeWebAPI.Models
     interface IMessageBroker
     {
 
-        void CreateChannel(Guid eventID, IUser eventCreator, IEnumerable<IUser> invitees);
-        void AddToChannel(IUser user, Guid eventId);
+        brokerResult CreateChannel(Guid eventID, IUser eventCreator, IEnumerable<IUser> invitees);
+        brokerResult AddToChannel(IUser user, Guid eventId);
+
+        brokerResult RespondToInvite(IUser user, Guid eventID, bool accept);
     }
 }

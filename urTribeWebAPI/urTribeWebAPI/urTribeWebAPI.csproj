@@ -199,9 +199,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\brokerError.cs" />
     <Compile Include="Models\Channel.cs" />
+    <Compile Include="Models\RTFHelpers.cs" />
     <Compile Include="Models\RTFQueries.cs" />
-    <Compile Include="Models\Event.cs" />
     <Compile Include="Models\IMessageBroker.cs" />
     <Compile Include="Models\realTimeBroker.cs" />
     <Compile Include="Models\Repository.cs" />

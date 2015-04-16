@@ -70,5 +70,15 @@ namespace urTribeWebAPI.Controllers
             invitees.ForEach(u => _broker.AddToChannel(u, eventID));
         }
 
+        [HttpPut]
+        public bool PutInviteResponse(Guid userID, Guid eventID, bool accept)
+        {
+            IUser user = _repo.Find(u => u.ID == userID).FirstOrDefault();
+            bool success =_broker.RespondToInvite(user, eventID, accept);
+
+
+            bool success = false;
+            return success;
+        }
     }
 }
