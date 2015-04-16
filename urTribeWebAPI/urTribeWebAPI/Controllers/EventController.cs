@@ -18,7 +18,8 @@ namespace urTribeWebAPI.Controllers
     public class EventController : ApiController
     {
         private readonly IMessageBroker _broker = new RealtimeBroker();
-        private readonly IRepository<IUser> _repo = new UserRepository<User> ();
+        private readonly IRepository<IUser> _userRepo = new UserRepository<User> ();
+        private readonly IRepository<IEvent> _eventRepo = new EventRepository<ScheduledEvent>();
 
 
         
@@ -47,9 +48,9 @@ namespace urTribeWebAPI.Controllers
         [HttpPut]
         public string PutEvent(Guid creatorGuid, List<Guid> inviteeIDs )
         {
-            IUser creator = _repo.Find(u => u.ID == creatorGuid).FirstOrDefault();
+            IUser creator = _userRepo.Find(u => u.ID == creatorGuid).FirstOrDefault();
             List<string> invalidIDs = new List<string>();
-            IEnumerable<IUser> invitees = _repo.Find(u => inviteeIDs.Contains(u.ID));
+            IEnumerable<IUser> invitees = _userRepo.Find(u => inviteeIDs.Contains(u.ID));
             
 
             //Guid eventID = _repo.newEvent(creator, invitees);
@@ -66,19 +67,23 @@ namespace urTribeWebAPI.Controllers
         [ActionName("InviteTo")]
         public void AddInvitee(List<Guid> inviteeGuids, Guid eventID)
         {
-            IEnumerable<IUser> invitees = _repo.Find(u => inviteeGuids.Contains(u.ID));
+            IEnumerable<IUser> invitees = _userRepo.Find(u => inviteeGuids.Contains(u.ID));
             invitees.ForEach(u => _broker.AddToChannel(u, eventID));
         }
 
         [HttpPut]
         public bool PutInviteResponse(Guid userID, Guid eventID, bool accept)
         {
-            IUser user = _repo.Find(u => u.ID == userID).FirstOrDefault();
-            bool success =_broker.RespondToInvite(user, eventID, accept);
+            IUser user = _userRepo.Find(u => u.ID == userID).FirstOrDefault();
+            brokerResult result =_broker.RespondToInvite(user, eventID, accept);
+            if (result.type == ResultType.fullsuccess && accept)
+            {
+                IEvent ev = _eventRepo.Find(e => e.ID == eventID).FirstOrDefault();
+                ev.attendingUsers.Add(user);
+                ev.invitedUsers.Remove(user);
+            }
 
-
-            bool success = false;
-            return success;
+            return result.type==ResultType.fullsuccess;
         }
     }
 }
