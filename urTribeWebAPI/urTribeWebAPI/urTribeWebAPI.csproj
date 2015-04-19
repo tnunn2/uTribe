@@ -207,6 +207,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -326,11 +327,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Users\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\urTribeWebAPI.BAL\urTribeWebAPI.BAL\urTribeWebAPI.BAL.csproj">
+      <Project>{8a749581-68d7-42c4-8b5c-d2c44711d7d2}</Project>
+      <Name>urTribeWebAPI.BAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\urTribeWebAPI.Common\urTribeWebAPI.Common.csproj">
       <Project>{D6E5D0B3-CD11-41BD-9E85-4E1C31401710}</Project>
       <Name>urTribeWebAPI.Common</Name>

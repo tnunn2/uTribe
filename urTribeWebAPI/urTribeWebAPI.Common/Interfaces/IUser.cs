@@ -6,14 +6,11 @@ namespace urTribeWebAPI.Common.Interfaces
 {
     public interface IUser : IDBRepositoryObject
     {
-
-        List<string> Channels { get; }
-
         new Guid ID
         {
             get;
         }
-
+        List<string> Channels { get; }
         string Token { get; }
         string Name { get; set; }
         string InvitesChannel { get; set; }

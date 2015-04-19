@@ -6,11 +6,12 @@ namespace urTribeWebAPI.Common.Concrete
 {
     public class User : IUser
     {
-        public Guid ID
-        {
-            get;
-            set;
-        }
+
+        #region Member Variables
+        #endregion
+
+        #region Properties
+        public Guid ID { get; set; }
 
         public string Name { get; set; }
 
@@ -21,9 +22,8 @@ namespace urTribeWebAPI.Common.Concrete
 
         public string InvitesChannel { get; set; }
 
-
         public List<string> Channels { get; set; }
-
+        #endregion
 
     }
 }

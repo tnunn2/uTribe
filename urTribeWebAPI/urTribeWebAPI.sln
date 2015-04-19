@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "urTribeWebAPI", "urTribeWebAPI\urTribeWebAPI.csproj", "{CC26760A-E958-4AC9-8FA4-1CEC452E5DB7}"
 EndProject
@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "urTribeWindowService", "urT
 		{CC26760A-E958-4AC9-8FA4-1CEC452E5DB7} = {CC26760A-E958-4AC9-8FA4-1CEC452E5DB7}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "urTribeWebAPI.BAL", "urTribeWebAPI.BAL\urTribeWebAPI.BAL\urTribeWebAPI.BAL.csproj", "{8A749581-68D7-42C4-8B5C-D2C44711D7D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{88EF48DC-FA8D-49CF-B19B-4F7A1F506C86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88EF48DC-FA8D-49CF-B19B-4F7A1F506C86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88EF48DC-FA8D-49CF-B19B-4F7A1F506C86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A749581-68D7-42C4-8B5C-D2C44711D7D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A749581-68D7-42C4-8B5C-D2C44711D7D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A749581-68D7-42C4-8B5C-D2C44711D7D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A749581-68D7-42C4-8B5C-D2C44711D7D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

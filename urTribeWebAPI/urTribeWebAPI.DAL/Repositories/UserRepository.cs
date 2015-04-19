@@ -44,16 +44,40 @@ namespace urTribeWebAPI.DAL.Repositories
 
             return list;
         }
-        public void AddToContactList(IUser usr, IUser friend)
+        public void AddToContactList(Guid usrId, Guid friendId)
         {
-            _dbms.Cypher.Match("(user1:User)", "(user2:User)").Where((User user1) => user1.ID.ToString() == usr.ID.ToString())
-                 .AndWhere((User user2) => user2.ID.ToString() == friend.ID.ToString()).CreateUnique("user1-[:FRIENDS_WITH]->user2")
+            _dbms.Cypher.Match("(user1:User)", "(user2:User)").Where((User user1) => user1.ID.ToString() == usrId.ToString())
+                 .AndWhere((User user2) => user2.ID.ToString() == friendId.ToString()).CreateUnique("user1-[:FRIENDS_WITH]->user2")
                  .ExecuteWithoutResults();
         }
-
-        public void AddFriendToGroup(IUser user, IGroup grp, IUser friend)
+        public void AddFriendToGroup(Guid usrId, Guid contactID, Guid groupId)
         {
+            //TODO move method to GroupRepository
             throw new NotImplementedException();
+        }
+        public IEnumerable<IUser> RetrieveContacts(Guid userId)
+        {
+            //need to confirm
+            var query = _dbms.Cypher.Match("(user:User)-[:FRIENDS_WITH]->(friend:User)").Where((User user) => user.ID == userId).Return(friend => friend.As<userImpl>());
+            var ienum = query.Results;
+
+            List<IUser> list = new List<IUser>();
+            foreach (IUser usr in ienum)
+                list.Add(usr);
+
+            return list;
+        }
+        public void RemoveContactFromGroup(Guid ID, Guid contactID, Guid groupId)
+        {
+            //TODO move method to GroupRepository
+            throw new NotImplementedException();
+        }
+        public void RemoveContact(Guid usrId, Guid friendId)
+        {
+            _dbms.Cypher.Match("(user:Usr)-[rel:FRIENDS_WITH]->(friend:User)").
+                         Where((User usr) => usr.ID == usrId).
+                         AndWhere((User friend) => friend.ID == friendId).
+                         Delete("rel").ExecuteWithoutResults();
         }
         #endregion
     }

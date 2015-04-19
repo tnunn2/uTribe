@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D6E5D0B3-CD11-41BD-9E85-4E1C31401710}</ProjectGuid>
+    <ProjectGuid>{8A749581-68D7-42C4-8B5C-D2C44711D7D2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>urTribeWebAPI.Common</RootNamespace>
-    <AssemblyName>urTribeWebAPI.Common</AssemblyName>
+    <RootNamespace>urTribeWebAPI.BAL</RootNamespace>
+    <AssemblyName>urTribeWebAPI.BAL</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,18 +39,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Concrete\Group.cs" />
-    <Compile Include="Concrete\ScheduledEvent.cs" />
-    <Compile Include="Concrete\User.cs" />
-    <Compile Include="Logging\ExceptionDTO.cs" />
-    <Compile Include="Interfaces\IDBRepositoryObject.cs" />
-    <Compile Include="Interfaces\IEvent.cs" />
-    <Compile Include="Interfaces\IGroup.cs" />
-    <Compile Include="Interfaces\IUser.cs" />
-    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="UserFacade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\urTribeWebAPI.Common\urTribeWebAPI.Common.csproj">
+      <Project>{d6e5d0b3-cd11-41bd-9e85-4e1c31401710}</Project>
+      <Name>urTribeWebAPI.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\urTribeWebAPI.DAL\urTribeWebAPI.DAL.csproj">
+      <Project>{5503f096-d876-480b-b05f-cfd91876786d}</Project>
+      <Name>urTribeWebAPI.DAL</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
