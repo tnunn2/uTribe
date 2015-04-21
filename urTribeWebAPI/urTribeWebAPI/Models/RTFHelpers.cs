@@ -11,9 +11,16 @@ namespace urTribeWebAPI.Models
     public class RTFHelpers
     {
         //Things we can't change
+        /* old login credentials 
         private const string RTtoken = "babfbf3c-ba02-11e4-8dfc-aa07a5b093db";
         private const string AppKey = "kSVcgZ";
-        private const string PrivateKey = "bMsGyhCfuR0I";
+        private const string PrivateKey = "bMsGyhCfuR0I"; */
+
+        //new credentials:
+        private const string AppKey = "rUaRaB";
+        private const string PrivateKey = "O4h7dcnRUIIL";
+        private const string RTtoken = "8c01b1ae-e87e-11e4-a50b-99b8eb024984";
+
         private const string TypeJson = "application/json; charset=UTF-8";
 
         //Things we can

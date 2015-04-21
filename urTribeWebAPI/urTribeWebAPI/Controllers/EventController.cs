@@ -71,6 +71,7 @@ namespace urTribeWebAPI.Controllers
             invitees.ForEach(u => _broker.AddToChannel(u, eventID));
         }
 
+        //should do nothing if refuse. 
         [HttpPut]
         public bool PutInviteResponse(Guid userID, Guid eventID, bool accept)
         {
@@ -83,7 +84,7 @@ namespace urTribeWebAPI.Controllers
                 ev.invitedUsers.Remove(user);
             }
 
-            return result.type==ResultType.fullsuccess;
+            return result.ok();
         }
     }
 }
