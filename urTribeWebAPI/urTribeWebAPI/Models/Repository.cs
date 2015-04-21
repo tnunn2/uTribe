@@ -5,7 +5,7 @@ using System.Web;
 using urTribeWebAPI.Common.Interfaces;
 
 namespace urTribeWebAPI.Models
-{
+{ /*
     public class Repository
     {
         private Dictionary<Guid, IUser> users;
@@ -30,5 +30,5 @@ namespace urTribeWebAPI.Models
             throw new NotImplementedException();
         }
 
-    }
+    } */
 }

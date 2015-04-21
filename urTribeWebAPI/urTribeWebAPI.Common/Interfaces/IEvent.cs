@@ -6,8 +6,8 @@ namespace urTribeWebAPI.Common.Interfaces
     public interface IEvent : IDBRepositoryObject
     {
 
-        public List<IUser> invitedUsers { get; set; }
-        public List<IUser> attendingUsers{get; set;}
-        public Guid ID {get; set;}
+        List<IUser> invitedUsers { get; set; }
+        List<IUser> attendingUsers{get; set;}
+        Guid ID {get; set;}
     }
 }
