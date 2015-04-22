@@ -53,7 +53,7 @@ namespace urTribeWebAPI.Controllers
             //Guid eventID = _repo.newEvent(creator, invitees);
             //TODO fix this
             Guid eventID = Guid.NewGuid();
-            _broker.CreateEventChannel(eventID, creator, invitees);
+            _broker.CreateAuthAndInvite(eventID, creator, invitees);
 
             //for now assuming #6
             return eventID.ToString();

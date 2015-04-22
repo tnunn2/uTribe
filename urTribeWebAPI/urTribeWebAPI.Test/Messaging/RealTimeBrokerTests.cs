@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Web.Script.Serialization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using urTribeWebAPI.Models;
-using Assert = NUnit.Framework.Assert;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using urTribeWebAPI.Common.Concrete;
 using urTribeWebAPI.Common.Interfaces;
+using urTribeWebAPI.Models;
+using Assert = NUnit.Framework.Assert;
 
 // ReSharper disable SuggestVarOrType_BuiltInTypes
 
@@ -96,7 +95,7 @@ namespace urTribeWebAPI.Test.Messaging
                 Thread.Sleep(20000);
                 invitees.ForEach(u =>
                 {
-                    b.AuthenticateUser(u, u.InvitesChannel);
+                    b.AuthenticateAndUpdateUser(u, u.InvitesChannel);
                     b.PutInvite(u, eventTable, creator.Name);
                 });
                 

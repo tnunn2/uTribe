@@ -16,11 +16,22 @@ namespace urTribeWebAPI.Models
         private const string AuthUrl = "https://storage-backend-prd-useast1.realtime.co/authenticate";
         private const string putItemURL = "https://storage-backend-prd-useast1.realtime.co/putItem";
 
-        
-        //Does not evaluate JSON response for errors in table creation!
-        public brokerResult CreateChannel(Guid eventID, IUser eventCreator, IEnumerable<IUser> invitees)
+
+        public brokerResult CreateAuthAndInvite(Guid eventID, IUser eventCreator, IEnumerable<IUser> invitees)
         {
             string tableName = RTFHelpers.eidToEtableName(eventID);
+            brokerResult creationRes = CreateEventChannel(tableName, eventCreator);
+            if (creationRes.ok())
+            {
+                return inviteUsers(invitees, tableName);
+            }
+            else return creationRes;
+        }
+
+        //Does not evaluate JSON response for errors in table creation!
+        //doesn't invite!
+        public brokerResult CreateEventChannel(string tableName, IUser eventCreator)
+        {
             string data = RTFHelpers.MakeCreateString(tableName);
 
             try {
@@ -32,8 +43,7 @@ namespace urTribeWebAPI.Models
             bool creatorOK = AuthenticateAndUpdateUser(eventCreator, tableName);
             if (creatorOK)
             {
-                brokerResult finalResult = inviteUsers(invitees, tableName);
-                return finalResult;
+                return brokerResult.newSuccess();
             }
             else return new brokerResult { type = ResultType.createError, reason = ErrorReason.remoteAuthFailure};
         }
@@ -84,7 +94,7 @@ namespace urTribeWebAPI.Models
 
         //Current implementation only allows for all users to have the same (RU) policy on table. 
         //Otherwise we have to store each policy in DB.
-        private bool AuthenticateAndUpdateUser(IUser user, string tableName)
+        public bool AuthenticateAndUpdateUser(IUser user, string tableName)
         {
             List<string> tableNames = user.Channels;
             tableNames.Add(tableName);
@@ -113,7 +123,12 @@ namespace urTribeWebAPI.Models
             if (success) return brokerResult.newSuccess();
             else return new brokerResult { type = ResultType.respondError, reason = ErrorReason.remoteAuthFailure };
         }
-
+        public string CreateUserChannel(IUser user)
+        {
+            string tableName = RTFHelpers.userToTableName(user);
+            string data = RTFHelpers.MakeCreateString(tableName);
+            return tableName;
+        }
         
 
         

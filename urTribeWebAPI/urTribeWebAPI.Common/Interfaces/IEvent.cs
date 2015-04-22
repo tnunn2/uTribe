@@ -8,6 +8,5 @@ namespace urTribeWebAPI.Common.Interfaces
 
         List<IUser> invitedUsers { get; set; }
         List<IUser> attendingUsers{get; set;}
-        Guid ID {get; set;}
     }
 }

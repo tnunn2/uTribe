@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Web.Script.Serialization;
+using urTribeWebAPI.Common.Interfaces;
 
 namespace urTribeWebAPI.Models
 {
@@ -34,7 +35,9 @@ namespace urTribeWebAPI.Models
         //The wisdom to know the difference
         private const long OneYearInMilliseconds = 31536000000;
         private const int TablePLoad = 2;
-        private const int TablePType = 1;
+        private const int TablePType = 5;
+        private const int ReadOps = 2;
+        private const int WriteOps = 2;
         //Helper methods section
         /* Spaces had to be removed
              * string data = "{\"applicationKey\": \"" + AppKey + "\", ";
@@ -68,7 +71,12 @@ namespace urTribeWebAPI.Models
                     }
                 },
                 provisionLoad = TablePLoad,
-                provisionType = TablePType
+                provisionType = TablePType,
+                throughput = new Throughput()
+                {
+                    read = ReadOps,
+                    write = WriteOps
+                }
             };
             return serializer.Serialize(q);
         }
@@ -113,7 +121,7 @@ namespace urTribeWebAPI.Models
             return JsonConvert.SerializeObject(q);
         }
 
-        public static string MakeInviteString(string userToken, string userTableName, string eventTableName)
+        public static string MakeInviteString(string userToken, string userTableName, string eventTableName, string invitedBy)
         {
             PutItemQuery q = new PutItemQuery()
             {
@@ -121,9 +129,23 @@ namespace urTribeWebAPI.Models
                 privateKey = PrivateKey,
                 authenticationToken = userToken,
                 table = userTableName,
-                item = new Dictionary<string, string> { { PrimaryKey, eventTableName } }
+                item = new Dictionary<string, string>
+                {
+                    { PrimaryKey, eventTableName },
+                    { SecondaryKey, GetTimestamp(DateTime.Now)},
+                    {"Invited By", invitedBy}
+                }
             };
             return JsonConvert.SerializeObject(q);
+        }
+        public static string GetTimestamp(DateTime value)
+        {
+            return value.ToString("yyyyMMddHHmmssffff");
+        }
+
+        public static string userToTableName(IUser user)
+        {
+            return "user" + user.ID;
         }
 
         public static string SendRequest(string url, string data)
