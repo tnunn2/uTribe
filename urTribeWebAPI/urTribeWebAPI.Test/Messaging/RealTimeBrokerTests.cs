@@ -36,7 +36,7 @@ namespace urTribeWebAPI.Test.Messaging
             data = data + "}";
 
             RealtimeBroker b = new RealtimeBroker();
-            string data2 = b.MakeCreateString(tableName);
+            string data2 = RTFHelpers.MakeCreateString(tableName);
             Assert.AreEqual(data, data2);
         }
 
@@ -63,7 +63,7 @@ namespace urTribeWebAPI.Test.Messaging
 
             List<string> names = new List<string> {tableName};
             RealtimeBroker b = new RealtimeBroker();
-            string data2 = b.MakeAuthString(names, userToken);
+            string data2 = RTFHelpers.MakeAuthString(names, userToken);
             Assert.AreEqual(data, data2);
         }
 
