@@ -49,21 +49,12 @@ namespace urTribeWebAPI.Controllers
             }
         }
 
-        [HttpPut]
-        public void ContactGroups(Guid userId, Guid contactID, Guid groupId)
-        {
-            using (UserFacade facade = new UserFacade())
-            {
-                facade.AddContactToGroup(userId, contactID, groupId);
-            }
-        }
-
         [HttpDelete]
         public void Contacts (Guid userId, Guid contactId, Guid groupId)
         {
             using (UserFacade facade = new UserFacade())
             {
-                facade.RemoveContact(userId, contactId, groupId);
+                facade.RemoveContact(userId, contactId);
             }
         }
 

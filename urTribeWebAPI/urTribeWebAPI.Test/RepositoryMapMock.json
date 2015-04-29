@@ -1,0 +1,3 @@
+{
+  "urTribeWebAPI.DAL.Interfaces.IUserRepository, urTribeWebAPI.DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null":"urTribeWebAPI.Test.RepositoryMocks.UserRepositoryMock`1[[urTribeWebAPI.Common.Concrete.User, urTribeWebAPI.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], urTribeWebAPI.Test, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", 
+}

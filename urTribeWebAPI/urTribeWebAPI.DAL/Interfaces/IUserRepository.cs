@@ -9,9 +9,7 @@ namespace urTribeWebAPI.DAL.Interfaces
     {
         void Add(IUser usr);
         void AddToContactList(Guid usrId, Guid friendId);
-        void AddFriendToGroup(Guid usrId, Guid contactID, Guid groupId);
         IEnumerable<IUser> RetrieveContacts(Guid userId);
-        void RemoveContactFromGroup(Guid ID, Guid contactID, Guid groupId);
         void RemoveContact(Guid usrId, Guid friendId);
     }
 }

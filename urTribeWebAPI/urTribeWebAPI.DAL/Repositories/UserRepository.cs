@@ -50,11 +50,6 @@ namespace urTribeWebAPI.DAL.Repositories
                  .AndWhere((User user2) => user2.ID.ToString() == friendId.ToString()).CreateUnique("user1-[:FRIENDS_WITH]->user2")
                  .ExecuteWithoutResults();
         }
-        public void AddFriendToGroup(Guid usrId, Guid contactID, Guid groupId)
-        {
-            //TODO move method to GroupRepository
-            throw new NotImplementedException();
-        }
         public IEnumerable<IUser> RetrieveContacts(Guid userId)
         {
             //need to confirm
@@ -66,11 +61,6 @@ namespace urTribeWebAPI.DAL.Repositories
                 list.Add(usr);
 
             return list;
-        }
-        public void RemoveContactFromGroup(Guid ID, Guid contactID, Guid groupId)
-        {
-            //TODO move method to GroupRepository
-            throw new NotImplementedException();
         }
         public void RemoveContact(Guid usrId, Guid friendId)
         {

@@ -13,6 +13,7 @@ namespace urTribeWebAPI.BAL
     {
 
         #region Member Variables
+        private readonly IUserRepository _repository; 
         #endregion
 
         #region Properties
@@ -20,13 +21,17 @@ namespace urTribeWebAPI.BAL
         {
             get
             {
-                var factory = RepositoryFactory.Instance;
-                return factory.Create<IUserRepository>();
+                return _repository;
             }
         }
         #endregion
 
         #region Constructors
+        public UserFacade ()
+        {
+                var factory = RepositoryFactory.Instance;
+                _repository = factory.Create<IUserRepository>();
+        }
         #endregion
 
         #region Public Methods
@@ -34,6 +39,9 @@ namespace urTribeWebAPI.BAL
         {
             try
             {
+                if (!ValidateUserRequiredFieldsAreFilled(user, true))
+                    throw new Exception("Invalid IUser object passed to the CreateUser method ");
+ 
                 ((User)user).ID = Guid.NewGuid();
                 UsrRepository.Add(user);
                 return user.ID;
@@ -76,18 +84,6 @@ namespace urTribeWebAPI.BAL
             }
         }
 
-        public void AddContactToGroup (Guid usrId, Guid contactID, Guid groupId)
-        {
-            try
-            {
-                UsrRepository.AddFriendToGroup(usrId, contactID, groupId);
-            }
-            catch (Exception ex)
-            {
-                Logger.Instance.Log = new ExceptionDTO() { FaultClass = "UserFacade", FaultMethod = "AddContactToGroup", Exception = ex };
-            }
-        }
-
         public IEnumerable<IUser> RetrieveContacts(Guid userId)
         {
             try
@@ -102,14 +98,11 @@ namespace urTribeWebAPI.BAL
             }
         }
 
-        public void RemoveContact (Guid usrId, Guid friendId, Guid groupId)
+        public void RemoveContact (Guid usrId, Guid friendId)
         {
             try
             {
-                if (groupId == null)
                     UsrRepository.RemoveContact(usrId, friendId);
-                else
-                    UsrRepository.RemoveContactFromGroup(usrId, friendId, groupId);
             }
             catch (Exception ex)
             {
@@ -123,6 +116,17 @@ namespace urTribeWebAPI.BAL
         #endregion
 
         #region Private Method
+        private bool ValidateUserRequiredFieldsAreFilled (IUser usr, bool isNew)
+        {
+            bool passed = true;
+
+            passed &= (usr != null);
+            passed &= (usr.ID != new Guid("99999999-9999-9999-9999-999999999999"));
+            passed &= (isNew ^ (usr.ID != new Guid("00000000-0000-0000-0000-000000000000")));
+            passed &= usr.Name != string.Empty && usr.Name != null;
+
+            return passed;
+        }
         #endregion
 
     }
