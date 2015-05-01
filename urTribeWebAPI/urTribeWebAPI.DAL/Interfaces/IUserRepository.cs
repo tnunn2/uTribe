@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using urTribeWebAPI.Common;
 using urTribeWebAPI.Common.Interfaces;
 
 
@@ -11,5 +12,6 @@ namespace urTribeWebAPI.DAL.Interfaces
         void AddToContactList(Guid usrId, Guid friendId);
         IEnumerable<IUser> RetrieveContacts(Guid userId);
         void RemoveContact(Guid usrId, Guid friendId);
+        IEnumerable<IEvent> RetrieveAllEventsByStatus(Guid usrId, EventAttendantsStatus status);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Neo4jClient;
+using urTribeWebAPI.Common;
 using urTribeWebAPI.Common.Interfaces;
 using urTribeWebAPI.Common.Concrete;
 using urTribeWebAPI.DAL.Interfaces;
@@ -69,6 +70,12 @@ namespace urTribeWebAPI.DAL.Repositories
                          AndWhere((User friend) => friend.ID == friendId).
                          Delete("rel").ExecuteWithoutResults();
         }
+
+        public IEnumerable<IEvent> RetrieveAllEventsByStatus(Guid usrId, EventAttendantsStatus status)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

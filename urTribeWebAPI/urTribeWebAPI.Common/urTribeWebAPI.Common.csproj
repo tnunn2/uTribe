@@ -45,6 +45,7 @@
     <Compile Include="Concrete\Group.cs" />
     <Compile Include="Concrete\ScheduledEvent.cs" />
     <Compile Include="Concrete\User.cs" />
+    <Compile Include="ENum\ENums.cs" />
     <Compile Include="Logging\ExceptionDTO.cs" />
     <Compile Include="Interfaces\IDBRepositoryObject.cs" />
     <Compile Include="Interfaces\IEvent.cs" />
@@ -56,6 +57,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

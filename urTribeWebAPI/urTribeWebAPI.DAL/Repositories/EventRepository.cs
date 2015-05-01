@@ -53,6 +53,10 @@ namespace urTribeWebAPI.DAL.Repositories
 
             return list;
         }
+        public void ChangeUserAttendStatus (IUser usr, IEvent evt)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 

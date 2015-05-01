@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using urTribeWebAPI.Common;
 using urTribeWebAPI.Common.Interfaces;
 using urTribeWebAPI.DAL.Interfaces;
 
@@ -19,6 +20,12 @@ namespace urTribeWebAPI.Test.RepositoryMocks
             get;
             set;
         }
+        public static IEnumerable<IEvent> ListOfEvents
+        {
+            get;
+            set;
+        }
+
         public static Guid UsrId
         {
             get;
@@ -73,6 +80,15 @@ namespace urTribeWebAPI.Test.RepositoryMocks
             if (ThrowException)
                 throw new Exception();
         }
+
+        public IEnumerable<IEvent> RetrieveAllEventsByStatus(Guid usrId, EventAttendantsStatus status)
+        {
+            if (ThrowException)
+                throw new Exception();
+
+            return ListOfEvents;
+        }
+
         #endregion
     }
 }

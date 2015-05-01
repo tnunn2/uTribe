@@ -7,5 +7,6 @@ namespace urTribeWebAPI.DAL.Interfaces
     {
         void Add(IUser usr, IEvent evt);
         void LinkToEvent(IUser usr, IEvent evt);
+        void ChangeUserAttendStatus(IUser usr, IEvent evt);
     }
 }
