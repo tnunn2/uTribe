@@ -1,94 +1,62 @@
-﻿using System;
-using urTribeWebAPI.DAL.Interfaces;
+﻿using NUnit.Framework;
+using System;
+using urTribeWebAPI.Common.Concrete;
 using urTribeWebAPI.DAL.Factory;
-using NUnit.Framework;
-using System.Collections.Generic;
+using urTribeWebAPI.DAL.Interfaces;
+using urTribeWebAPI.Test.RepositoryMocks;
 
 namespace urTribeWebAPI.Test.DAL
 {
     [TestFixture]
     class FactoryTest
     {
-        [Test]
-        public void RetrieveRepository()
+        [SetUp]
+        public void Init()
         {
-//            var factory = RepositoryFactory.Instance;
-//            IUserRepository userRepository = factory.Create<IUserRepository>();
-//            Assert.IsTrue(userRepository != null);
+            UserRepositoryMock<User>.User = null;
+            UserRepositoryMock<User>.UsrId = new Guid();
+            UserRepositoryMock<User>.FriendId = new Guid();
+            UserRepositoryMock<User>.ListOfUsers = null;
+            UserRepositoryMock<User>.ThrowException = false;
+        }
+        
+        [Test]
+        public void RetrieveUserRepositoryReturnUserRepositoryMock()
+        {
+            var factory = RepositoryFactory.Instance;
+            IUserRepository userRepository = factory.Create<IUserRepository>();
+            try
+            {
+                var userRepositoryMock = (UserRepositoryMock<User>)userRepository;
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected repository was returned instead of userRepositoryMock. Exception: {1}", ex.Message);
+            }
+
+            Assert.Pass();
         }
 
         [Test]
-        public void RepositoryAddUserNode()
+        public void RequestNonExistRepositoryReturnException()
         {
-//            var factory = RepositoryFactory.Instance;
-//            IUserRepository userRepository = factory.Create<IUserRepository>();
+            var factory = RepositoryFactory.Instance;
 
-//            User user = new User { ID = Guid.NewGuid()};
-//            userRepository.Add(user);
-//            Assert.IsTrue(userRepository != null);
+            try
+            {
+                IFakeRepository fakeRepository = factory.Create<IFakeRepository>();
+            }
+            catch  (RepositoryNotExistException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected Exception returned. Exception: {1}", ex.Message);
+            }
+
+            Assert.Fail("RepositionNotExistException was expected.");
         }
 
-        [Test]
-        public void RepositoryAddEventNode()
-        {
-//            var factory = RepositoryFactory.Instance;
-//            IEventRepository eventRepository = factory.Create<IEventRepository>();
-//            IUserRepository userRepository = factory.Create<IUserRepository>();
-         
-//            User user = new User { ID = Guid.NewGuid() };
-//            userRepository.Add(user);
-
-//            ScheduledEvent evt = new ScheduledEvent { ID = Guid.NewGuid() };
-//            eventRepository.Add(user, evt);
-//            Assert.IsTrue(evt != null);
-        }
-
-        [Test]
-        public void RepositoryMergeUserNode()
-        {
-//            var factory = RepositoryFactory.Instance;
-//           IUserRepository userRepository = factory.Create<IUserRepository>();
-
-//            User user = new User { ID = new Guid("ec8cfb7f-4436-4f72-b0fc-62b9f134ff28") };
-//            userRepository.Add(user);
-//            Assert.IsTrue(userRepository != null);
-        }
-
-        [Test]
-        public void RepositoryRemoveUserNode()
-        {
-//            var factory = RepositoryFactory.Instance;
-//            IUserRepository userRepository = factory.Create<IUserRepository>();
-
-//            User user = new User { ID = new Guid("ec8cfb7f-4436-4f72-b0fc-62b9f134ff28") };
-//            userRepository.Remove(user);
-//            Assert.IsTrue(userRepository != null);
-        }
-
-        [Test]
-        public void RepositoryFindUserNode()
-        {
-//            var factory = RepositoryFactory.Instance;
-//            IUserRepository userRepository = factory.Create<IUserRepository>();
-
-//            var UserList = userRepository.Find(user => user.ID.ToString() == "ec8cfb7f-4436-4f72-b0fc-62b9f134ff28");
-      //      Assert.IsTrue(UserList.Count > 0);
-        }
-        [Test]
-        public void RepositoryAddToContactList()
-        {
-//            var factory = RepositoryFactory.Instance;
-//            IUserRepository userRepository = factory.Create<IUserRepository>();
-
-//            User user = new User { ID = Guid.NewGuid() };
-//            userRepository.Add(user);
-//            Assert.IsTrue(userRepository != null);
-
-//            User friend = new User { ID = Guid.NewGuid() };
-//            userRepository.Add(friend);
-//            Assert.IsTrue(userRepository != null);
-
-//            userRepository.AddToContactList(user, friend);
-        }
     }
 }

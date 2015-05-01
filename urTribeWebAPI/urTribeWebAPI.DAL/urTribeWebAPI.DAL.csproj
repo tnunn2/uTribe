@@ -61,6 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exception\RepositoryNotExistException.cs" />
     <Compile Include="Factory\RepositoryFactory.cs" />
     <Compile Include="Interfaces\IEventRepository.cs" />
     <Compile Include="Interfaces\IGroupRepository.cs" />

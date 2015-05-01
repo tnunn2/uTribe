@@ -94,6 +94,8 @@
     <Compile Include="BAL\UserFacadeTest.cs" />
     <Compile Include="DAL\FactoryTest.cs" />
     <Compile Include="Messaging\RealTimeBrokerTests.cs" />
+    <Compile Include="RepositoryMocks\IFake.cs" />
+    <Compile Include="RepositoryMocks\IFakeRepository.cs" />
     <Compile Include="RepositoryMocks\UserRepositoryMock.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

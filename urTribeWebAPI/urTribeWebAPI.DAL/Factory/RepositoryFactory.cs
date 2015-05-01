@@ -46,10 +46,17 @@ namespace urTribeWebAPI.DAL.Factory
         #region Public Methods
         public repositorytype Create<repositorytype>() where repositorytype : class
         {
-            Type t = typeof(repositorytype);
-            var repository = Activator.CreateInstance(_repositoryTypeMap[t]);
-            repositorytype concrete = repository as repositorytype;
-            return concrete;
+            try
+            {
+                Type t = typeof(repositorytype);
+                var repository = Activator.CreateInstance(_repositoryTypeMap[t]);
+                repositorytype concrete = repository as repositorytype;
+                return concrete;
+            }
+            catch (Exception ex)
+            {
+                throw new RepositoryNotExistException(ex);
+            }
         }
         #endregion
     }

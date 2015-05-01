@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using urTribeWebAPI.DAL.Interfaces;
 using urTribeWebAPI.Common.Interfaces;
+using urTribeWebAPI.DAL.Interfaces;
 
 
 namespace urTribeWebAPI.Test.RepositoryMocks
