@@ -1,4 +1,6 @@
-﻿using urTribeWebAPI.Common.Interfaces;
+﻿using System;
+using urTribeWebAPI.Common;
+using urTribeWebAPI.Common.Interfaces;
 
 
 namespace urTribeWebAPI.DAL.Interfaces
@@ -7,6 +9,6 @@ namespace urTribeWebAPI.DAL.Interfaces
     {
         void Add(IUser usr, IEvent evt);
         void LinkToEvent(IUser usr, IEvent evt);
-        void ChangeUserAttendStatus(IUser usr, IEvent evt);
+        void ChangeUserAttendStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus);
     }
 }

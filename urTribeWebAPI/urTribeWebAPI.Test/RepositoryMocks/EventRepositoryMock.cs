@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using urTribeWebAPI.Common;
 using urTribeWebAPI.Common.Interfaces;
 using urTribeWebAPI.DAL.Interfaces;
 
@@ -20,7 +21,7 @@ namespace urTribeWebAPI.Test.RepositoryMocks
             set;
         }
 
-        public static Guid UsrId
+        public static Guid UserId
         {
             get;
             set;
@@ -32,7 +33,13 @@ namespace urTribeWebAPI.Test.RepositoryMocks
             set;
         }
 
-        public static IEvent evt
+        public static IEvent Evt
+        {
+            get;
+            set;
+        }
+
+        public static Guid EventId
         {
             get;
             set;
@@ -52,9 +59,10 @@ namespace urTribeWebAPI.Test.RepositoryMocks
                 throw new Exception();
         }
 
-        public void ChangeUserAttendStatus (IUser usr, IEvent evt)
+        public void ChangeUserAttendStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
         {
-            throw new NotImplementedException();
+            if (ThrowException)
+                throw new Exception();
         }
 
         public IEnumerable<IEvent> Find(System.Linq.Expressions.Expression<Func<IEvent, bool>> predicate)
