@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Net;
 using urTribeWebAPI.Common.Interfaces;
+using urTribeWebAPI.Messaging;
 
 // ReSharper disable SuggestVarOrType_SimpleTypes
 // ReSharper disable SuggestVarOrType_BuiltInTypes
 
-namespace urTribeWebAPI.Models
+namespace urTribeWebAPI.Messaging
 {
     public class RealtimeBroker : IMessageBroker
     {

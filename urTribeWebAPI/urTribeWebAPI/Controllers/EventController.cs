@@ -6,6 +6,7 @@ using urTribeWebAPI.Common.Concrete;
 using urTribeWebAPI.Common.Interfaces;
 using urTribeWebAPI.DAL.Interfaces;
 using urTribeWebAPI.DAL.Repositories;
+using urTribeWebAPI.Messaging;
 using urTribeWebAPI.Models;
 using WebGrease.Css.Extensions;
 
@@ -99,6 +100,16 @@ namespace urTribeWebAPI.Controllers
             }
 
             return result.ok();
+        }
+
+        public EventDescription GetEvent(Guid userID, Guid eventID)
+        {
+            return sampleEventFactory.getEvent1(userID, eventID);
+        }
+
+        public EventListResponse GetEvents(Guid userID)
+        {
+            return sampleEventFactory.user1Events(userID);
         }
     }
 }

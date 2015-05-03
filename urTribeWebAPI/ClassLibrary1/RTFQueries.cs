@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 // ReSharper disable InconsistentNaming
 
-namespace urTribeWebAPI.Models
+namespace urTribeWebAPI.Messaging
 {
 
     public class CreateTableQuery
