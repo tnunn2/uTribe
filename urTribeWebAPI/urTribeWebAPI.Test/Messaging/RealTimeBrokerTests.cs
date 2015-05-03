@@ -5,6 +5,7 @@ using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using urTribeWebAPI.Common.Concrete;
 using urTribeWebAPI.Common.Interfaces;
+using urTribeWebAPI.Messaging;
 using urTribeWebAPI.Models;
 using Assert = NUnit.Framework.Assert;
 
