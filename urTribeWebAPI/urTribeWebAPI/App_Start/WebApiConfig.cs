@@ -19,13 +19,13 @@ namespace urTribeWebAPI
             );
 
             config.Routes.MapHttpRoute(
-                name: "UserApi",
+                name: "UsersApi",
                 routeTemplate: "api/Users/{userId}",
                 defaults: new { controller = "users" }
             );
 
             config.Routes.MapHttpRoute(
-                name: "UserApi",
+                name: "UserRouteForUserObjApi",
                 routeTemplate: "api/Users/{user}",
                 defaults: new { controller = "users" }
             );

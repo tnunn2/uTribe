@@ -26,7 +26,7 @@ namespace urTribeWebAPI.Test.RepositoryMocks
             set;
         }
 
-        public static Guid UsrId
+        public static Guid UserId
         {
             get;
             set;

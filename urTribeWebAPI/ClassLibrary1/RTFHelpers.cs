@@ -7,7 +7,7 @@ using System.Text;
 using System.Web.Script.Serialization;
 using urTribeWebAPI.Common.Interfaces;
 
-namespace urTribeWebAPI.Models
+namespace urTribeWebAPI.Messaging
 {
     public class RTFHelpers
     {

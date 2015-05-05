@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Neo4jClient;
+using urTribeWebAPI.Common;
 using urTribeWebAPI.Common.Interfaces;
 using urTribeWebAPI.Common.Concrete;
 using urTribeWebAPI.DAL.Interfaces;
@@ -53,9 +54,15 @@ namespace urTribeWebAPI.DAL.Repositories
 
             return list;
         }
-        public void ChangeUserAttendStatus (IUser usr, IEvent evt)
+        public void ChangeUserAttendStatus (Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
         {
-            throw new NotImplementedException();
+            _dbms.Cypher
+                 .Match("(user:User)-[rel:Guest]->(event:Event)")
+                 .Where((User user) => user.ID.ToString() == userId.ToString())
+                 .AndWhere((ScheduledEvent schevt) => schevt.ID.ToString() == eventId.ToString())
+                 .Set("rel.Status = {status}")
+                 .WithParam("status", (int)attendStatus)
+                 .ExecuteWithoutResults();
         }
         #endregion
     }

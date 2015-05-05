@@ -95,8 +95,8 @@
     <Compile Include="DAL\FactoryTest.cs" />
     <Compile Include="Messaging\RealTimeBrokerTests.cs" />
     <Compile Include="RepositoryMocks\EventRepositoryMock.cs" />
-    <Compile Include="RepositoryMocks\IFake.cs" />
-    <Compile Include="RepositoryMocks\IFakeRepository.cs" />
+    <Compile Include="RepositoryMocks\FakeInterfaces\IFake.cs" />
+    <Compile Include="RepositoryMocks\FakeInterfaces\IFakeRepository.cs" />
     <Compile Include="RepositoryMocks\UserRepositoryMock.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -109,6 +109,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary1\urTribeWebAPI.Messaging.csproj">
+      <Project>{45AF9444-0F0F-4611-9B1E-55C45A58DF9C}</Project>
+      <Name>urTribeWebAPI.Messaging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\urTribeWebAPI.BAL\urTribeWebAPI.BAL\urTribeWebAPI.BAL.csproj">
       <Project>{8a749581-68d7-42c4-8b5c-d2c44711d7d2}</Project>
       <Name>urTribeWebAPI.BAL</Name>

@@ -14,7 +14,7 @@ namespace urTribeWebAPI.Test.DAL
         public void Init()
         {
             UserRepositoryMock<User>.User = null;
-            UserRepositoryMock<User>.UsrId = new Guid();
+            UserRepositoryMock<User>.UserId = new Guid();
             UserRepositoryMock<User>.FriendId = new Guid();
             UserRepositoryMock<User>.ListOfUsers = null;
             UserRepositoryMock<User>.ThrowException = false;
