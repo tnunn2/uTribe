@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using System.Web.Http;
+//using System.Web.Routing;
 
 namespace urTribeWebAPI
 {
@@ -9,11 +11,25 @@ namespace urTribeWebAPI
     {
         public static void Register(HttpConfiguration config)
         {
+
             config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                name: "ContactUserIdApi",
+                routeTemplate: "api/Users/{userId}/contacts/{contactId}",
+                defaults: new { controller = "contacts", contactId = RouteParameter.Optional }
             );
+
+            config.Routes.MapHttpRoute(
+                name: "UserApi",
+                routeTemplate: "api/Users/{userId}",
+                defaults: new { controller = "users" }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "UserApi",
+                routeTemplate: "api/Users/{user}",
+                defaults: new { controller = "users" }
+            );
+
 
             // Uncomment the following line of code to enable query support for actions with an IQueryable or IQueryable<T> return type.
             // To avoid processing unexpected or malicious queries, use the validation settings on QueryableAttribute to validate incoming queries.
