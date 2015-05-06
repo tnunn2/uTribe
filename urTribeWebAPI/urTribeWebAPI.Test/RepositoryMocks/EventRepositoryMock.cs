@@ -52,19 +52,21 @@ namespace urTribeWebAPI.Test.RepositoryMocks
             if (ThrowException)
                 throw new Exception();
         }
-
+        public void Update(IEvent evt)
+        {
+            if (ThrowException)
+                throw new Exception();
+        }
         public void LinkToEvent(IUser usr, IEvent evt)
         {
             if (ThrowException)
                 throw new Exception();
         }
-
         public void ChangeUserAttendStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
         {
             if (ThrowException)
                 throw new Exception();
         }
-
         public IEnumerable<IEvent> Find(System.Linq.Expressions.Expression<Func<IEvent, bool>> predicate)
         {
             if (ThrowException)
@@ -72,7 +74,6 @@ namespace urTribeWebAPI.Test.RepositoryMocks
 
             return ListOfEvents;
         }
-
         public void Remove(IEvent poco)
         {
             if (ThrowException)

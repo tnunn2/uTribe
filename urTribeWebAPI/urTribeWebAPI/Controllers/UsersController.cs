@@ -1,62 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using System.Web.Http;
 using urTribeWebAPI.Common.Interfaces;
+using urTribeWebAPI.Common.Concrete;
 using urTribeWebAPI.BAL;
 
 namespace urTribeWebAPI.Controllers
 {
-    public class UsersController : Controller
+    public class UsersController : ApiController
     {
-        [HttpGet]
-        public IUser Users(Guid userId)
+        public IUser Get(Guid userId)
         {
-            using (UserFacade facade = new UserFacade())
+            using ( UserFacade facade = new UserFacade())
             {
-                IUser user = facade.FindUser(userId);
+                IUser user = facade.FindUser(userId); 
                 return user;
             }
         }
 
-        [HttpPut]
-        public Guid Users(IUser user)
+        public Guid Post(User user)
         {
             using (UserFacade facade = new UserFacade())
             {
-                Guid userId = facade.CreateUser(user);
+                Guid userId;
+                if (user.ID == new Guid())
+                    userId = facade.CreateUser(user);
+                else
+                {
+                    facade.UpdateUser(user);
+                    userId = user.ID;
+                }
                 return userId;
             }
-        }
-
-        [HttpGet]
-        public IEnumerable<IUser> Contacts (Guid userId)
-        {
-            using (UserFacade facade = new UserFacade())
-            {
-                IEnumerable<IUser> friends = facade.RetrieveContacts(userId);
-                return friends;
-            }
-        }
-
-        [HttpPut]
-        public void Contacts(Guid userId, Guid contactId)
-        {
-            using (UserFacade facade = new UserFacade())
-            {
-                facade.AddContact(userId, contactId);
-            }
-        }
-
-        [HttpDelete]
-        public void Contacts (Guid userId, Guid contactId, Guid groupId)
-        {
-            using (UserFacade facade = new UserFacade())
-            {
-                facade.RemoveContact(userId, contactId);
-            }
-        }
-
+        }      
     }
 }

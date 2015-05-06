@@ -118,7 +118,7 @@
       <Name>urTribeWebAPI.BAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\urTribeWebAPI.Common\urTribeWebAPI.Common.csproj">
-      <Project>{D6E5D0B3-CD11-41BD-9E85-4E1C31401710}</Project>
+      <Project>{d6e5d0b3-cd11-41bd-9e85-4e1c31401710}</Project>
       <Name>urTribeWebAPI.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\urTribeWebAPI.DAL\urTribeWebAPI.DAL.csproj">

@@ -8,6 +8,7 @@ namespace urTribeWebAPI.DAL.Interfaces
     public interface IEventRepository : IRepository<IEvent>
     {
         void Add(IUser usr, IEvent evt);
+        void Update(IEvent evt);
         void LinkToEvent(IUser usr, IEvent evt);
         void ChangeUserAttendStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus);
     }

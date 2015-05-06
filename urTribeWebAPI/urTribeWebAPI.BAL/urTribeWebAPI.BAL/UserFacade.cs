@@ -53,11 +53,23 @@ namespace urTribeWebAPI.BAL
             }
         }
 
+        public void UpdateUser (IUser user)
+        {
+            try
+            {
+                UsrRepository.Update(user);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log = new ExceptionDTO() { FaultClass = "UserFacade", FaultMethod = "UpdateUser", Exception = ex };
+            }
+        }
+
         public IUser FindUser (Guid userId)
         {
             try
             {
-                var userList = UsrRepository.Find(usr => usr.ID == userId);
+                var userList = UsrRepository.Find(user => user.ID == userId);
 
                 foreach (IUser usr in userList)
                     return usr;
@@ -74,6 +86,9 @@ namespace urTribeWebAPI.BAL
         {
             try
             {
+                if (usrId.Equals(friendId))
+                    throw new UserContactAssociationException("UserId and ContactId are the same.");
+
                 var factory = RepositoryFactory.Instance;
                 IUserRepository userRepository = factory.Create<IUserRepository>();
                 userRepository.AddToContactList(usrId, friendId);

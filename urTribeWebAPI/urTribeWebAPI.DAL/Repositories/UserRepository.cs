@@ -29,6 +29,15 @@ namespace urTribeWebAPI.DAL.Repositories
         {
             _dbms.Cypher.Merge("(user:User { ID: {ID} })").OnCreate().Set("user = {poco}").WithParams(new { ID = poco.ID, poco }).ExecuteWithoutResults();
         }
+
+        public void Update(IUser usr)
+        {
+            _dbms.Cypher.Match ("(user:User)")
+                        .Where ((userImpl user) => user.ID.ToString() == usr.ID.ToString())
+                        .Set("user = {user}")
+                        .WithParam ("user", usr)
+                        .ExecuteWithoutResults();
+        }
         public void Remove(IUser poco)
         {
             _dbms.Cypher.Match("(user:User)").Where((userImpl user) => user.ID == poco.ID).
@@ -65,7 +74,7 @@ namespace urTribeWebAPI.DAL.Repositories
         }
         public void RemoveContact(Guid usrId, Guid friendId)
         {
-            _dbms.Cypher.Match("(user:Usr)-[rel:FRIENDS_WITH]->(friend:User)").
+            _dbms.Cypher.Match("(user:User)-[rel:FRIENDS_WITH]->(friend:User)").
                          Where((User usr) => usr.ID == usrId).
                          AndWhere((User friend) => friend.ID == friendId).
                          Delete("rel").ExecuteWithoutResults();
@@ -73,7 +82,14 @@ namespace urTribeWebAPI.DAL.Repositories
 
         public IEnumerable<IEvent> RetrieveAllEventsByStatus(Guid usrId, EventAttendantsStatus status)
         {
-            throw new NotImplementedException();
+            //TODO: Need to rewrite to return all if status is all
+
+            var query =  _dbms.Cypher.Match("(user:User)-[rel:EVENTOWNER]->(evt:Event)")
+                                     .Where((User user) => user.ID.ToString() == usrId.ToString())
+                                     .AndWhere((EventRelationship rel) => rel.AttendStatus == status)
+                                     .Return(evt => evt.As<ScheduledEvent>())
+                                     .Results;
+            return query;
         }
 
         #endregion
