@@ -32,7 +32,7 @@ namespace urTribeWebAPI.DAL.Repositories
 
         public void Update(IUser usr)
         {
-            _dbms.Cypher.Match ("(user:User")
+            _dbms.Cypher.Match ("(user:User)")
                         .Where ((userImpl user) => user.ID.ToString() == usr.ID.ToString())
                         .Set("user = {user}")
                         .WithParam ("user", usr)
@@ -82,6 +82,8 @@ namespace urTribeWebAPI.DAL.Repositories
 
         public IEnumerable<IEvent> RetrieveAllEventsByStatus(Guid usrId, EventAttendantsStatus status)
         {
+            //TODO: Need to rewrite to return all if status is all
+
             var query =  _dbms.Cypher.Match("(user:User)-[rel:EVENTOWNER]->(evt:Event)")
                                      .Where((User user) => user.ID.ToString() == usrId.ToString())
                                      .AndWhere((EventRelationship rel) => rel.AttendStatus == status)
