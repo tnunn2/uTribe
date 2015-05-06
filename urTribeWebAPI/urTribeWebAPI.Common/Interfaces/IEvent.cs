@@ -1,6 +1,6 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
+
 namespace urTribeWebAPI.Common.Interfaces
 {
     public interface IEvent : IDBRepositoryObject

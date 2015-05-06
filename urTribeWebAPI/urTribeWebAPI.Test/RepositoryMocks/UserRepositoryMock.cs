@@ -51,6 +51,11 @@ namespace urTribeWebAPI.Test.RepositoryMocks
                 throw new Exception();
             else User = poco;
         }
+        public void Update(IUser usr)
+        {
+            if (ThrowException)
+                throw new Exception();
+        }
         public void Remove(IUser poco)
         {
             if (ThrowException)
@@ -80,7 +85,6 @@ namespace urTribeWebAPI.Test.RepositoryMocks
             if (ThrowException)
                 throw new Exception();
         }
-
         public IEnumerable<IEvent> RetrieveAllEventsByStatus(Guid usrId, EventAttendantsStatus status)
         {
             if (ThrowException)
@@ -88,7 +92,6 @@ namespace urTribeWebAPI.Test.RepositoryMocks
 
             return ListOfEvents;
         }
-
         #endregion
     }
 }

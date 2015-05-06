@@ -27,16 +27,29 @@ namespace urTribeWebAPI.DAL.Repositories
         #region Public Methods
         public void Add(IUser usr, IEvent evt)
         {
+            EventRelationship rel = new EventRelationship { AttendStatus = EventAttendantsStatus.Attending};
+
             _dbms.Cypher.Match("(inviter:User)")
-                .Where((User inviter) => inviter.ID.ToString() == usr.ID.ToString()).Create("inviter-[:EVENTOWNER]->(event:Event {evt})")
-                .WithParam("evt", evt).ExecuteWithoutResults();
+                .Where((User inviter) => inviter.ID.ToString() == usr.ID.ToString()).Create("inviter-[rel:EVENTOWNER]->(event:Event {evt})")
+                .WithParam("evt", evt)
+                .WithParam("rel", rel).ExecuteWithoutResults();
+        }
+        public void Update(IEvent evt)
+        {
+            _dbms.Cypher.Match("(evt:Event")
+                        .Where((eventImpl evtImp) => evtImp.ID.ToString() == evt.ID.ToString())
+                        .Set("evt = {evt}")
+                        .WithParam("evt", evt)
+                        .ExecuteWithoutResults();
         }
         public void LinkToEvent(IUser usr, IEvent evt)
         {
+            EventRelationship rel = new EventRelationship { AttendStatus = EventAttendantsStatus.Pending};
+
             _dbms.Cypher
                  .Match("(user:User)", "(event:Event)").Where((User user) => user.ID.ToString() == usr.ID.ToString())
-                 .AndWhere((ScheduledEvent schevt) => schevt.ID.ToString() == evt.ID.ToString()).Create("user1-[:Guest]->event")
-                 .ExecuteWithoutResults();
+                 .AndWhere((ScheduledEvent schevt) => schevt.ID.ToString() == evt.ID.ToString()).Create("user1-[rel:Guest]->event")
+                 .WithParam("rel", rel).ExecuteWithoutResults();
         }
         public void Remove(IEvent poco)
         {
@@ -61,7 +74,7 @@ namespace urTribeWebAPI.DAL.Repositories
                  .Where((User user) => user.ID.ToString() == userId.ToString())
                  .AndWhere((ScheduledEvent schevt) => schevt.ID.ToString() == eventId.ToString())
                  .Set("rel.Status = {status}")
-                 .WithParam("status", (int)attendStatus)
+                 .WithParam("status", attendStatus)
                  .ExecuteWithoutResults();
         }
         #endregion

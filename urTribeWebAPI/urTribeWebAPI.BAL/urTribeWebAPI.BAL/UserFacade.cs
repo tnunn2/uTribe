@@ -55,7 +55,14 @@ namespace urTribeWebAPI.BAL
 
         public void UpdateUser (IUser user)
         {
-            throw new NotImplementedException();
+            try
+            {
+                UsrRepository.Update(user);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log = new ExceptionDTO() { FaultClass = "UserFacade", FaultMethod = "UpdateUser", Exception = ex };
+            }
         }
 
         public IUser FindUser (Guid userId)
