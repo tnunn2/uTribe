@@ -12,7 +12,7 @@ namespace urTribeWebAPI.Controllers
     {
         public IUser Get(Guid userId)
         {
-            using (UserFacade facade = new UserFacade())
+            using ( UserFacade facade = new UserFacade())
             {
                 IUser user = facade.FindUser(userId); 
                 return user;

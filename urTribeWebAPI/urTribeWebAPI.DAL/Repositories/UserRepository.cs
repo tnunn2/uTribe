@@ -73,6 +73,7 @@ namespace urTribeWebAPI.DAL.Repositories
 
         public IEnumerable<IEvent> RetrieveAllEventsByStatus(Guid usrId, EventAttendantsStatus status)
         {
+
             throw new NotImplementedException();
         }
 

@@ -18,17 +18,18 @@ namespace urTribeWebAPI
                 defaults: new { controller = "contacts", contactId = RouteParameter.Optional }
             );
 
-            config.Routes.MapHttpRoute(
+             config.Routes.MapHttpRoute(
                 name: "UsersApi",
                 routeTemplate: "api/Users/{userId}",
-                defaults: new { controller = "users" }
+                defaults: new { controller = "users"} 
             );
 
-            config.Routes.MapHttpRoute(
+           config.Routes.MapHttpRoute(
                 name: "UserRouteForUserObjApi",
                 routeTemplate: "api/Users/{user}",
-                defaults: new { controller = "users" }
+                defaults: new { controller = "users", user = RouteParameter.Optional }
             );
+
 
 
             // Uncomment the following line of code to enable query support for actions with an IQueryable or IQueryable<T> return type.
