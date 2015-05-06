@@ -125,6 +125,20 @@ namespace urTribeWebAPI.BAL
             }
         }
 
+        public void CreateEvent (IUser user, IEvent evt)
+        {
+            try
+            {
+                var factory = RepositoryFactory.Instance;
+                IEventRepository eventRepository = factory.Create<IEventRepository>();
+                eventRepository.Add(user, evt);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "CreateEvent", Exception = ex };
+            }
+        }
+
         public void Dispose()
         {
         }
