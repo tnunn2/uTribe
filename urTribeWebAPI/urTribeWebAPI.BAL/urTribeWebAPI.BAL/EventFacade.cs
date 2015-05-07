@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using urTribeWebAPI.Common;
 using urTribeWebAPI.Common.Interfaces;
 using urTribeWebAPI.Common.Logging;
 using urTribeWebAPI.DAL.Interfaces;
@@ -60,7 +61,7 @@ namespace urTribeWebAPI.BAL
                 return null;
             }
         }
-        public void AddUserToEvent(IUser user, IEvent evt)
+        public void AddContactToEvent(IUser user, IEvent evt)
         {
             try
             {
@@ -71,9 +72,17 @@ namespace urTribeWebAPI.BAL
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "AddUserToEvent", Exception = ex };
             }
         }
-
-
-
+        public void ChangeContactAttendanceStatus (Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
+        {
+            try
+            {
+                EvtRepository.ChangeUserAttendStatus(userId, eventId, attendStatus);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "AddUserToEvent", Exception = ex };
+            }
+        }
         #endregion
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using urTribeWebAPI.Common;
 using urTribeWebAPI.Common.Interfaces;
 using urTribeWebAPI.Common.Logging;
 using urTribeWebAPI.DAL.Interfaces;
@@ -111,6 +112,21 @@ namespace urTribeWebAPI.BAL
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "UserFacade", FaultMethod = "RetrieveContacts", Exception = ex };
                 return null;
             }
+        }
+
+        public IEnumerable<IEvent> RetrieveEventsByAttendanceStatus(Guid usrId, EventAttendantsStatus status)
+        {
+            try
+            {
+                IEnumerable<IEvent> evtList = UsrRepository.RetrieveAllEventsByStatus(usrId, status);
+                return evtList;
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log = new ExceptionDTO() { FaultClass = "UserFacade", FaultMethod = "RetrieveContacts", Exception = ex };
+                return null;
+            }
+
         }
 
         public void RemoveContact (Guid usrId, Guid friendId)

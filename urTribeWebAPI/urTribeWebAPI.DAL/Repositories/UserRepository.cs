@@ -82,7 +82,8 @@ namespace urTribeWebAPI.DAL.Repositories
 
         public IEnumerable<IEvent> RetrieveAllEventsByStatus(Guid usrId, EventAttendantsStatus status)
         {
-            //TODO: Need to rewrite to return all if status is all
+            //TODO: Need to rewrite to return all if status is all.
+            //NOTE: also need to limit to active events
 
             var query =  _dbms.Cypher.Match("(user:User)-[rel:EVENTOWNER]->(evt:Event)")
                                      .Where((User user) => user.ID.ToString() == usrId.ToString())
@@ -91,7 +92,6 @@ namespace urTribeWebAPI.DAL.Repositories
                                      .Results;
             return query;
         }
-
         #endregion
     }
 }
