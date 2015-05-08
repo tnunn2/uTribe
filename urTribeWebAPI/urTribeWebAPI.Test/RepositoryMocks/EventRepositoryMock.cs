@@ -44,6 +44,11 @@ namespace urTribeWebAPI.Test.RepositoryMocks
             get;
             set;
         }
+        public static Guid OwnerId
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Public Methods
@@ -79,6 +84,14 @@ namespace urTribeWebAPI.Test.RepositoryMocks
             if (ThrowException)
                 throw new Exception();
         }
+        public Guid Owner(IEvent evt)
+        {
+            if (ThrowException)
+                throw new Exception();
+
+            return OwnerId;
+        }
         #endregion
+
     }
 }

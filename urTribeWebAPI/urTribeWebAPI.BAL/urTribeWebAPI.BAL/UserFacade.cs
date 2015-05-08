@@ -141,17 +141,22 @@ namespace urTribeWebAPI.BAL
             }
         }
 
-        public void CreateEvent (IUser user, IEvent evt)
+        public Guid CreateEvent (IUser user, IEvent evt)
         {
             try
             {
                 var factory = RepositoryFactory.Instance;
                 IEventRepository eventRepository = factory.Create<IEventRepository>();
+
+                ((ScheduledEvent)evt).ID = Guid.NewGuid();
                 eventRepository.Add(user, evt);
+
+                return evt.ID;
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "CreateEvent", Exception = ex };
+                return new Guid("99999999-9999-9999-9999-999999999999");
             }
         }
 

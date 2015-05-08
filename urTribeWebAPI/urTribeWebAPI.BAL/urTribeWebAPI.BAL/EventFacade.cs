@@ -9,7 +9,7 @@ using urTribeWebAPI.Common.Concrete;
 
 namespace urTribeWebAPI.BAL
 {
-    class EventFacade
+    public class EventFacade : IDisposable
     {
         #region Member Variables
         private readonly IEventRepository _repository; 
@@ -83,6 +83,16 @@ namespace urTribeWebAPI.BAL
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "AddUserToEvent", Exception = ex };
             }
         }
+        public void Dispose ()
+        {
+        }
+
+        public Guid EventOwner(IEvent evt)
+        {
+            var owner = EvtRepository.Owner(evt);
+            return owner;
+        }
+
         #endregion
     }
 }

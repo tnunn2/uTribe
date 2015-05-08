@@ -82,6 +82,10 @@ namespace urTribeWebAPI.DAL.Repositories
                  .WithParam("rel", rel)
                  .ExecuteWithoutResults();
         }
+        public Guid Owner (IEvent evt)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using System.Web.Http;
-//using System.Web.Routing;
 
 namespace urTribeWebAPI
 {
@@ -11,6 +9,17 @@ namespace urTribeWebAPI
     {
         public static void Register(HttpConfiguration config)
         {
+            config.Routes.MapHttpRoute(
+                name: "EventsApi",
+                routeTemplate: "api/Users/{userId}/events/{eventId}",
+                defaults: new { controller = "events"}
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "EventsApi",
+                routeTemplate: "api/Users/{userId}/events/evt",
+                defaults: new { controller = "events", evt = RouteParameter.Optional }
+            );
 
             config.Routes.MapHttpRoute(
                 name: "ContactUserIdApi",
