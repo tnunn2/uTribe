@@ -14,6 +14,7 @@ namespace urTribeWebAPI.Controllers
 {
     public class ContactsController : ApiController
     {
+        //Get a list of User Contacts
         public IEnumerable<IUser> Get(Guid userId)
         {
             using (UserFacade facade = new UserFacade())
@@ -23,6 +24,8 @@ namespace urTribeWebAPI.Controllers
             }
         }
 
+
+        //Link to Contact to User
         public bool Post(Guid userId, Guid contactId)
         {
             bool done = false;
@@ -34,6 +37,7 @@ namespace urTribeWebAPI.Controllers
             return done;
         }
 
+        //Remove a contact
         public bool Delete(Guid userId, Guid contactId)
         {
             bool done = false;

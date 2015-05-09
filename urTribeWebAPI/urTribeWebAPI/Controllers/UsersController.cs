@@ -10,6 +10,7 @@ namespace urTribeWebAPI.Controllers
 {
     public class UsersController : ApiController
     {
+        //Get User data
         public IUser Get(Guid userId)
         {
             using ( UserFacade facade = new UserFacade())
@@ -19,6 +20,8 @@ namespace urTribeWebAPI.Controllers
             }
         }
 
+        //Create User data
+        //Update User data
         public Guid Post(User user)
         {
             using (UserFacade facade = new UserFacade())

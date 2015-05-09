@@ -71,20 +71,21 @@ namespace urTribeWebAPI.BAL
             try
             {
                 IEvent evt = FindEvent(eventId);
-                if (userId == EvtRepository.Owner(evt))
+
+                if (userId != EvtRepository.Owner(evt))
+                  return;
+
+                foreach (var contact in contactList)
                 {
-                    foreach (var contact in contactList)
+                    if (!EvtRepository.Guest(evt, contact))
+                        continue;
+
+                    using (UserFacade userFacade = new UserFacade())
                     {
-                        if (EvtRepository.Guest(evt, contact))
-                        {
-                            using (UserFacade userFacade = new UserFacade())
-                            {
-                                IUser user = userFacade.FindUser(userId);
-                                EvtRepository.LinkToEvent(user, evt);
-                            }
-                        }
-                    }
-                }
+                        IUser user = userFacade.FindUser(userId);
+                        EvtRepository.LinkToEvent(user, evt);
+                    }  
+                }  
             }
             catch (Exception ex)
             {
