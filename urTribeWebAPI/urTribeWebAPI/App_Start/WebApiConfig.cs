@@ -10,13 +10,26 @@ namespace urTribeWebAPI
         public static void Register(HttpConfiguration config)
         {
             config.Routes.MapHttpRoute(
-                name: "EventsApi",
-                routeTemplate: "api/Users/{userId}/events/{eventId}",
-                defaults: new { controller = "events"}
+                name: "Events1Api",
+                routeTemplate: "api/Users/{userId}/events/{eventId}/Contacts/{contactList}",
+                defaults: new { controller = "events", contactList = RouteParameter.Optional }
             );
 
             config.Routes.MapHttpRoute(
-                name: "EventsApi",
+                name: "Events2Api",
+                routeTemplate: "api/Users/{userId}/events/{eventId}/Status/{AttendStatus}",
+                defaults: new { controller = "events", AttendStatus = RouteParameter.Optional }
+            );
+
+
+            config.Routes.MapHttpRoute(
+                name: "Events3Api",
+                routeTemplate: "api/Users/{userId}/events/{eventId}",
+                defaults: new { controller = "events", eventId = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "Events4Api",
                 routeTemplate: "api/Users/{userId}/events/evt",
                 defaults: new { controller = "events", evt = RouteParameter.Optional }
             );

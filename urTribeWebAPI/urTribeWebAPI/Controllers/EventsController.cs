@@ -47,8 +47,9 @@ namespace urTribeWebAPI.Controllers
 
         //Add new contacts to events
         //Maybe change to take a list of Contacts???
-        public void Post (Guid userId, Guid eventId)
+        public void Post(Guid userId, Guid eventId, List<Guid> contactList)
         {
+            //TODO: Rewrite to take a list of user Ids
             using (UserFacade userFacade = new UserFacade())
             using (EventFacade eventFacade = new EventFacade())
             {
