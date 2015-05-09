@@ -21,7 +21,6 @@ namespace urTribeWebAPI
                 defaults: new { controller = "events", AttendStatus = RouteParameter.Optional }
             );
 
-
             config.Routes.MapHttpRoute(
                 name: "Events3Api",
                 routeTemplate: "api/Users/{userId}/events/{eventId}",

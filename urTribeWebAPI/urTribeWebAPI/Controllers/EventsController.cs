@@ -17,57 +17,41 @@ namespace urTribeWebAPI.Controllers
         //Update Event Info
         public Guid Post (Guid userId, ScheduledEvent evt)
         {
+            Guid eventId = new Guid();
 
             if (evt.ID == new Guid())
             {
                 using (UserFacade userFacade = new UserFacade())
-                {
-                    IUser user = userFacade.FindUser(userId);
-                    if (user == null)
-                        return new Guid("99999999-9999-9999-9999-999999999999");
-
-                    var eventId = userFacade.CreateEvent(user, evt);
-                    return eventId;
-                }
+                    eventId = userFacade.CreateEvent(userId, evt);
             }
             else
             {
                 using (EventFacade eventFacade = new EventFacade())
-                {
-                    if (userId == eventFacade.EventOwner(evt))
-                    {
-                        eventFacade.UpdateEvent(evt);
-                        return evt.ID;
-                    }
-                    else
-                        return new Guid("99999999-9999-9999-9999-999999999999");
-                }
+                    eventId = eventFacade.UpdateEvent(userId, evt);
             }
+
+            return eventId;
         }
 
         //Add new contacts to events
-        //Maybe change to take a list of Contacts???
         public void Post(Guid userId, Guid eventId, List<Guid> contactList)
         {
-            //TODO: Rewrite to take a list of user Ids
-            using (UserFacade userFacade = new UserFacade())
             using (EventFacade eventFacade = new EventFacade())
-            {
-                IUser user = userFacade.FindUser(userId);
-                IEvent evt = eventFacade.FindEvent(eventId);
-                eventFacade.AddContactToEvent(user, evt);
-            }
+                eventFacade.AddContactsToEvent(userId, eventId, contactList);
         }
 
         //Update Contacts attendents status
         public void Post (Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
         {
-            using (UserFacade userFacade = new UserFacade())
-            using (EventFacade eventFacade = new EventFacade())
+            if (attendStatus == EventAttendantsStatus.Cancel)
             {
-                IUser user = userFacade.FindUser(userId);
-                IEvent evt = eventFacade.FindEvent(eventId);
-                eventFacade.ChangeContactAttendanceStatus(userId, eventId, attendStatus);
+                using (UserFacade userFacade = new UserFacade())
+                    userFacade.CancelEvent(userId, eventId);
+            }
+            else
+            {
+                using (EventFacade eventFacade = new EventFacade())
+                    eventFacade.ChangeContactAttendanceStatus(userId, eventId, attendStatus);
             }
         }
 

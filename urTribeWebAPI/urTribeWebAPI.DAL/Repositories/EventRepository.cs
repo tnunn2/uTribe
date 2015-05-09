@@ -11,6 +11,7 @@ namespace urTribeWebAPI.DAL.Repositories
 {
     public class EventRepository<eventImpl> : IEventRepository where eventImpl : IEvent
     {
+
         #region Member Variable
         private readonly GraphClient _dbms;
         #endregion
@@ -62,17 +63,18 @@ namespace urTribeWebAPI.DAL.Repositories
         public IEnumerable<IEvent> Find(System.Linq.Expressions.Expression<Func<IEvent, bool>> predicate)
         {
             var query = _dbms.Cypher.Match("(evt:Event)").Where(predicate).Return(evt => evt.As<eventImpl>());
-            var ienum = query.Results;
+            var rsult = query.Results;
             
             List<IEvent> list = new List<IEvent>();
-            foreach (IEvent evt in ienum)
+
+            foreach (IEvent evt in rsult)
                 list.Add(evt);
 
             return list;
         }
         public void ChangeUserAttendStatus (Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
         {
-            EventRelationship rel = new EventRelationship { AttendStatus = EventAttendantsStatus.Cancel };
+            EventRelationship rel = new EventRelationship { AttendStatus = attendStatus };
 
             _dbms.Cypher
                  .Match("(user:User)-[rel:GUEST]->(evtImp:Event)")
@@ -82,10 +84,32 @@ namespace urTribeWebAPI.DAL.Repositories
                  .WithParam("rel", rel)
                  .ExecuteWithoutResults();
         }
-        public Guid Owner (IEvent evt)
+        public Guid Owner(IEvent evt)
         {
-            throw new NotImplementedException();
+            IEnumerable<User> owners = _dbms.Cypher
+                                            .Match("(user:User)-[:EVENTOWNER]->(evtImp:Event)")
+                                            .Where((ScheduledEvent evtImp) => evtImp.ID.ToString() == evt.ID.ToString())
+                                            .Return(user => user.As<User>())
+                                            .Results;
+            foreach (var owner in owners)
+                return owner.ID;
+
+            return new Guid("99999999-9999-9999-9999-999999999999");
         }
+        public bool Guest(IEvent evt, Guid userId)
+        {
+            IEnumerable<User> guestList =  _dbms.Cypher
+                                                .Match("(user:User)-[:GUEST]->(evtImp:Event)")
+                                                .Where((ScheduledEvent evtImp) => evtImp.ID.ToString() == evt.ID.ToString())
+                                                .AndWhere((User user) => user.ID.ToString() == userId.ToString())
+                                                .Return(user => user.As<User>())
+                                                .Results;
+            foreach (var guest in guestList)
+                return true;
+
+            return false;
+        }
+
         #endregion
     }
 

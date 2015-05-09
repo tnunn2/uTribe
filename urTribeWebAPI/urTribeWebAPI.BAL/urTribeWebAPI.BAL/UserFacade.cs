@@ -14,7 +14,8 @@ namespace urTribeWebAPI.BAL
     {
 
         #region Member Variables
-        private readonly IUserRepository _repository; 
+        private readonly IUserRepository _usrrepository;
+        private readonly RepositoryFactory _factory;
         #endregion
 
         #region Properties
@@ -22,7 +23,14 @@ namespace urTribeWebAPI.BAL
         {
             get
             {
-                return _repository;
+                return _usrrepository;
+            }
+        }
+        private RepositoryFactory Factory
+        {
+            get
+            {
+                return _factory;
             }
         }
         #endregion
@@ -30,8 +38,8 @@ namespace urTribeWebAPI.BAL
         #region Constructors
         public UserFacade ()
         {
-                var factory = RepositoryFactory.Instance;
-                _repository = factory.Create<IUserRepository>();
+                _factory = RepositoryFactory.Instance;
+                _usrrepository = _factory.Create<IUserRepository>();
         }
         #endregion
 
@@ -141,15 +149,18 @@ namespace urTribeWebAPI.BAL
             }
         }
 
-        public Guid CreateEvent (IUser user, IEvent evt)
+        public Guid CreateEvent(Guid userId, IEvent evt)
         {
             try
             {
-                var factory = RepositoryFactory.Instance;
-                IEventRepository eventRepository = factory.Create<IEventRepository>();
+                IUser user = FindUser(userId);
+                if (user == null)
+                    return new Guid("99999999-9999-9999-9999-999999999999");
 
                 ((ScheduledEvent)evt).ID = Guid.NewGuid();
-                eventRepository.Add(user, evt);
+
+                var evtRepository = Factory.Create<IEventRepository>();
+                evtRepository.Add(user, evt);
 
                 return evt.ID;
             }
@@ -159,7 +170,29 @@ namespace urTribeWebAPI.BAL
                 return new Guid("99999999-9999-9999-9999-999999999999");
             }
         }
+        public void CancelEvent (Guid userId, Guid eventId)
+        {
+            try
+            {
+                using (EventFacade eventFacade = new EventFacade())
+                {
+                    IEvent evt = eventFacade.FindEvent(eventId);
 
+                    var evtRepository = Factory.Create<IEventRepository>();
+                    if (evtRepository.Guest(evt, userId))
+                        return;
+                    if (evt.Active)
+                        return;
+
+                    evt.Active = false;
+                    eventFacade.UpdateEvent(userId, evt);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "CancelEvent", Exception = ex };
+            }
+        }
         public void Dispose()
         {
         }

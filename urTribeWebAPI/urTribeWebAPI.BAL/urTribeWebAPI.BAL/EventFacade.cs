@@ -34,16 +34,21 @@ namespace urTribeWebAPI.BAL
         #endregion
 
         #region Public Methods
-        public void UpdateEvent(IEvent user)
+        public Guid UpdateEvent(Guid userId, IEvent evt)
         {
             try
             {
-                EvtRepository.Update(user);
+                if (userId == EvtRepository.Owner(evt))
+                {
+                    EvtRepository.Update(evt);
+                    return evt.ID;
+                }
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "UpdateEvent", Exception = ex };
             }
+            return new Guid("99999999-9999-9999-9999-999999999999");
         }
         public IEvent FindEvent(Guid eventId)
         {
@@ -61,38 +66,52 @@ namespace urTribeWebAPI.BAL
                 return null;
             }
         }
-        public void AddContactToEvent(IUser user, IEvent evt)
+        public void AddContactsToEvent(Guid userId, Guid eventId, List<Guid> contactList)
         {
             try
             {
-                EvtRepository.LinkToEvent(user, evt);
+                IEvent evt = FindEvent(eventId);
+                if (userId == EvtRepository.Owner(evt))
+                {
+                    foreach (var contact in contactList)
+                    {
+                        if (EvtRepository.Guest(evt, contact))
+                        {
+                            using (UserFacade userFacade = new UserFacade())
+                            {
+                                IUser user = userFacade.FindUser(userId);
+                                EvtRepository.LinkToEvent(user, evt);
+                            }
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
-                Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "AddUserToEvent", Exception = ex };
+                Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "AddContactsToEvent", Exception = ex };
             }
         }
         public void ChangeContactAttendanceStatus (Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
         {
             try
             {
+                if (attendStatus == EventAttendantsStatus.All || attendStatus == EventAttendantsStatus.Cancel)
+                    return;
+
+                IEvent evt = FindEvent(eventId);
+                if (!EvtRepository.Guest(evt, userId))
+                    return;
+
                 EvtRepository.ChangeUserAttendStatus(userId, eventId, attendStatus);
             }
             catch (Exception ex)
             {
-                Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "AddUserToEvent", Exception = ex };
+                Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "ChangeContactAttendanceStatus", Exception = ex };
             }
         }
         public void Dispose ()
         {
         }
-
-        public Guid EventOwner(IEvent evt)
-        {
-            var owner = EvtRepository.Owner(evt);
-            return owner;
-        }
-
         #endregion
     }
 }

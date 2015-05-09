@@ -29,7 +29,6 @@ namespace urTribeWebAPI.DAL.Repositories
         {
             _dbms.Cypher.Merge("(user:User { ID: {ID} })").OnCreate().Set("user = {poco}").WithParams(new { ID = poco.ID, poco }).ExecuteWithoutResults();
         }
-
         public void Update(IUser usr)
         {
             _dbms.Cypher.Match ("(user:User)")
@@ -79,15 +78,18 @@ namespace urTribeWebAPI.DAL.Repositories
                          AndWhere((User friend) => friend.ID == friendId).
                          Delete("rel").ExecuteWithoutResults();
         }
-
         public IEnumerable<IEvent> RetrieveAllEventsByStatus(Guid usrId, EventAttendantsStatus status)
         {
-            //TODO: Need to rewrite to return all if status is all.
-            //NOTE: also need to limit to active events
-
             var query =  _dbms.Cypher.Match("(user:User)-[rel:EVENTOWNER]->(evt:Event)")
                                      .Where((User user) => user.ID.ToString() == usrId.ToString())
-                                     .AndWhere((EventRelationship rel) => rel.AttendStatus == status)
+                                     .AndWhere((ScheduledEvent evt) => evt.Active == true)
+                                     .AndWhere((EventRelationship rel) => rel.AttendStatus == status || status == EventAttendantsStatus.All)
+                                     .Return(evt => evt.As<ScheduledEvent>())
+                                     .Union()
+                                     .Match("(user:User)-[rel:GUEST]->(evt:Event)")
+                                     .Where((User user) => user.ID.ToString() == usrId.ToString())
+                                     .AndWhere((ScheduledEvent evt) => evt.Active == true)
+                                     .AndWhere((EventRelationship rel) => rel.AttendStatus == status || status == EventAttendantsStatus.All)
                                      .Return(evt => evt.As<ScheduledEvent>())
                                      .Results;
             return query;

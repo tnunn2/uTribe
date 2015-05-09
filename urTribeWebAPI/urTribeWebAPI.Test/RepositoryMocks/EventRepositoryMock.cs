@@ -44,10 +44,17 @@ namespace urTribeWebAPI.Test.RepositoryMocks
             get;
             set;
         }
+
         public static Guid OwnerId
         {
             get;
             set;
+        }
+
+        public static bool IsGuest 
+        { 
+            get; 
+            set; 
         }
         #endregion
 
@@ -90,6 +97,13 @@ namespace urTribeWebAPI.Test.RepositoryMocks
                 throw new Exception();
 
             return OwnerId;
+        }
+        public bool Guest(IEvent evt, Guid userId)
+        {
+            if (ThrowException)
+                throw new Exception();
+
+            return IsGuest;
         }
         #endregion
 
