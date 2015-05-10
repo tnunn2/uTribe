@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using urTribeWebAPI.Common.Concrete;
-using urTribeWebAPI.Common.Interfaces;
+using urTribeWebAPI.Common;
 using urTribeWebAPI.DAL.Interfaces;
 using urTribeWebAPI.DAL.Repositories;
 using urTribeWebAPI.Messaging;
@@ -15,7 +14,7 @@ namespace urTribeWebAPI.Controllers
     [RoutePrefix("api/events")]
     public class EventController : ApiController
     {
-        private readonly IMessageBroker _broker = new RealtimeBroker();
+        private readonly IMessageBroker _broker = new RealTimeBroker();
         private readonly IRepository<IUser> _userRepo = new UserRepository<User> ();
         private readonly IRepository<IEvent> _eventRepo = new EventRepository<ScheduledEvent>();
 
@@ -91,12 +90,14 @@ namespace urTribeWebAPI.Controllers
         public bool PutInviteResponse(Guid userID, Guid eventID, bool accept)
         {
             IUser user = _userRepo.Find(u => u.ID == userID).FirstOrDefault();
-            brokerResult result =_broker.RespondToInvite(user, eventID, accept);
+            BrokerResult result =_broker.RespondToInvite(user, eventID, accept);
             if (result.type == ResultType.fullsuccess && accept)
             {
                 IEvent ev = _eventRepo.Find(e => e.ID == eventID).FirstOrDefault();
-                ev.attendingUsers.Add(user);
-                ev.invitedUsers.Remove(user);
+
+                // Use EventFacade  --> EventAttendeesByStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
+   //             ev.attendingUsers.Add(user);  
+   //             ev.invitedUsers.Remove(user);
             }
 
             return result.ok();

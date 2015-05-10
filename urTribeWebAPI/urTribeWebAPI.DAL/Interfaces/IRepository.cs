@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using urTribeWebAPI.Common.Interfaces;
+using urTribeWebAPI.Common;
 
 namespace urTribeWebAPI.DAL.Interfaces
 {

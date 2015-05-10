@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using urTribeWebAPI.Common.Interfaces;
+using urTribeWebAPI.Common;
 
 namespace urTribeWebAPI.Test.RepositoryMocks
 {

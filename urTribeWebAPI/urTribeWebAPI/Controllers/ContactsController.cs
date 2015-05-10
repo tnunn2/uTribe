@@ -4,8 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using urTribeWebAPI.Common.Interfaces;
-using urTribeWebAPI.Common.Concrete;
+using urTribeWebAPI.Common;
 using urTribeWebAPI.BAL;
 
 

@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using urTribeWebAPI.Common.Interfaces;
+using urTribeWebAPI.Common;
 
 namespace urTribeWebAPI.Messaging
 {
     public interface IMessageBroker
     {
-
-        //brokerResult CreateEventChannel(Guid eventID, IUser eventCreator);
-        brokerResult CreateAuthAndInvite(Guid eventID, IUser eventCreator, IEnumerable<IUser> invitees);
-        string CreateUserChannel(IUser user);
-        brokerResult AddToChannel(IUser user, Guid eventId);
-
-        brokerResult RespondToInvite(IUser user, Guid eventID, bool accept);
+        //BrokerResult CreateEventChannel(Guid eventID, IUser eventCreator);
+        BrokerResult CreateAuthAndInvite(Guid eventID, IUser eventCreator, IEnumerable<IUser> invitees);
+        BrokerResult AddToChannel(IUser user, Guid eventId);
+        BrokerResult RespondToInvite(IUser user, Guid eventID, bool accept);
     }
 }

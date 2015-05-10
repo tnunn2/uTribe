@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using urTribeWebAPI.Common;
-using urTribeWebAPI.Common.Interfaces;
 
 
 namespace urTribeWebAPI.DAL.Interfaces
@@ -12,6 +12,7 @@ namespace urTribeWebAPI.DAL.Interfaces
         Guid Owner(IEvent evt);
         bool Guest(IEvent evt, Guid userId);
         void LinkToEvent(IUser usr, IEvent evt);
+        IEnumerable<IUser> AttendingByStatus(Guid eventId, EventAttendantsStatus attendStatus);
         void ChangeUserAttendStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus);
     }
 }

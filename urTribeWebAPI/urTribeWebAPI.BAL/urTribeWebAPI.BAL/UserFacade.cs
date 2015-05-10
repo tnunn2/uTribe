@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using urTribeWebAPI.Common;
-using urTribeWebAPI.Common.Interfaces;
 using urTribeWebAPI.Common.Logging;
 using urTribeWebAPI.DAL.Interfaces;
 using urTribeWebAPI.DAL.Factory;
-using urTribeWebAPI.Common.Concrete;
 
 
 namespace urTribeWebAPI.BAL

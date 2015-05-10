@@ -1,7 +1,7 @@
 ﻿using System;
 using urTribeWebAPI.DAL.Interfaces;
 using urTribeWebAPI.DAL.Factory;
-using urTribeWebAPI.Common.Concrete;
+using urTribeWebAPI.Common;
 
 namespace urTribeWebAPI.DAL.DALTest
 {

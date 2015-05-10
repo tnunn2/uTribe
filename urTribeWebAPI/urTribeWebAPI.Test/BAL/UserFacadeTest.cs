@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using urTribeWebAPI.BAL;
-using urTribeWebAPI.Common.Interfaces;
-using urTribeWebAPI.Common.Concrete;
+using urTribeWebAPI.Common;
 using urTribeWebAPI.DAL.Factory;
 using urTribeWebAPI.DAL.Interfaces;
 using urTribeWebAPI.Test.RepositoryMocks;

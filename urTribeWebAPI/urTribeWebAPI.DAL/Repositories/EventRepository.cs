@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Neo4jClient;
 using urTribeWebAPI.Common;
-using urTribeWebAPI.Common.Interfaces;
-using urTribeWebAPI.Common.Concrete;
 using urTribeWebAPI.DAL.Interfaces;
 using System.Configuration;
 
@@ -84,6 +82,12 @@ namespace urTribeWebAPI.DAL.Repositories
                  .WithParam("rel", rel)
                  .ExecuteWithoutResults();
         }
+
+        public IEnumerable<IUser> AttendingByStatus(Guid eventId, EventAttendantsStatus attendStatus)
+        {
+            throw new NotImplementedException();
+        }
+
         public Guid Owner(IEvent evt)
         {
             IEnumerable<User> owners = _dbms.Cypher

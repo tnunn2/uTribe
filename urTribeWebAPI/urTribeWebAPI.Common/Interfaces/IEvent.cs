@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace urTribeWebAPI.Common.Interfaces
+namespace urTribeWebAPI.Common
 {
     public interface IEvent : IDBRepositoryObject
     {
@@ -9,8 +9,5 @@ namespace urTribeWebAPI.Common.Interfaces
 
         string VenueName { get; set; }
 
-        List<IUser> invitedUsers { get; set; }
-
-        List<IUser> attendingUsers{ get; set; }
     }
 }

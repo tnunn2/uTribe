@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
-using urTribeWebAPI.Common.Concrete;
+using urTribeWebAPI.Common;
 using urTribeWebAPI.DAL.Factory;
 using urTribeWebAPI.DAL.Interfaces;
 using urTribeWebAPI.Test.RepositoryMocks;

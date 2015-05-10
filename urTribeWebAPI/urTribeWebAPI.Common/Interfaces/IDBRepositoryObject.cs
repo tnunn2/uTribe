@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace urTribeWebAPI.Common.Interfaces
+namespace urTribeWebAPI.Common
 {
     public interface IDBRepositoryObject
     {

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using urTribeWebAPI.Common;
-using urTribeWebAPI.Common.Interfaces;
 using urTribeWebAPI.Common.Logging;
 using urTribeWebAPI.DAL.Interfaces;
 using urTribeWebAPI.DAL.Factory;
-using urTribeWebAPI.Common.Concrete;
 
 namespace urTribeWebAPI.BAL
 {
@@ -109,6 +107,24 @@ namespace urTribeWebAPI.BAL
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "ChangeContactAttendanceStatus", Exception = ex };
             }
+        }
+
+        public IEnumerable<IUser> EventAttendeesByStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
+        {
+            try
+            {
+                IEvent evt = FindEvent(eventId);
+                if (!EvtRepository.Guest(evt, userId) && (userId != EvtRepository.Owner(evt)))
+                    return null;
+
+                EvtRepository.ChangeUserAttendStatus(userId, eventId, attendStatus);
+                EvtRepository.AttendingByStatus(eventId, attendStatus);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "EventAttendeesByStatus", Exception = ex };
+            }
+            throw new NotImplementedException();
         }
         public void Dispose ()
         {

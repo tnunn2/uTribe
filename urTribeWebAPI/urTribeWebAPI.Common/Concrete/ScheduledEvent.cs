@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using urTribeWebAPI.Common.Interfaces;
 
-namespace urTribeWebAPI.Common.Concrete
+
+namespace urTribeWebAPI.Common
 {
     public class ScheduledEvent : IEvent
     {

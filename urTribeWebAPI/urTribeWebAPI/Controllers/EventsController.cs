@@ -5,8 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using urTribeWebAPI.Common;
-using urTribeWebAPI.Common.Interfaces;
-using urTribeWebAPI.Common.Concrete;
 using urTribeWebAPI.BAL;
 
 namespace urTribeWebAPI.Controllers

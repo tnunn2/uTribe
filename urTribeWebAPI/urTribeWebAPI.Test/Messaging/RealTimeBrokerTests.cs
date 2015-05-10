@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using urTribeWebAPI.Common.Concrete;
-using urTribeWebAPI.Common.Interfaces;
+using urTribeWebAPI.Common;
 using urTribeWebAPI.Messaging;
 using urTribeWebAPI.Models;
 using Assert = NUnit.Framework.Assert;
@@ -17,6 +16,7 @@ namespace urTribeWebAPI.Test.Messaging
     public class RealTimeBrokerTests
         
     {
+        /*
         [TestMethod]
         public void TestCreateChannel()
         {
@@ -107,7 +107,7 @@ namespace urTribeWebAPI.Test.Messaging
                Assert.Fail();
             }
         }
-
+        */ //mks was here
         /*[TestMethod]
         public void testPutItem()
         {

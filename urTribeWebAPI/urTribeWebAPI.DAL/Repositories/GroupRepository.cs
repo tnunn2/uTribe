@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Neo4jClient;
-using urTribeWebAPI.Common.Interfaces;
-using urTribeWebAPI.Common.Concrete;
+using urTribeWebAPI.Common;
 using urTribeWebAPI.DAL.Interfaces;
 using System.Configuration;
 

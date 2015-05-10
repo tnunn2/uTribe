@@ -1,5 +1,5 @@
 ﻿
-namespace urTribeWebAPI.Common.Interfaces
+namespace urTribeWebAPI.Common
 {
     public interface IGroup : IDBRepositoryObject
     {

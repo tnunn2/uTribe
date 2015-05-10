@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using urTribeWebAPI.Common;
-using urTribeWebAPI.Common.Interfaces;
 
 
 namespace urTribeWebAPI.DAL.Interfaces

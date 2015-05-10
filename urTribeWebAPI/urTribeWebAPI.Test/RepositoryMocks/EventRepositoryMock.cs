@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using urTribeWebAPI.Common;
-using urTribeWebAPI.Common.Interfaces;
 using urTribeWebAPI.DAL.Interfaces;
 
 namespace urTribeWebAPI.Test.RepositoryMocks
@@ -16,6 +15,12 @@ namespace urTribeWebAPI.Test.RepositoryMocks
         }
 
         public static IEnumerable<IEvent> ListOfEvents
+        {
+            get;
+            set;
+        }
+
+        public static IEnumerable<IUser> ListOfUsers
         {
             get;
             set;
@@ -85,6 +90,14 @@ namespace urTribeWebAPI.Test.RepositoryMocks
                 throw new Exception();
 
             return ListOfEvents;
+        }
+        public IEnumerable<IUser> AttendingByStatus(Guid eventId, EventAttendantsStatus attendStatus)
+        {
+            if (ThrowException)
+                throw new Exception();
+
+            return ListOfUsers;
+
         }
         public void Remove(IEvent poco)
         {

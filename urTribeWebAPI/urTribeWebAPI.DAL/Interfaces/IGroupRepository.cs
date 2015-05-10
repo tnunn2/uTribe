@@ -1,4 +1,4 @@
-﻿using urTribeWebAPI.Common.Interfaces;
+﻿using urTribeWebAPI.Common;
 
 namespace urTribeWebAPI.DAL.Interfaces
 {
