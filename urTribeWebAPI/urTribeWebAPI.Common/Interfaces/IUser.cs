@@ -5,9 +5,10 @@ namespace urTribeWebAPI.Common
 {
     public interface IUser : IDBRepositoryObject
     {
-        List<string> Channels { get; }
         string Token { get; }
         string Name { get; set; }
+        UserCurrentStatus Status { get; set; }
         string InvitesChannel { get; set; }
+        List<string> Channels { get; }
     }
 }

@@ -11,18 +11,43 @@ namespace urTribeWebAPI.Common
         #endregion
 
         #region Properties
-        public Guid ID { get; set; }
+        public Guid ID 
+        { 
+            get; 
+            set; 
+        }
 
-        public string Name { get; set; }
+        public string Name 
+        { 
+            get; 
+            set; 
+        }
 
+        public UserCurrentStatus Status 
+        { 
+            get; 
+            set; 
+        }
+
+        //Used for Authorization in the Real Time Framework
         public string Token
         {
             get { return ID.ToString(); }
         }
 
-        public string InvitesChannel { get; set; }
+        //Used to put out invitation to an event???
+        public string InvitesChannel 
+        { 
+            get; 
+            set; 
+        }
 
-        public List<string> Channels { get; set; }
+        //List of Events???  Is this necessary???
+        public List<string> Channels 
+        { 
+            get; 
+            set; 
+        }
         #endregion
 
     }

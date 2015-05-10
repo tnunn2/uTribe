@@ -4,7 +4,7 @@ using urTribeWebAPI.Common;
 using urTribeWebAPI.Common.Logging;
 using urTribeWebAPI.DAL.Interfaces;
 using urTribeWebAPI.DAL.Factory;
-
+using urTribeWebAPI.Messaging;
 
 namespace urTribeWebAPI.BAL
 {
@@ -14,6 +14,7 @@ namespace urTribeWebAPI.BAL
         #region Member Variables
         private readonly IUserRepository _usrrepository;
         private readonly RepositoryFactory _factory;
+        private readonly RealTimeBroker_N _realTimeBroker;
         #endregion
 
         #region Properties
@@ -31,6 +32,13 @@ namespace urTribeWebAPI.BAL
                 return _factory;
             }
         }
+        private RealTimeBroker_N RTBroker
+        {
+            get
+            {
+                return _realTimeBroker;
+            }
+        }
         #endregion
 
         #region Constructors
@@ -38,6 +46,8 @@ namespace urTribeWebAPI.BAL
         {
                 _factory = RepositoryFactory.Instance;
                 _usrrepository = _factory.Create<IUserRepository>();
+
+                _realTimeBroker = new RealTimeBroker_N ();
         }
         #endregion
 
@@ -147,25 +157,35 @@ namespace urTribeWebAPI.BAL
             }
         }
 
-        public Guid CreateEvent(Guid userId, IEvent evt)
+        public BrokerResult CreateEvent(Guid userId, IEvent evt)
         {
             try
             {
                 IUser user = FindUser(userId);
                 if (user == null)
-                    return new Guid("99999999-9999-9999-9999-999999999999");
+                    return null;
 
                 ((ScheduledEvent)evt).ID = Guid.NewGuid();
 
                 var evtRepository = Factory.Create<IEventRepository>();
                 evtRepository.Add(user, evt);
 
-                return evt.ID;
+                //Here Add Code to insert create a new event in the real time framework.
+                var result = RTBroker.CreateEventChannel(evt.ID.ToString(), user);
+
+                if (result.ok())
+                {
+                    var eventList = RetrieveEventsByAttendanceStatus(userId, EventAttendantsStatus.All);
+                    var convertedEventList = RTBroker.ConvertEventToTableName(eventList);
+                    result = RTBroker.AuthUser(convertedEventList, user.Token);
+                }
+
+                return result;
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "CreateEvent", Exception = ex };
-                return new Guid("99999999-9999-9999-9999-999999999999");
+                return null;
             }
         }
         public void CancelEvent (Guid userId, Guid eventId)
@@ -208,6 +228,7 @@ namespace urTribeWebAPI.BAL
 
             return passed;
         }
+
         #endregion
 
     }

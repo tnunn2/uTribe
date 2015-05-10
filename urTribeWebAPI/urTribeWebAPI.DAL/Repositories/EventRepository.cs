@@ -83,8 +83,16 @@ namespace urTribeWebAPI.DAL.Repositories
                  .ExecuteWithoutResults();
         }
 
-        public IEnumerable<IUser> AttendingByStatus(Guid eventId, EventAttendantsStatus attendStatus)
+        public IEnumerable<IUser> AttendingByStatus(Guid eventId, EventAttendantsStatus status)
         {
+            var query = _dbms.Cypher.Match("(user:User)-[rel]->(evt:Event)")
+                         .Where((ScheduledEvent evt) => evt.ID.ToString() == eventId.ToString())
+                         .AndWhere((EventRelationship rel) => rel.AttendStatus == status || status == EventAttendantsStatus.All)
+                         .Return(user => user.As<User>())
+                         .Results;
+
+            return query;
+
             throw new NotImplementedException();
         }
 

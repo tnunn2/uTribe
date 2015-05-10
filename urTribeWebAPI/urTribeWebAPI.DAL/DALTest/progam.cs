@@ -155,7 +155,7 @@ namespace urTribeWebAPI.DAL.DALTest
                 var factory = RepositoryFactory.Instance;
                 IEventRepository eventRepository = factory.Create<IEventRepository>();
 
-                _event.VenueName = "Update Event";
+                _event.Location = "Update Event";
 
                 eventRepository.Update(_event);
 

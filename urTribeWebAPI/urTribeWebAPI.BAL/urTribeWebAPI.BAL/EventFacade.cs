@@ -4,13 +4,15 @@ using urTribeWebAPI.Common;
 using urTribeWebAPI.Common.Logging;
 using urTribeWebAPI.DAL.Interfaces;
 using urTribeWebAPI.DAL.Factory;
+using urTribeWebAPI.Messaging;
 
 namespace urTribeWebAPI.BAL
 {
     public class EventFacade : IDisposable
     {
         #region Member Variables
-        private readonly IEventRepository _repository; 
+        private readonly IEventRepository _repository;
+        private readonly RealTimeBroker_N _realTimeBroker;
         #endregion
 
         #region Properties
@@ -21,6 +23,13 @@ namespace urTribeWebAPI.BAL
                 return _repository;
             }
         }
+        private RealTimeBroker_N RTBroker
+        {
+            get
+            {
+                return _realTimeBroker;
+            }
+        }
         #endregion
 
         #region Constructors
@@ -28,6 +37,8 @@ namespace urTribeWebAPI.BAL
         {
                 var factory = RepositoryFactory.Instance;
                 _repository = factory.Create<IEventRepository>();
+
+                _realTimeBroker = new RealTimeBroker_N();
         }
         #endregion
 
@@ -70,20 +81,36 @@ namespace urTribeWebAPI.BAL
             {
                 IEvent evt = FindEvent(eventId);
 
-                if (userId != EvtRepository.Owner(evt))
+                var ownerId = EvtRepository.Owner(evt);
+                if (userId == ownerId)
                   return;
 
-                foreach (var contact in contactList)
+                using (UserFacade userFacade = new UserFacade())
                 {
-                    if (!EvtRepository.Guest(evt, contact))
-                        continue;
 
-                    using (UserFacade userFacade = new UserFacade())
+                    var owner = userFacade.FindUser(ownerId);
+
+                    foreach (var contactId in contactList)
                     {
-                        IUser user = userFacade.FindUser(userId);
-                        EvtRepository.LinkToEvent(user, evt);
-                    }  
-                }  
+                        if (!EvtRepository.Guest(evt, contactId))
+                            continue;
+
+                        IUser contact = userFacade.FindUser(userId);
+                        if (contact != null)
+                        {
+                            EvtRepository.LinkToEvent(contact, evt);
+
+                            //Here Add code for Real Time Framework
+                            var invitesChannel = RTBroker.CreateUserChannel(contact);
+
+                            var eventList = userFacade.RetrieveEventsByAttendanceStatus(contactId, EventAttendantsStatus.All);
+                            var convertedEventList = RTBroker.ConvertEventToTableName(eventList);  //Do we have to redo all events or just the one added?
+                            RTBroker.AuthUser(convertedEventList, contact.Token);
+                            RTBroker.SendInvite(contact, evt.ID.ToString(), owner.Name);
+                        }
+
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -108,7 +135,6 @@ namespace urTribeWebAPI.BAL
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "ChangeContactAttendanceStatus", Exception = ex };
             }
         }
-
         public IEnumerable<IUser> EventAttendeesByStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
         {
             try

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using urTribeWebAPI.Common;
 using urTribeWebAPI.BAL;
+using urTribeWebAPI.Messaging;
 
 namespace urTribeWebAPI.Controllers
 {
@@ -13,14 +14,17 @@ namespace urTribeWebAPI.Controllers
     {
         //Create a newEvent
         //Update Event Info
+
+        //TODO: Need to figure out what to return... 
         public Guid Post (Guid userId, ScheduledEvent evt)
         {
             Guid eventId = new Guid();
+            BrokerResult brokerResults; 
 
             if (evt.ID == new Guid())
             {
                 using (UserFacade userFacade = new UserFacade())
-                    eventId = userFacade.CreateEvent(userId, evt);
+                    brokerResults = userFacade.CreateEvent(userId, evt);
             }
             else
             {
@@ -29,6 +33,7 @@ namespace urTribeWebAPI.Controllers
             }
 
             return eventId;
+            // return brokerResults;
         }
 
         //Add new contacts to events

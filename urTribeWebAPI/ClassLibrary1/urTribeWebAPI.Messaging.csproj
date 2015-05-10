@@ -53,6 +53,7 @@
     <Compile Include="Interfaces\IRTFStringBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RealTimeBroker.cs" />
+    <Compile Include="RealTimeBroker_N.cs" />
     <Compile Include="RealTimeFrameworkConnect.cs" />
     <Compile Include="RTFHelperClasses\AuthQuery.cs" />
     <Compile Include="RTFHelperClasses\CreateTableQuery.cs" />

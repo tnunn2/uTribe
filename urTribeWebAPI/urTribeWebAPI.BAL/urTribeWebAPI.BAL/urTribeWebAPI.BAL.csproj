@@ -58,6 +58,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ClassLibrary1\urTribeWebAPI.Messaging.csproj">
+      <Project>{45af9444-0f0f-4611-9b1e-55c45a58df9c}</Project>
+      <Name>urTribeWebAPI.Messaging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\urTribeWebAPI.Common\urTribeWebAPI.Common.csproj">
       <Project>{d6e5d0b3-cd11-41bd-9e85-4e1c31401710}</Project>
       <Name>urTribeWebAPI.Common</Name>
