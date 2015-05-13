@@ -1,11 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-<<<<<<< HEAD
 VisualStudioVersion = 12.0.30324.0
-=======
-VisualStudioVersion = 12.0.30501.0
->>>>>>> c3ffcfdffde5f2319008670bd185752c61565fb8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "urTribeWebAPI", "urTribeWebAPI\urTribeWebAPI.csproj", "{CC26760A-E958-4AC9-8FA4-1CEC452E5DB7}"
 EndProject

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.IO;
+using urTribeWebAPI.Common.Logging;
 using System.Configuration;
 
 namespace urTribeWebAPI.DAL.Factory
@@ -33,12 +34,20 @@ namespace urTribeWebAPI.DAL.Factory
         #region Private Methods
         private Dictionary<Type, Type> LoadRepositoryTypes()
         {
-            string MapLocation = ConfigurationManager.AppSettings["RepositoryMapFileLocation"];
-            using (StreamReader r = new StreamReader(MapLocation))
+            try
             {
-                string json = r.ReadToEnd();
-                Dictionary<Type, Type> repositoryTypeMap = JsonConvert.DeserializeObject<Dictionary<Type, Type>>(json);
-                return repositoryTypeMap;
+                string MapLocation = ConfigurationManager.AppSettings["RepositoryMapFileLocation"];
+                using (StreamReader r = new StreamReader(MapLocation))
+                {
+                    string json = r.ReadToEnd();
+                    Dictionary<Type, Type> repositoryTypeMap = JsonConvert.DeserializeObject<Dictionary<Type, Type>>(json);
+                    return repositoryTypeMap;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Log = new ExceptionDTO() { FaultClass = "RepositoryFactory", FaultMethod = "LoadRepositoryTypes", Exception = ex };
+                return new Dictionary<Type, Type> ();
             }
         }
         #endregion

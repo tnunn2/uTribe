@@ -9,7 +9,7 @@ namespace urTribeWebAPI.Common
         public Guid ID { get; set; }
         public string Name { get; set; }
         public bool Active { get; set; } 
-        public DateTime Time { get; set; }
+        public long Time { get; set; }
         public string Location { get; set; }
         public Address LocationAddress { get; set; }
 
