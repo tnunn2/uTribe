@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 using System.Configuration;
 
 namespace urTribeWebAPI.Messaging
@@ -84,7 +85,7 @@ namespace urTribeWebAPI.Messaging
                     write = WriteOps
                 }
             };
-            return ObjectSerializer.Serialize(q);
+            return ObjectSerializer.Serialize(q);  //Determine if need to use different Serializer
         }
         public string MakeAuthString(List<string> tableNames, string userToken)
         {
@@ -112,7 +113,7 @@ namespace urTribeWebAPI.Messaging
                 timeout = OneYearInMilliseconds,
                 policies = p
             };
-            return ObjectSerializer.Serialize(q);
+            return JsonConvert.SerializeObject(q);
         }
         public string MakeInviteString(string userToken, string userTableName, string eventTableName, string invitedBy)
         {
@@ -129,7 +130,7 @@ namespace urTribeWebAPI.Messaging
                     {"Invited By", invitedBy}
                 }
             };
-            return ObjectSerializer.Serialize(q);
+            return JsonConvert.SerializeObject(q);
         }
         #endregion
     }
