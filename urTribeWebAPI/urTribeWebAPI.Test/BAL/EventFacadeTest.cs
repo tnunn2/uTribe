@@ -5,6 +5,7 @@ using urTribeWebAPI.Common;
 using urTribeWebAPI.DAL.Factory;
 using urTribeWebAPI.DAL.Interfaces;
 using urTribeWebAPI.Test.RepositoryMocks;
+using System.Collections.Generic;
 
 namespace urTribeWebAPI.Test.BAL
 {
@@ -122,6 +123,182 @@ namespace urTribeWebAPI.Test.BAL
             }
 
             Assert.AreEqual(eventId.ToString(), "99999999-9999-9999-9999-999999999999");
+        }
+        [Test]
+        public void UpdateEventWithEventIdSetToZerosReturnInvalidIdCode ()
+        {
+            Guid userId = Guid.NewGuid();
+            EventRepositoryMock<ScheduledEvent>.ThrowException = false;
+            EventRepositoryMock<ScheduledEvent>.OwnerId = userId;
+            Guid eventId = new Guid();
+
+
+            try
+            {
+                using (EventFacade facade = new EventFacade())
+                {
+                    IEvent evt = new ScheduledEvent() { ID = new Guid(), Name = "Test Update", Active = true };
+                    eventId = facade.UpdateEvent(userId, evt);
+                }
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to UpdateEvent method in the EventFacade. Exception: {1}", ex.Message);
+            }
+
+            Assert.AreEqual(new Guid("99999999-9999-9999-9999-999999999999"), eventId);
+        }
+        [Test]
+        public void UpdateEventWithEventIdSetToNinesReturnInvalidIdCode()
+        {
+            Guid userId = Guid.NewGuid();
+            EventRepositoryMock<ScheduledEvent>.ThrowException = false;
+            EventRepositoryMock<ScheduledEvent>.OwnerId = userId;
+            Guid eventId = new Guid();
+
+
+            try
+            {
+                using (EventFacade facade = new EventFacade())
+                {
+                    IEvent evt = new ScheduledEvent() { ID = new Guid("99999999-9999-9999-9999-999999999999"), Name = "Test Update", Active = true };
+                    eventId = facade.UpdateEvent(userId, evt);
+                }
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to UpdateEvent method in the EventFacade. Exception: {1}", ex.Message);
+            }
+
+            Assert.AreEqual(new Guid("99999999-9999-9999-9999-999999999999"), eventId);
+        }
+        [Test]
+        public void FindEventWhenExceptionHappensReturningNullEvent ()
+        {
+
+            IEvent evt = new ScheduledEvent() { ID = Guid.NewGuid(), Name = "Test Update", Active = true };
+            List<IEvent> eventList = new List<IEvent>();
+            eventList.Add(evt);
+
+            EventRepositoryMock<ScheduledEvent>.ThrowException = true;
+            EventRepositoryMock<ScheduledEvent>.ListOfEvents = eventList;
+            IEvent result = new ScheduledEvent();
+
+
+            try
+            {
+                using (EventFacade facade = new EventFacade())
+                {
+                    result = facade.FindEvent(evt.ID);
+                }
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to FindEvent method in the EventFacade. Exception: {1}", ex.Message);
+            }
+
+            Assert.AreEqual(null, result);
+        }
+        [Test]
+        public void FindEventPassingEventIdAsZerosReturnNullEvent()
+        {
+            IEvent evt = new ScheduledEvent() { ID = new Guid(), Name = "Test Update", Active = true };
+            List<IEvent> eventList = new List<IEvent>();
+            eventList.Add(evt);
+
+            EventRepositoryMock<ScheduledEvent>.ThrowException = false;
+            EventRepositoryMock<ScheduledEvent>.ListOfEvents = eventList;
+            IEvent result = new ScheduledEvent();
+
+
+            try
+            {
+                using (EventFacade facade = new EventFacade())
+                {
+                    result = facade.FindEvent(EventRepositoryMock<ScheduledEvent>.EventId);
+                }
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to FindEvent method in the EventFacade. Exception: {1}", ex.Message);
+            }
+
+            Assert.AreEqual(null, result);
+        }
+        [Test]
+        public void FindEventPassingEventIdAsNinesReturnNullEvent ()
+        {
+            IEvent evt = new ScheduledEvent() { ID = new Guid("99999999-9999-9999-9999-999999999999"), Name = "Test Update", Active = true };
+            List<IEvent> eventList = new List<IEvent>();
+            eventList.Add(evt);
+
+            EventRepositoryMock<ScheduledEvent>.ThrowException = false;
+            EventRepositoryMock<ScheduledEvent>.ListOfEvents = eventList;
+            IEvent result = new ScheduledEvent();
+
+
+            try
+            {
+                using (EventFacade facade = new EventFacade())
+                {
+                    result = facade.FindEvent(EventRepositoryMock<ScheduledEvent>.EventId);
+                }
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to FindEvent method in the EventFacade. Exception: {1}", ex.Message);
+            }
+
+            Assert.AreEqual(null, result);
+        }
+        [Test]
+        public void FindEventPassingValidEventIdThatExistReturnEvent()
+        {
+            IEvent evt = new ScheduledEvent() { ID = Guid.NewGuid(), Name = "Test Update", Active = true };
+            List<IEvent> eventList = new List<IEvent>();
+            eventList.Add(evt);
+
+            EventRepositoryMock<ScheduledEvent>.ThrowException = false;
+            EventRepositoryMock<ScheduledEvent>.ListOfEvents = eventList;
+            IEvent result = new ScheduledEvent();
+
+
+            try
+            {
+                using (EventFacade facade = new EventFacade())
+                {
+                    result = facade.FindEvent(evt.ID);
+                }
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to FindEvent method in the EventFacade. Exception: {1}", ex.Message);
+            }
+            Assert.AreEqual(evt, result);
+        }
+        [Test]
+        public void FindEventPassingValidEventIdThatNotExistReturnNullEvent()
+        {
+            List<IEvent> eventList = new List<IEvent>();
+
+            EventRepositoryMock<ScheduledEvent>.ThrowException = false;
+            EventRepositoryMock<ScheduledEvent>.ListOfEvents = eventList;
+            IEvent result = new ScheduledEvent();
+
+
+            try
+            {
+                using (EventFacade facade = new EventFacade())
+                {
+                    result = facade.FindEvent(Guid.NewGuid());
+                }
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to FindEvent method in the EventFacade. Exception: {1}", ex.Message);
+            }
+
+            Assert.AreEqual(null, result);
         }
 
     }

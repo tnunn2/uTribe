@@ -33,12 +33,12 @@ namespace urTribeWebAPI.BAL
         #endregion
 
         #region Constructors
-        public EventFacade ()
+        public EventFacade()
         {
-                var factory = RepositoryFactory.Instance;
-                _repository = factory.Create<IEventRepository>();
+            var factory = RepositoryFactory.Instance;
+            _repository = factory.Create<IEventRepository>();
 
-                _realTimeBroker = new RealTimeBroker_N();
+            _realTimeBroker = new RealTimeBroker_N();
         }
         #endregion
 
@@ -47,6 +47,9 @@ namespace urTribeWebAPI.BAL
         {
             try
             {
+                if (!ValidateEventRequiredFields(evt, false))
+                    throw new Exception("Invalid IEvent object passed to the UpdateEvent method ");
+
                 if (userId == EvtRepository.Owner(evt))
                 {
                     EvtRepository.Update(evt);
@@ -63,6 +66,9 @@ namespace urTribeWebAPI.BAL
         {
             try
             {
+                if (eventId == new Guid("99999999-9999-9999-9999-999999999999") || eventId == new Guid())
+                   throw new Exception(string.Format("Invalid eventId passed to the FindEvent method: {0} ", eventId.ToString()));
+
                 var eventList = EvtRepository.Find(evt => evt.ID == eventId);
 
                 foreach (IEvent evt in eventList)
@@ -83,7 +89,7 @@ namespace urTribeWebAPI.BAL
 
                 var ownerId = EvtRepository.Owner(evt);
                 if (userId == ownerId)
-                  return;
+                    return;
 
                 using (UserFacade userFacade = new UserFacade())
                 {
@@ -117,7 +123,7 @@ namespace urTribeWebAPI.BAL
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "AddContactsToEvent", Exception = ex };
             }
         }
-        public void ChangeContactAttendanceStatus (Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
+        public void ChangeContactAttendanceStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
         {
             try
             {
@@ -152,8 +158,19 @@ namespace urTribeWebAPI.BAL
             }
             throw new NotImplementedException();
         }
-        public void Dispose ()
+        public void Dispose()
         {
+        }
+        #endregion
+
+        #region Private Methods
+        private bool ValidateEventRequiredFields(IEvent evt, bool isNew)
+        {
+            bool passed = true;
+            passed &= (evt != null);
+            passed &= (evt.ID != new Guid("99999999-9999-9999-9999-999999999999"));
+            passed &= (isNew ^ (evt.ID != new Guid("00000000-0000-0000-0000-000000000000")));
+            return passed;
         }
         #endregion
     }
