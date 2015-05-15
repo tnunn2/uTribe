@@ -68,11 +68,13 @@ namespace urTribeWebAPI.Test.RepositoryMocks
         {
             if (ThrowException)
                 throw new Exception();
+            Evt = evt;
         }
         public void Update(IEvent evt)
         {
             if (ThrowException)
                 throw new Exception();
+            Evt = evt;
         }
         public void LinkToEvent(IUser usr, IEvent evt)
         {

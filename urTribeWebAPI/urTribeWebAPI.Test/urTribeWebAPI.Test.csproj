@@ -91,6 +91,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="BAL\EventFacadeTest.cs" />
     <Compile Include="BAL\UserFacadeTest.cs" />
     <Compile Include="DAL\FactoryTest.cs" />
     <Compile Include="Messaging\RealTimeBrokerTests.cs" />
@@ -130,7 +131,9 @@
       <Name>urTribeWebAPI</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="MessagingMocks\" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
