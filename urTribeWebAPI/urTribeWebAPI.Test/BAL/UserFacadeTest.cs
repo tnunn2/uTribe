@@ -36,7 +36,7 @@ namespace urTribeWebAPI.Test.BAL
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {1}", ex.Message);
+                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
             }
 
             Assert.AreEqual(userId.ToString(), "99999999-9999-9999-9999-999999999999");
@@ -56,7 +56,7 @@ namespace urTribeWebAPI.Test.BAL
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {1}", ex.Message);
+                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
             }
 
             Assert.AreEqual(userId.ToString(), "99999999-9999-9999-9999-999999999999");
@@ -76,7 +76,7 @@ namespace urTribeWebAPI.Test.BAL
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {1}", ex.Message);
+                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
             }
 
             Assert.AreEqual(userId.ToString(), "99999999-9999-9999-9999-999999999999");
@@ -96,7 +96,7 @@ namespace urTribeWebAPI.Test.BAL
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {1}", ex.Message);
+                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
             }
 
             Assert.AreEqual(userId.ToString(), "99999999-9999-9999-9999-999999999999");
@@ -116,7 +116,7 @@ namespace urTribeWebAPI.Test.BAL
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {1}", ex.Message);
+                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
             }
 
             Assert.AreEqual(userId.ToString(), "99999999-9999-9999-9999-999999999999");
@@ -175,7 +175,7 @@ namespace urTribeWebAPI.Test.BAL
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {1}", ex.Message);
+                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
             }
             Assert.IsTrue(user == null);
         }
@@ -194,7 +194,7 @@ namespace urTribeWebAPI.Test.BAL
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {1}", ex.Message);
+                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
             }
 
             Assert.Pass();
@@ -215,7 +215,7 @@ namespace urTribeWebAPI.Test.BAL
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {1}", ex.Message);
+                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
             }
 
             Assert.Pass();
@@ -241,7 +241,7 @@ namespace urTribeWebAPI.Test.BAL
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {1}", ex.Message);
+                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
             }
 
             Assert.IsTrue(userfriends == friends);
@@ -269,7 +269,7 @@ namespace urTribeWebAPI.Test.BAL
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {1}", ex.Message);
+                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
             }
 
             Assert.IsTrue(userfriends == null);
@@ -289,7 +289,7 @@ namespace urTribeWebAPI.Test.BAL
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {1}", ex.Message);
+                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
             }
 
             Assert.Pass();
@@ -310,7 +310,7 @@ namespace urTribeWebAPI.Test.BAL
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {1}", ex.Message);
+                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
             }
 
             Assert.Pass();

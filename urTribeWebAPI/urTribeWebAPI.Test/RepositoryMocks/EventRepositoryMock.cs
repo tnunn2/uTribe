@@ -61,6 +61,12 @@ namespace urTribeWebAPI.Test.RepositoryMocks
             get; 
             set; 
         }
+
+        public static EventAttendantsStatus AttendStatus
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Public Methods
@@ -85,6 +91,8 @@ namespace urTribeWebAPI.Test.RepositoryMocks
         {
             if (ThrowException)
                 throw new Exception();
+
+            AttendStatus = attendStatus;
         }
         public IEnumerable<IEvent> Find(System.Linq.Expressions.Expression<Func<IEvent, bool>> predicate)
         {

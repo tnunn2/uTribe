@@ -123,40 +123,52 @@ namespace urTribeWebAPI.BAL
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "AddContactsToEvent", Exception = ex };
             }
         }
-        public void ChangeContactAttendanceStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
+        public ResultType ChangeContactAttendanceStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
         {
             try
             {
                 if (attendStatus == EventAttendantsStatus.All || attendStatus == EventAttendantsStatus.Cancel)
-                    return;
+                    return ResultType.Error;
 
                 IEvent evt = FindEvent(eventId);
+
+                if (evt == null)
+                    return ResultType.RecordNotFound; 
+
                 if (!EvtRepository.Guest(evt, userId))
-                    return;
+                    return ResultType.Error;
 
                 EvtRepository.ChangeUserAttendStatus(userId, eventId, attendStatus);
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "ChangeContactAttendanceStatus", Exception = ex };
+                return ResultType.Error;
             }
+            return ResultType.Successful;
         }
-        public IEnumerable<IUser> EventAttendeesByStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
+        public IEnumerable<IUser> InviteesByStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
         {
             try
             {
+                if (userId == new Guid("99999999-9999-9999-9999-999999999999") || userId == new Guid())
+                    throw new Exception(string.Format("Invalid UserId passed to the InviteesByStatus method: {0} ", userId.ToString()));
+
+                if (eventId == new Guid("99999999-9999-9999-9999-999999999999") || eventId == new Guid())
+                    throw new Exception(string.Format("Invalid eventId passed to the InviteesByStatus method: {0} ", eventId.ToString()));
+
                 IEvent evt = FindEvent(eventId);
                 if (!EvtRepository.Guest(evt, userId) && (userId != EvtRepository.Owner(evt)))
                     return null;
 
-                EvtRepository.ChangeUserAttendStatus(userId, eventId, attendStatus);
-                EvtRepository.AttendingByStatus(eventId, attendStatus);
+                var results = EvtRepository.AttendingByStatus(eventId, attendStatus);
+                return results;
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "EventAttendeesByStatus", Exception = ex };
+                return null;
             }
-            throw new NotImplementedException();
         }
         public void Dispose()
         {
@@ -164,6 +176,7 @@ namespace urTribeWebAPI.BAL
         #endregion
 
         #region Private Methods
+
         private bool ValidateEventRequiredFields(IEvent evt, bool isNew)
         {
             bool passed = true;
