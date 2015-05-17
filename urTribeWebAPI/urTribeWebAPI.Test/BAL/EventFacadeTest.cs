@@ -41,7 +41,7 @@ namespace urTribeWebAPI.Test.BAL
                     facade.UpdateEvent(userId, evt);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Assert.Pass();
             }
@@ -133,9 +133,6 @@ namespace urTribeWebAPI.Test.BAL
             Guid userId = Guid.NewGuid();
             EventRepositoryMock<ScheduledEvent>.ThrowException = false;
             EventRepositoryMock<ScheduledEvent>.OwnerId = userId;
-            Guid eventId = new Guid();
-
-
             try
             {
                 using (EventFacade facade = new EventFacade())
@@ -179,7 +176,7 @@ namespace urTribeWebAPI.Test.BAL
                 }
                 Assert.Fail("Exception from repository should be allow to bubble up");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Assert.Pass();
             }
@@ -366,7 +363,7 @@ namespace urTribeWebAPI.Test.BAL
                     facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.All);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             Assert.AreNotEqual(EventRepositoryMock<ScheduledEvent>.AttendStatus, EventAttendantsStatus.All);
@@ -386,7 +383,7 @@ namespace urTribeWebAPI.Test.BAL
                     facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Cancel);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             Assert.AreNotEqual(EventRepositoryMock<ScheduledEvent>.AttendStatus, EventAttendantsStatus.Cancel);
@@ -467,7 +464,7 @@ namespace urTribeWebAPI.Test.BAL
                     facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Assert.Pass();
             }
