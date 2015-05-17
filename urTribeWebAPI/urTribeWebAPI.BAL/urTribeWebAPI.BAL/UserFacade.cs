@@ -157,13 +157,13 @@ namespace urTribeWebAPI.BAL
             }
         }
 
-        public BrokerResult CreateEvent(Guid userId, IEvent evt)
+        public Guid CreateEvent(Guid userId, IEvent evt)
         {
             try
             {
                 IUser user = FindUser(userId);
                 if (user == null)
-                    return null;
+                    throw new EventException("User doesnot exist");
 
                 ((ScheduledEvent)evt).ID = Guid.NewGuid();
 
@@ -180,12 +180,12 @@ namespace urTribeWebAPI.BAL
                     result = RTBroker.AuthUser(convertedEventList, user.Token);
                 }
 
-                return result;
+                return ((ScheduledEvent)evt).ID;
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "CreateEvent", Exception = ex };
-                return null;
+                throw;
             }
         }
         public void CancelEvent (Guid userId, Guid eventId)
@@ -199,16 +199,20 @@ namespace urTribeWebAPI.BAL
                     var evtRepository = Factory.Create<IEventRepository>();
                     if (evtRepository.Guest(evt, userId))
                         return;
-                    if (evt.Active)
+                    if (evt.Active == false)
                         return;
 
                     evt.Active = false;
                     eventFacade.UpdateEvent(userId, evt);
+
+                    //Potientially Add Code for Messaging (RTF).  However, The eventFacade.UpdateEvent may have code for RTF.
+
                 }
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "CancelEvent", Exception = ex };
+                throw;
             }
         }
         public void Dispose()

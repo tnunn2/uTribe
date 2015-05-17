@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using urTribeWebAPI.Common;
 using urTribeWebAPI.BAL;
+using urTribeWebAPI.Common;
 using urTribeWebAPI.Messaging;
+using urTribeWebAPI.Models.Response;
 
 namespace urTribeWebAPI.Controllers
 {
@@ -14,57 +12,103 @@ namespace urTribeWebAPI.Controllers
     {
         //Create a newEvent
         //Update Event Info
-
-        //TODO: Need to figure out what to return... 
-        public Guid Post (Guid userId, ScheduledEvent evt)
+        public APIResponse Post (Guid userId, ScheduledEvent evt)
         {
-            Guid eventId = new Guid();
-            BrokerResult brokerResults; 
-
-            if (evt.ID == new Guid())
+            try
             {
-                using (UserFacade userFacade = new UserFacade())
-                    brokerResults = userFacade.CreateEvent(userId, evt);
-            }
-            else
-            {
-                using (EventFacade eventFacade = new EventFacade())
-                    eventId = eventFacade.UpdateEvent(userId, evt);
-            }
+                if (evt.ID == new Guid())
+                {
+                    using (UserFacade userFacade = new UserFacade())
+                    {
+                        Guid result = userFacade.CreateEvent(userId, evt);
 
-            return eventId;
-            // return brokerResults;
+                        APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, new { EventId = result});
+                        return response;
+                    }
+                }
+                else
+                {
+                    using (EventFacade eventFacade = new EventFacade())
+                        eventFacade.UpdateEvent(userId, evt);
+
+                    APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, null);
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                APIResponse response = new APIResponse(APIResponse.ReponseStatus.error, new {Error = ex.Message});
+                return response;
+            }
         }
 
         //Add new contacts to events
-        public void Post(Guid userId, Guid eventId, List<Guid> contactList)
+        public APIResponse Post(Guid userId, Guid eventId, List<Guid> contactList)
         {
-            using (EventFacade eventFacade = new EventFacade())
-                eventFacade.AddContactsToEvent(userId, eventId, contactList);
+            try
+            {
+                using (EventFacade eventFacade = new EventFacade())
+                    eventFacade.AddContactsToEvent(userId, eventId, contactList);
+
+                APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, null);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                APIResponse response = new APIResponse(APIResponse.ReponseStatus.error, new { Error = ex.Message });
+                return response;
+            }
+
         }
 
         //Update Contacts attendents status
-        public void Post (Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
+        public APIResponse Post(Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
         {
-            if (attendStatus == EventAttendantsStatus.Cancel)
+            try
             {
-                using (UserFacade userFacade = new UserFacade())
-                    userFacade.CancelEvent(userId, eventId);
+                if (attendStatus == EventAttendantsStatus.Cancel)
+                {
+                    using (UserFacade userFacade = new UserFacade())
+                        userFacade.CancelEvent(userId, eventId);
+
+                    APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, null);
+                    return response;
+                }
+                else
+                {
+                    using (EventFacade eventFacade = new EventFacade())
+                        eventFacade.ChangeContactAttendanceStatus(userId, eventId, attendStatus);
+
+                    APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, null);
+                    return response;
+
+                }
             }
-            else
+            catch (Exception ex)
             {
-                using (EventFacade eventFacade = new EventFacade())
-                    eventFacade.ChangeContactAttendanceStatus(userId, eventId, attendStatus);
+                APIResponse response = new APIResponse(APIResponse.ReponseStatus.error, new { Error = ex.Message });
+                return response;
             }
         }
 
         //Return all Active events
-        public IEnumerable<IEvent> Get (Guid userId)
+        public APIResponse Get (Guid userId)
         {
             using (UserFacade userFacade = new UserFacade())
             {
                 IEnumerable<IEvent> eventList = userFacade.RetrieveEventsByAttendanceStatus(userId, EventAttendantsStatus.All);
-                return eventList;
+
+                if (eventList == null)
+                {
+                    string message = "Unable to return a list of events.";
+                    APIResponse response = new APIResponse(APIResponse.ReponseStatus.fail, new {Error = message});
+                    return response;
+                }
+                else
+                {
+                    APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, new { EventList = eventList });
+                    return response;
+                }
             }
         }
 

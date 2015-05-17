@@ -29,51 +29,24 @@ namespace urTribeWebAPI.Test.BAL
 
         #region UpdateEvent
         [Test]
-        public void UpdateEventWhenExceptionHappensReturnInvalidIdCode ()
+        public void UpdateEventWhenExceptionHappensInRepositoryCausesExceptionToBubbleUp ()
         {
             EventRepositoryMock<ScheduledEvent>.ThrowException = true;
-            Guid eventId = new Guid();
             Guid userId = Guid.NewGuid ();
             try
             {
                 using (EventFacade facade = new EventFacade())
                 {
-                    IEvent evt = new ScheduledEvent() { ID = Guid.NewGuid(), Name = "Test Update", Active = true};
-                    eventId = facade.UpdateEvent(userId, evt);
+                    IEvent evt = new ScheduledEvent() { ID = Guid.NewGuid(), Name = "Test Update", Active = true };
+                    facade.UpdateEvent(userId, evt);
                 }
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to UpdateEvent method in the EventFacade. Exception: {0}", ex.Message);
+                Assert.Pass();
             }
+            Assert.Fail("Error Message did not bubble up as expected");
 
-            Assert.AreEqual(eventId.ToString(), "99999999-9999-9999-9999-999999999999");
-        }
-        [Test]
-        public void UpdateEventWithValidParametersReturnValidGuid ()
-        {
-            Guid mockEventId = Guid.NewGuid();
-            Guid userId = Guid.NewGuid();
-            EventRepositoryMock<ScheduledEvent>.ThrowException = false;
-            EventRepositoryMock<ScheduledEvent>.EventId = mockEventId;
-            EventRepositoryMock<ScheduledEvent>.OwnerId = userId;
-
-            Guid eventId = new Guid ();
-
-            try
-            {
-                using (EventFacade facade = new EventFacade())
-                {
-                    IEvent evt = new ScheduledEvent() { ID = mockEventId, Name = "Test Update", Active = true };
-                    eventId = facade.UpdateEvent(userId, evt);
-                }
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail("Unexpected exception escaped call to UpdateEvent method in the EventFacade. Exception: {0}", ex.Message);
-            }
-
-            Assert.AreEqual(eventId, EventRepositoryMock<ScheduledEvent>.EventId);
         }
         [Test]
         public void UpdateEventWithValidParametersCheckEventIsSentToRepository ()
@@ -86,14 +59,12 @@ namespace urTribeWebAPI.Test.BAL
             EventRepositoryMock<ScheduledEvent>.Evt = null;
 
             IEvent evt = new ScheduledEvent() { ID = mockEventId, Name = "Test Update", Active = true };
-            Guid eventId = new Guid();
 
             try
             {
                 using (EventFacade facade = new EventFacade())
-                {
-                    eventId = facade.UpdateEvent(userId, evt);
-                }
+                facade.UpdateEvent(userId, evt);
+
             }
             catch (Exception ex)
             {
@@ -103,36 +74,38 @@ namespace urTribeWebAPI.Test.BAL
             Assert.AreEqual(evt, EventRepositoryMock<ScheduledEvent>.Evt);
         }
         [Test]
-        public void UpdateEventWithNULLEventObjectReturnInvalidIdCode()
+        public void UpdateEventWithNULLEventObjectReturnInvalidIEventObjectException()
         {
             Guid userId = Guid.NewGuid();
             EventRepositoryMock<ScheduledEvent>.ThrowException = false;
             EventRepositoryMock<ScheduledEvent>.EventId = new Guid();
             EventRepositoryMock<ScheduledEvent>.OwnerId = userId;
             EventRepositoryMock<ScheduledEvent>.Evt = null;
-            Guid eventId = new Guid();
             try
             {
                 using (EventFacade facade = new EventFacade())
                 {
                     IEvent evt = null;
-                    eventId = facade.UpdateEvent(userId, evt);
+                    facade.UpdateEvent(userId, evt);
                 }
+            }
+            catch (InvalidIEventObjectException)
+            {
+                Assert.Pass();
             }
             catch (Exception ex)
             {
                 Assert.Fail("Unexpected exception escaped call to UpdateEvent method in the EventFacade. Exception: {0}", ex.Message);
             }
 
-            Assert.AreEqual(eventId.ToString(), "99999999-9999-9999-9999-999999999999");
+            Assert.Fail("No Exception was bubbled up.");
         }
         [Test]
-        public void UpdateEventWithEventIdSetToZerosReturnInvalidIdCode ()
+        public void UpdateEventWithEventIdSetToZerosReturnInvalidIEventObjectException()
         {
             Guid userId = Guid.NewGuid();
             EventRepositoryMock<ScheduledEvent>.ThrowException = false;
             EventRepositoryMock<ScheduledEvent>.OwnerId = userId;
-            Guid eventId = new Guid();
 
 
             try
@@ -140,18 +113,22 @@ namespace urTribeWebAPI.Test.BAL
                 using (EventFacade facade = new EventFacade())
                 {
                     IEvent evt = new ScheduledEvent() { ID = new Guid(), Name = "Test Update", Active = true };
-                    eventId = facade.UpdateEvent(userId, evt);
+                    facade.UpdateEvent(userId, evt);
                 }
+            }
+            catch (InvalidIEventObjectException)
+            {
+                Assert.Pass();
             }
             catch (Exception ex)
             {
                 Assert.Fail("Unexpected exception escaped call to UpdateEvent method in the EventFacade. Exception: {0}", ex.Message);
             }
 
-            Assert.AreEqual(new Guid("99999999-9999-9999-9999-999999999999"), eventId);
+            Assert.Fail("No Exception was bubbled up.");
         }
         [Test]
-        public void UpdateEventWithEventIdSetToNinesReturnInvalidIdCode()
+        public void UpdateEventWithEventIdSetToNinesReturnInvalidIEventObjectException()
         {
             Guid userId = Guid.NewGuid();
             EventRepositoryMock<ScheduledEvent>.ThrowException = false;
@@ -164,21 +141,25 @@ namespace urTribeWebAPI.Test.BAL
                 using (EventFacade facade = new EventFacade())
                 {
                     IEvent evt = new ScheduledEvent() { ID = new Guid("99999999-9999-9999-9999-999999999999"), Name = "Test Update", Active = true };
-                    eventId = facade.UpdateEvent(userId, evt);
+                    facade.UpdateEvent(userId, evt);
                 }
+            }
+            catch (InvalidIEventObjectException)
+            {
+                Assert.Pass();
             }
             catch (Exception ex)
             {
                 Assert.Fail("Unexpected exception escaped call to UpdateEvent method in the EventFacade. Exception: {0}", ex.Message);
             }
 
-            Assert.AreEqual(new Guid("99999999-9999-9999-9999-999999999999"), eventId);
+            Assert.Fail("No Exception was bubbled up.");
         }
         #endregion
 
         #region FindEvent
         [Test]
-        public void FindEventWhenExceptionHappensReturningNullEvent ()
+        public void FindEventWhenRepositoryExceptionHappensReturningNullEvent ()
         {
 
             IEvent evt = new ScheduledEvent() { ID = Guid.NewGuid(), Name = "Test Update", Active = true };
@@ -196,13 +177,13 @@ namespace urTribeWebAPI.Test.BAL
                 {
                     result = facade.FindEvent(evt.ID);
                 }
+                Assert.Fail("Exception from repository should be allow to bubble up");
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to FindEvent method in the EventFacade. Exception: {0}", ex.Message);
+                Assert.Pass();
             }
 
-            Assert.AreEqual(null, result);
         }
         [Test]
         public void FindEventPassingEventIdAsZerosReturnNullEvent()
@@ -222,13 +203,17 @@ namespace urTribeWebAPI.Test.BAL
                 {
                     result = facade.FindEvent(EventRepositoryMock<ScheduledEvent>.EventId);
                 }
+                Assert.Fail("Expecting to receive an InvalidEventId Exception.");
+            }
+            catch (InvalidEventIdException)
+            {
+                Assert.Pass();
             }
             catch (Exception ex)
             {
                 Assert.Fail("Unexpected exception escaped call to FindEvent method in the EventFacade. Exception: {1}", ex.Message);
             }
 
-            Assert.AreEqual(null, result);
         }
         [Test]
         public void FindEventPassingEventIdAsNinesReturnNullEvent ()
@@ -248,13 +233,16 @@ namespace urTribeWebAPI.Test.BAL
                 {
                     result = facade.FindEvent(EventRepositoryMock<ScheduledEvent>.EventId);
                 }
+                Assert.Fail("Expecting to receive an InvalidEventId Exception.");
+            }
+            catch (InvalidEventIdException)
+            {
+                Assert.Pass();
             }
             catch (Exception ex)
             {
                 Assert.Fail("Unexpected exception escaped call to FindEvent method in the EventFacade. Exception: {1}", ex.Message);
             }
-
-            Assert.AreEqual(null, result);
         }
         [Test]
         public void FindEventPassingValidEventIdThatExistReturnEvent()
@@ -313,11 +301,10 @@ namespace urTribeWebAPI.Test.BAL
 
         #region ChangeContactAttendanceStatus
         [Test]
-        public void ChangeContactAttendanceStatusWithStatusOfAllReturnResultOfError()
+        public void ChangeContactAttendanceStatusWithStatusOfAllReturnInvalidEventStatusException()
         {
             Guid eventId = Guid.NewGuid();
             Guid userId = Guid.NewGuid();
-            ResultType result = ResultType.incomplete;
             EventRepositoryMock<ScheduledEvent>.ThrowException = false;
             EventRepositoryMock<ScheduledEvent>.IsGuest = true;
 
@@ -325,21 +312,24 @@ namespace urTribeWebAPI.Test.BAL
             {
                 using (EventFacade facade = new EventFacade())
                 {
-                    result = facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.All);
+                    facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.All);
                 }
+            }
+            catch (InvalidEventStatusException)
+            {
+                Assert.Pass();
             }
             catch (Exception ex)
             {
                 Assert.Fail("Unexpected exception escaped call to FindEvent method in the EventFacade. Exception: {0}", ex.Message);
             }
-            Assert.AreEqual(ResultType.Error, result);
+            Assert.Fail("An Invalid Event Status exception should have been thrown.");
         }
         [Test]
-        public void ChangeContactAttendanceStatusWithStatusOfCancelReturnResultOfError()
+        public void ChangeContactAttendanceStatusWithStatusOfCancelReturnInvalidEventStatusException()
         {
             Guid eventId = Guid.NewGuid();
             Guid userId = Guid.NewGuid();
-            ResultType result = ResultType.incomplete;
             EventRepositoryMock<ScheduledEvent>.ThrowException = false;
             EventRepositoryMock<ScheduledEvent>.IsGuest = true;
 
@@ -347,21 +337,25 @@ namespace urTribeWebAPI.Test.BAL
             {
                 using (EventFacade facade = new EventFacade())
                 {
-                    result = facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Cancel);
+                    facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Cancel);
+                    Assert.Fail("An InvalidEventStatusException should have been thrown.");
                 }
+            }
+            catch (InvalidEventStatusException)
+            {
+                Assert.Pass();
             }
             catch (Exception ex)
             {
                 Assert.Fail("Unexpected exception escaped call to FindEvent method in the EventFacade. Exception: {0}", ex.Message);
             }
-            Assert.AreEqual(ResultType.Error, result);
+            
         }
         [Test]
         public void ChangeContactAttendanceStatusWithStatusOfAllCheckIfSentToRepository()
         {
             Guid eventId = Guid.NewGuid();
             Guid userId = Guid.NewGuid();
-            ResultType result = ResultType.incomplete;
             EventRepositoryMock<ScheduledEvent>.ThrowException = false;
             EventRepositoryMock<ScheduledEvent>.IsGuest = true;
 
@@ -369,12 +363,11 @@ namespace urTribeWebAPI.Test.BAL
             {
                 using (EventFacade facade = new EventFacade())
                 {
-                    result = facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.All);
+                    facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.All);
                 }
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to FindEvent method in the EventFacade. Exception: {0}", ex.Message);
             }
             Assert.AreNotEqual(EventRepositoryMock<ScheduledEvent>.AttendStatus, EventAttendantsStatus.All);
         }
@@ -383,7 +376,6 @@ namespace urTribeWebAPI.Test.BAL
         {
             Guid eventId = Guid.NewGuid();
             Guid userId = Guid.NewGuid();
-            ResultType result = ResultType.incomplete;
             EventRepositoryMock<ScheduledEvent>.ThrowException = false;
             EventRepositoryMock<ScheduledEvent>.IsGuest = true;
 
@@ -391,14 +383,13 @@ namespace urTribeWebAPI.Test.BAL
             {
                 using (EventFacade facade = new EventFacade())
                 {
-                    result = facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Cancel);
+                    facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Cancel);
                 }
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to FindEvent method in the EventFacade. Exception: {0}", ex.Message);
             }
-            Assert.AreNotEqual(EventRepositoryMock<ScheduledEvent>.AttendStatus, EventAttendantsStatus.All);
+            Assert.AreNotEqual(EventRepositoryMock<ScheduledEvent>.AttendStatus, EventAttendantsStatus.Cancel);
         }
         [Test]
         public void ChangeContactAttendanceStatusWithNoMatchingEventReturnResultOfRecordNotFound()
@@ -406,23 +397,27 @@ namespace urTribeWebAPI.Test.BAL
             IEvent evt = null;
             Guid eventId = Guid.NewGuid();
             Guid userId = Guid.NewGuid();
-            ResultType result = ResultType.incomplete;
             EventRepositoryMock<ScheduledEvent>.ThrowException = false;
             EventRepositoryMock<ScheduledEvent>.IsGuest = false;
+            EventRepositoryMock<ScheduledEvent>.ListOfEvents = new List<IEvent>();
             EventRepositoryMock<ScheduledEvent>.Evt = evt;
 
             try
             {
                 using (EventFacade facade = new EventFacade())
                 {
-                    result = facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
+                    facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
+                    Assert.Fail("An EventException should have been thrown.");
                 }
+            }
+            catch (EventException)
+            {
+                Assert.Pass();
             }
             catch (Exception ex)
             {
                 Assert.Fail("Unexpected exception escaped call to FindEvent method in the EventFacade. Exception: {0}", ex.Message);
             }
-            Assert.AreEqual(ResultType.RecordNotFound, result);
         }
         [Test]
         public void ChangeContactAttendanceStatusUserNotAGuestToEventReturnResultOfError()
@@ -432,7 +427,6 @@ namespace urTribeWebAPI.Test.BAL
 
             Guid eventId = Guid.NewGuid();
             Guid userId = Guid.NewGuid();
-            ResultType result = ResultType.incomplete;
             EventRepositoryMock<ScheduledEvent>.ThrowException = false;
             EventRepositoryMock<ScheduledEvent>.IsGuest = false;
             EventRepositoryMock<ScheduledEvent>.ListOfEvents = eventList;
@@ -441,14 +435,18 @@ namespace urTribeWebAPI.Test.BAL
             {
                 using (EventFacade facade = new EventFacade())
                 {
-                    result = facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
+                    facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
+                    Assert.Fail("An EventException should have been thrown.");
                 }
+            }
+            catch (EventException)
+            {
+                Assert.Pass();
             }
             catch (Exception ex)
             {
                 Assert.Fail("Unexpected exception escaped call to FindEvent method in the EventFacade. Exception: {0}", ex.Message);
             }
-            Assert.AreEqual(ResultType.Error, result);
         }
         [Test]
         public void ChangeContactAttendanceStatusWhenExceptionWithExceptionCaughtAndHandled()
@@ -458,7 +456,6 @@ namespace urTribeWebAPI.Test.BAL
 
             Guid eventId = Guid.NewGuid();
             Guid userId = Guid.NewGuid();
-            ResultType result = ResultType.incomplete;
             EventRepositoryMock<ScheduledEvent>.ThrowException = true;
             EventRepositoryMock<ScheduledEvent>.IsGuest = false;
             EventRepositoryMock<ScheduledEvent>.ListOfEvents = eventList;
@@ -467,14 +464,14 @@ namespace urTribeWebAPI.Test.BAL
             {
                 using (EventFacade facade = new EventFacade())
                 {
-                    result = facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
+                    facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
                 }
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to FindEvent method in the EventFacade. Exception: {0}", ex.Message);
+                Assert.Pass();
             }
-            Assert.Pass();
+            Assert.Fail("An exception from the Repository should have been thrown.");
         }
         [Test]
         public void ChangeContactAttendanceStatusValidUserAndValidEventReturnResultOfSucessful()
@@ -484,7 +481,6 @@ namespace urTribeWebAPI.Test.BAL
 
             Guid eventId = evt.ID;
             Guid userId = Guid.NewGuid();
-            ResultType result = ResultType.incomplete;
             EventRepositoryMock<ScheduledEvent>.ThrowException = false;
             EventRepositoryMock<ScheduledEvent>.IsGuest = true;
             EventRepositoryMock<ScheduledEvent>.ListOfEvents = eventList;
@@ -493,14 +489,14 @@ namespace urTribeWebAPI.Test.BAL
             {
                 using (EventFacade facade = new EventFacade())
                 {
-                    result = facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
+                    facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
                 }
             }
             catch (Exception ex)
             {
                 Assert.Fail("Unexpected exception escaped call to FindEvent method in the EventFacade. Exception: {0}", ex.Message);
             }
-            Assert.AreEqual(ResultType.Successful, result);
+            Assert.Pass();
         }
         #endregion
 

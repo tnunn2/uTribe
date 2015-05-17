@@ -43,31 +43,32 @@ namespace urTribeWebAPI.BAL
         #endregion
 
         #region Public Methods
-        public Guid UpdateEvent(Guid userId, IEvent evt)
+        public void UpdateEvent(Guid userId, IEvent evt)
         {
             try
             {
                 if (!ValidateEventRequiredFields(evt, false))
-                    throw new Exception("Invalid IEvent object passed to the UpdateEvent method ");
+                    throw new InvalidIEventObjectException();
 
-                if (userId == EvtRepository.Owner(evt))
-                {
-                    EvtRepository.Update(evt);
-                    return evt.ID;
-                }
+                if (userId != EvtRepository.Owner(evt))
+                    throw new UserNotOwnerException();
+
+                EvtRepository.Update(evt);
+
+                //Add code here for Messaging (RTF)
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "UpdateEvent", Exception = ex };
+                throw;
             }
-            return new Guid("99999999-9999-9999-9999-999999999999");
         }
         public IEvent FindEvent(Guid eventId)
         {
             try
             {
                 if (eventId == new Guid("99999999-9999-9999-9999-999999999999") || eventId == new Guid())
-                   throw new Exception(string.Format("Invalid eventId passed to the FindEvent method: {0} ", eventId.ToString()));
+                   throw new InvalidEventIdException(eventId);
 
                 var eventList = EvtRepository.Find(evt => evt.ID == eventId);
 
@@ -78,7 +79,7 @@ namespace urTribeWebAPI.BAL
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "FindEvent", Exception = ex };
-                return null;
+                throw;
             }
         }
         public void AddContactsToEvent(Guid userId, Guid eventId, List<Guid> contactList)
@@ -89,7 +90,7 @@ namespace urTribeWebAPI.BAL
 
                 var ownerId = EvtRepository.Owner(evt);
                 if (userId == ownerId)
-                    return;
+                    throw new EventException("The owner of the event can not be assigned as a guest of the event.");
 
                 using (UserFacade userFacade = new UserFacade())
                 {
@@ -114,52 +115,52 @@ namespace urTribeWebAPI.BAL
                             RTBroker.AuthUser(convertedEventList, contact.Token);
                             RTBroker.SendInvite(contact, evt.ID.ToString(), owner.Name);
                         }
-
                     }
                 }
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "AddContactsToEvent", Exception = ex };
+                throw;
             }
         }
-        public ResultType ChangeContactAttendanceStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
+        public void ChangeContactAttendanceStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
         {
             try
             {
                 if (attendStatus == EventAttendantsStatus.All || attendStatus == EventAttendantsStatus.Cancel)
-                    return ResultType.Error;
+                    throw new InvalidEventStatusException(attendStatus);
 
                 IEvent evt = FindEvent(eventId);
 
                 if (evt == null)
-                    return ResultType.RecordNotFound; 
+                    throw new EventException ("Specified event cannot be found"); 
 
                 if (!EvtRepository.Guest(evt, userId))
-                    return ResultType.Error;
+                    throw new EventException("Specified user is not an invited guest:"+userId.ToString());
 
                 EvtRepository.ChangeUserAttendStatus(userId, eventId, attendStatus);
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "ChangeContactAttendanceStatus", Exception = ex };
-                return ResultType.Error;
+                throw;
             }
-            return ResultType.Successful;
         }
         public IEnumerable<IUser> InviteesByStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
         {
             try
             {
                 if (userId == new Guid("99999999-9999-9999-9999-999999999999") || userId == new Guid())
-                    throw new Exception(string.Format("Invalid UserId passed to the InviteesByStatus method: {0} ", userId.ToString()));
+                    throw new InvalidEventIdException(string.Format("Invalid UserId passed to the InviteesByStatus method: {0} ", userId.ToString()));
 
                 if (eventId == new Guid("99999999-9999-9999-9999-999999999999") || eventId == new Guid())
-                    throw new Exception(string.Format("Invalid eventId passed to the InviteesByStatus method: {0} ", eventId.ToString()));
+                    throw new InvalidEventIdException(string.Format("Invalid eventId passed to the InviteesByStatus method: {0} ", eventId.ToString()));
 
                 IEvent evt = FindEvent(eventId);
+
                 if (!EvtRepository.Guest(evt, userId) && (userId != EvtRepository.Owner(evt)))
-                    return null;
+                    throw new EventException("User is not the owner of the event, nor an invited guest.");
 
                 var results = EvtRepository.AttendingByStatus(eventId, attendStatus);
                 return results;
@@ -167,7 +168,7 @@ namespace urTribeWebAPI.BAL
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "EventAttendeesByStatus", Exception = ex };
-                return null;
+                throw;
             }
         }
         public void Dispose()
@@ -179,8 +180,10 @@ namespace urTribeWebAPI.BAL
 
         private bool ValidateEventRequiredFields(IEvent evt, bool isNew)
         {
+            if (evt == null)
+                return false;
+
             bool passed = true;
-            passed &= (evt != null);
             passed &= (evt.ID != new Guid("99999999-9999-9999-9999-999999999999"));
             passed &= (isNew ^ (evt.ID != new Guid("00000000-0000-0000-0000-000000000000")));
             return passed;

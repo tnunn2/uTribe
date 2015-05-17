@@ -52,8 +52,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exception\EventException.cs" />
+    <Compile Include="Exception\InvalidEventIdException.cs" />
+    <Compile Include="Exception\InvalidEventStatusException.cs" />
+    <Compile Include="Exception\InvalidIEventObjectException.cs" />
     <Compile Include="Exception\UserContactAssociationException.cs" />
     <Compile Include="EventFacade.cs" />
+    <Compile Include="Exception\UserNotOwnerException.cs" />
     <Compile Include="UserFacade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
