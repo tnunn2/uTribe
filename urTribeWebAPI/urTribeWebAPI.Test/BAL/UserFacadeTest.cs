@@ -21,88 +21,93 @@ namespace urTribeWebAPI.Test.BAL
             UserRepositoryMock<User>.ListOfUsers = null;
             UserRepositoryMock<User>.ThrowException = false;
         }
-        [Test]
-        public void AddUserWithEmptyFieldsReturnInvalidIds ()
-        {
-            Guid userId = new Guid("99999999-9999-9999-9999-999999999999");
 
+        #region CreateUser
+        [Test]
+        public void CreateUserWithEmptyFieldsReturnUserException()
+        {
             try
             {
                 using (UserFacade facade = new UserFacade())
                 {
                     IUser user = new User();
-                    userId = facade.CreateUser(user);
+                    facade.CreateUser(user);
                 }
+            }
+            catch (UserException)
+            {
+                Assert.Pass();
             }
             catch (Exception ex)
             {
                 Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
             }
 
-            Assert.AreEqual(userId.ToString(), "99999999-9999-9999-9999-999999999999");
+            Assert.Fail("An UserException should have been thrown because user not have passed validation");
         }
         [Test]
-        public void AddUserWithNullObjectReturnInvalidIds()
+        public void CreateUserWithNullObjectReturnUserException()
         {
-            Guid userId = new Guid("99999999-9999-9999-9999-999999999999"); ;
-
             try
             {
                 using (UserFacade facade = new UserFacade())
                 {
                     IUser user = null;
-                    userId = facade.CreateUser(user);
+                    facade.CreateUser(user);
                 }
+            }
+            catch (UserException)
+            {
+                Assert.Pass();
             }
             catch (Exception ex)
             {
                 Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
             }
-
-            Assert.AreEqual(userId.ToString(), "99999999-9999-9999-9999-999999999999");
         }
         [Test]
-        public void AddUserWithRequiredFieldsAndIDReturnInvalidIds()
+        public void CreateUserWithRequiredFieldsAndIDReturnUserException()
         {
-            Guid userId = new Guid("99999999-9999-9999-9999-999999999999"); ;
-
             try
             {
                 using (UserFacade facade = new UserFacade())
                 {
                     IUser user = new User() { Name = "Kevin Arnold", ID =  Guid.NewGuid() };
-                    userId = facade.CreateUser(user);
+                    facade.CreateUser(user);
                 }
+            }
+            catch (UserException)
+            {
+                Assert.Pass();
             }
             catch (Exception ex)
             {
                 Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
             }
-
-            Assert.AreEqual(userId.ToString(), "99999999-9999-9999-9999-999999999999");
         }
         [Test]
-        public void AddUserWithRequiredFieldsAndInvalidIDReturnInvalidIds()
+        public void CreateUserWithRequiredFieldsAndInvalidIDReturnUserException()
         {
-            Guid userId = new Guid("99999999-9999-9999-9999-999999999999");
-
             try
             {
                 using (UserFacade facade = new UserFacade())
                 {
                     IUser user = new User() { Name = "Kevin Arnold", ID = new Guid("99999999-9999-9999-9999-999999999999") };
-                    userId = facade.CreateUser(user);
+                    facade.CreateUser(user);
                 }
+            }
+            catch (UserException)
+            {
+                Assert.Pass();
             }
             catch (Exception ex)
             {
                 Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
             }
-
-            Assert.AreEqual(userId.ToString(), "99999999-9999-9999-9999-999999999999");
+            Assert.Fail("An UserException should have been generated");
         }
         [Test]
-        public void AddUserWhenExceptionHappensReturnInvalidIdCode()
+        public void CreateUserWhenExceptionHappensReturnInvalidIdCode()
         {
             UserRepositoryMock<User>.ThrowException = true;
             Guid userId = new Guid();
@@ -114,15 +119,14 @@ namespace urTribeWebAPI.Test.BAL
                     userId = facade.CreateUser(user);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
+                Assert.Pass();
             }
-
-            Assert.AreEqual(userId.ToString(), "99999999-9999-9999-9999-999999999999");
+            Assert.Fail("An Exception should have been thrown from the repository");
         }
         [Test]
-        public void AddUserWithRequiredFieldReturnsUserId()
+        public void CreateUserWithRequiredFieldReturnsUserId()
         {
             using (UserFacade facade = new UserFacade())
             {
@@ -133,31 +137,208 @@ namespace urTribeWebAPI.Test.BAL
                 Assert.IsTrue(userId != null && userId.ToString() != "99999999-9999-9999-9999-999999999999");
             }
         }
+        #endregion
+
+        #region UpdateUser
+        [Test]
+        public void UpdateUserWithNullUserObjectReturnUserException()
+        {
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    IUser user = null;
+                    facade.UpdateUser(user);
+                }
+            }
+            catch (UserException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call update on a user. Exception: {0}", ex.Message);
+            }
+            Assert.Fail("An UserException should have been generated");
+        }
+        [Test]
+        public void UpdateUserWithZerosAsUserIdReturnUserException ()
+        {
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    IUser user = new User() { Name = "Kevin Arnold", ID = new Guid() };
+                    facade.UpdateUser(user);
+                }
+            }
+            catch (UserException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to update a user. Exception: {0}", ex.Message);
+            }
+            Assert.Fail("An UserException should have been generated");
+        }
+        [Test]
+        public void UpdateUserWithNinesAsUserIdReturnUserException()
+        {
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    IUser user = new User() { Name = "Kevin Arnold", ID = new Guid("99999999-9999-9999-9999-999999999999") };
+                    facade.UpdateUser(user);
+                }
+            }
+            catch (UserException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to update a user. Exception: {0}", ex.Message);
+            }
+            Assert.Fail("An UserException should have been generated");
+        }
+        [Test]
+        public void UpdateUserWhenExceptionOccursInRepositoryReturnUserException()
+        {
+            UserRepositoryMock<User>.ThrowException = true;
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    IUser user = new User() { Name = "Kevin Arnold", ID = Guid.NewGuid () };
+                    facade.UpdateUser(user);
+                }
+            }
+            catch (Exception)
+            {
+                Assert.Pass();
+            }
+                Assert.Fail("An Exception should have been generated");
+        }
+        [Test]
+        public void UpdateUserWithNinesAsUserIdSendingUserToRepository()
+        {
+            UserRepositoryMock<User>.User = null;
+            IUser user = null;
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    user = new User() { Name = "Kevin Arnold", ID = Guid.NewGuid() };
+                    facade.UpdateUser(user);
+                }
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to update a user. Exception: {0}", ex.Message);
+            }
+            Assert.IsTrue(user == UserRepositoryMock<User>.User);
+        }
+        #endregion
+
+        #region FindUser
         [Test]
         public void FindUserWithValidIdReturnUser()
         {
             var usrId = Guid.NewGuid();
+            IUser user = new User();
 
-            List<User> ListOfUsers = new List<User> ();
-            ListOfUsers.Add(new User() { Name = "Jack Frost",ID = usrId});
+            List<User> ListOfUsers = new List<User>();
+            ListOfUsers.Add(new User() { Name = "Jack Frost", ID = usrId });
             UserRepositoryMock<User>.ListOfUsers = ListOfUsers;
 
-            using (UserFacade facade = new UserFacade())
+            try
             {
-                 var user = facade.FindUser(usrId);
-                 Assert.IsTrue(user.Name == "Jack Frost");
+                using (UserFacade facade = new UserFacade())
+                {
+                    user = facade.FindUser(usrId);
+                }
             }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to find a user. Exception: {0}", ex.Message);
+            }
+            Assert.IsTrue(user.Name == "Jack Frost");
         }
         [Test]
-        public void FindUserUsingInvalidIDReturnNull()
+        public void FindUserWithZerosAsIdReturnInvalidUserIdException()
+        {
+            var usrId = new Guid();
+            IUser user = new User();
+
+            List<User> ListOfUsers = new List<User>();
+            ListOfUsers.Add(new User() { Name = "Jack Frost", ID = usrId });
+            UserRepositoryMock<User>.ListOfUsers = ListOfUsers;
+
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    user = facade.FindUser(usrId);
+                }
+            }
+            catch (InvalidUserIdException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to find a user. Exception: {0}", ex.Message);
+            }
+            Assert.Fail("An InvalidUserIdException should have been thrown for the invliad Id.");
+        }
+        [Test]
+        public void FindUserWithNinesAsIdReturnInvalidUserIdException()
+        {
+            var usrId = new Guid("99999999-9999-9999-9999-999999999999");
+            IUser user = new User();
+
+            List<User> ListOfUsers = new List<User>();
+            ListOfUsers.Add(new User() { Name = "Jack Frost", ID = usrId });
+            UserRepositoryMock<User>.ListOfUsers = ListOfUsers;
+
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    user = facade.FindUser(usrId);
+                }
+            }
+            catch (InvalidUserIdException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to find a user. Exception: {0}", ex.Message);
+            }
+            Assert.Fail("An InvalidUserIdException should have been thrown for the invliad Id.");
+        }
+        [Test]
+        public void FindUserUsingNonExistingUserIdReturnNull()
         {
             var usrId = Guid.NewGuid();
+            IUser user = new User();
+            UserRepositoryMock<User>.ListOfUsers = new List<IUser>();
 
-            using (UserFacade facade = new UserFacade())
+            try
             {
-                var user = facade.FindUser(usrId);
-                Assert.IsTrue(user == null);
+                using (UserFacade facade = new UserFacade())
+                {
+                    user = facade.FindUser(usrId);
+                }
             }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to find a user. Exception: {0}", ex.Message);
+            }
+            Assert.IsTrue(user == null);
         }
         [Test]
         public void FindUserWhenExceptionHappensReturnNull()
@@ -173,11 +354,106 @@ namespace urTribeWebAPI.Test.BAL
                     user = facade.FindUser(usrId);
                 }
             }
+            catch (Exception)
+            {
+                Assert.Pass();
+            }
+            Assert.Fail("An Exception from the repository should have bubbled up.");
+        }
+        #endregion
+
+        #region AddContact
+        [Test]
+        public void AddContactWithUserIdAsZerosReturnInvalidUserIdException()
+        {
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    Guid userId = new Guid();
+                    Guid friendId = Guid.NewGuid();
+
+                    facade.AddContact(userId, friendId);
+                }
+            }
+            catch (InvalidUserIdException)
+            {
+                Assert.Pass();
+            }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
+                Assert.Fail("Unexpected exception escaped call to Link Contact to User. Exception: {0}", ex.Message);
             }
-            Assert.IsTrue(user == null);
+            Assert.Fail("An UserException should have been generated");
+        }
+        [Test]
+        public void AddContactWithUserIdAsNinesReturnInvalidUserIdException()
+        {
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    Guid userId = new Guid("99999999-9999-9999-9999-999999999999");
+                    Guid friendId = Guid.NewGuid();
+
+                    facade.AddContact(userId, friendId);
+                }
+            }
+            catch (InvalidUserIdException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to Link Contact to User. Exception: {0}", ex.Message);
+            }
+            Assert.Fail("An UserException should have been generated");
+        }
+        [Test]
+        public void AddContactWithFriendIdAsZerosReturnInvalidUserIdException()
+        {
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    Guid userId = Guid.NewGuid();
+                    Guid friendId = new Guid();
+
+                    facade.AddContact(userId, friendId);
+                }
+            }
+            catch (InvalidUserIdException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to Link Contact to User. Exception: {0}", ex.Message);
+            }
+            Assert.Fail("An UserException should have been generated");
+        }
+        [Test]
+        public void AddContactWithFriendIdAsNinesReturnInvalidUserIdException()
+        {
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    Guid userId = Guid.NewGuid();
+                    Guid friendId = new Guid("99999999-9999-9999-9999-999999999999");
+
+                    facade.AddContact(userId, friendId);
+                }
+            }
+            catch (InvalidUserIdException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to Link Contact to User. Exception: {0}", ex.Message);
+            }
+            Assert.Fail("An UserException should have been generated");
         }
         [Test]
         public void AddContactWithValidUserAndFriendIDsReturnNothing ()
@@ -213,15 +489,78 @@ namespace urTribeWebAPI.Test.BAL
                     facade.AddContact(userId, friendId);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
+                Assert.Pass();
             }
 
-            Assert.Pass();
+            Assert.Fail("An Exception should have bubbled up from the Repository.");
+        }
+        #endregion
+
+        #region RetrieveContacts
+        [Test]
+        public void RetrieveContactWithUserIdAsZerosReturnInvalidUserException()
+        {
+            var usrId = new Guid();
+            IEnumerable<IUser> userfriends = null;
+            List<IUser> friends = new List<IUser>();
+            friends.Add(new User() { Name = "Jack Frost", ID = Guid.NewGuid() });
+            friends.Add(new User() { Name = "Tom Ridder", ID = Guid.NewGuid() });
+            friends.Add(new User() { Name = "Uni Daisy", ID = Guid.NewGuid() });
+            friends.Add(new User() { Name = "Lisa Hunter", ID = Guid.NewGuid() });
+            UserRepositoryMock<User>.ListOfUsers = friends;
+
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    userfriends = facade.RetrieveContacts(usrId);
+                }
+            }
+            catch (InvalidUserIdException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to retrieve contacts. Exception: {0}", ex.Message);
+            }
+
+            Assert.Fail("An InvalidUserIdException should have been thrown");
         }
         [Test]
-        public void RetrieveContactValidIdReturnCorrectList ()
+        public void RetrieveContactWithUserIdAsNinesReturnInvalidUserException()
+        {
+            var usrId = new Guid("99999999-9999-9999-9999-999999999999");
+            IEnumerable<IUser> userfriends = null;
+            List<IUser> friends = new List<IUser>();
+            friends.Add(new User() { Name = "Jack Frost", ID = Guid.NewGuid() });
+            friends.Add(new User() { Name = "Tom Ridder", ID = Guid.NewGuid() });
+            friends.Add(new User() { Name = "Uni Daisy", ID = Guid.NewGuid() });
+            friends.Add(new User() { Name = "Lisa Hunter", ID = Guid.NewGuid() });
+            UserRepositoryMock<User>.ListOfUsers = friends;
+
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    userfriends = facade.RetrieveContacts(usrId);
+                }
+            }
+            catch (InvalidUserIdException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception escaped call to retrieve contacts. Exception: {0}", ex.Message);
+            }
+
+            Assert.Fail("An InvalidUserIdException should have been thrown");
+        }
+        [Test]
+        public void RetrieveContactsValidIdReturnCorrectList ()
         {
             var usrId = Guid.NewGuid();
             IEnumerable<IUser> userfriends = null;
@@ -241,13 +580,13 @@ namespace urTribeWebAPI.Test.BAL
             }
             catch (Exception ex)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
+                Assert.Fail("Unexpected exception escaped call to retrieve contacts. Exception: {0}", ex.Message);
             }
 
             Assert.IsTrue(userfriends == friends);
         }
         [Test]
-        public void RetrieveContactExceptionHappensReturnNull()
+        public void RetrieveContactsRepositoryExceptionHappensReturnException()
         {
             var usrId = Guid.NewGuid();
             IEnumerable<IUser> userfriends = null;
@@ -267,13 +606,19 @@ namespace urTribeWebAPI.Test.BAL
                     userfriends = facade.RetrieveContacts(usrId);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
+                Assert.Pass();
             }
 
-            Assert.IsTrue(userfriends == null);
+            Assert.Fail("An exception should have bubbled up from the repository");
         }
+        #endregion
+
+        #region RetrieveEventsByAttendanceStatus
+        #endregion
+
+        #region RemoveContact
         [Test]
         public void RemoveContactWithValidUserAndFriendIDsReturnNothing()
         {
@@ -295,7 +640,7 @@ namespace urTribeWebAPI.Test.BAL
             Assert.Pass();
         }
         [Test]
-        public void RemoveContactWhenExceptionHappensReturnNothing()
+        public void RemoveContactWhenRepositoryExceptionHappensReturnException()
         {
             UserRepositoryMock<User>.ThrowException = true;
             try
@@ -308,13 +653,20 @@ namespace urTribeWebAPI.Test.BAL
                     facade.RemoveContact(userId, friendId);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Assert.Fail("Unexpected exception escaped call to create user. Exception: {0}", ex.Message);
+                Assert.Pass();
             }
 
-            Assert.Pass();
+            Assert.Fail("An Exception from the repository should have bubbled up.");
         }
+        #endregion
+
+        #region CreateEvent
+        #endregion
+
+        #region CancelEvent
+        #endregion
 
     }
 }

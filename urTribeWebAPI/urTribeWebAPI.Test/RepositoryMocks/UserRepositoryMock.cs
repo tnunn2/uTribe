@@ -54,6 +54,8 @@ namespace urTribeWebAPI.Test.RepositoryMocks
         {
             if (ThrowException)
                 throw new Exception();
+
+            User = usr;
         }
         public void Remove(IUser poco)
         {

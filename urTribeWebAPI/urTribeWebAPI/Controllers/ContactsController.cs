@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using urTribeWebAPI.Common;
 using urTribeWebAPI.BAL;
-
+using urTribeWebAPI.Models.Response;
 
 
 namespace urTribeWebAPI.Controllers
@@ -14,38 +14,63 @@ namespace urTribeWebAPI.Controllers
     public class ContactsController : ApiController
     {
         //Get a list of User Contacts
-        public IEnumerable<IUser> Get(Guid userId)
+        public APIResponse Get(Guid userId)
         {
-            using (UserFacade facade = new UserFacade())
+
+            try
             {
-                IEnumerable<IUser> friends = facade.RetrieveContacts(userId);
-                return friends;
+                using (UserFacade facade = new UserFacade())
+                {
+                    IEnumerable<IUser> friends = facade.RetrieveContacts(userId);
+
+                    APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, new { Contacts = friends });
+                    return response;
+                }
             }
+            catch (Exception ex)
+            {
+                APIResponse response = new APIResponse(APIResponse.ReponseStatus.error, new { Error = ex.Message });
+                return response;
+            }
+
         }
 
-
         //Link to Contact to User
-        public bool Post(Guid userId, Guid contactId)
+        public APIResponse Post(Guid userId, Guid contactId)
         {
-            bool done = false;
-            using (UserFacade facade = new UserFacade())
+            try
             {
-                facade.AddContact(userId, contactId);
-                done = true;
+                using (UserFacade facade = new UserFacade())
+                {
+                    facade.AddContact(userId, contactId);
+                    APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, null);
+                    return response;
+                }
             }
-            return done;
+            catch (Exception ex)
+            {
+                APIResponse response = new APIResponse(APIResponse.ReponseStatus.error, new { Error = ex.Message });
+                return response;
+            }
         }
 
         //Remove a contact
-        public bool Delete(Guid userId, Guid contactId)
+        public APIResponse Delete(Guid userId, Guid contactId)
         {
-            bool done = false;
-            using (UserFacade facade = new UserFacade())
+            try
             {
-                facade.RemoveContact(userId, contactId);
-                done = true;
+                using (UserFacade facade = new UserFacade())
+                {
+                    facade.RemoveContact(userId, contactId);
+                    APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, null);
+                    return response;
+                }
             }
-            return done;
+            catch (Exception ex)
+            {
+                APIResponse response = new APIResponse(APIResponse.ReponseStatus.error, new { Error = ex.Message });
+                return response;
+            }
         }
     }
 }

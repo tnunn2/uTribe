@@ -4,36 +4,61 @@ using System.Linq;
 using System.Web.Http;
 using urTribeWebAPI.Common;
 using urTribeWebAPI.BAL;
+using urTribeWebAPI.Models.Response;
 
 namespace urTribeWebAPI.Controllers
 {
     public class UsersController : ApiController
     {
         //Get User data
-        public IUser Get(Guid userId)
+        public APIResponse Get(Guid userId)
         {
-            using ( UserFacade facade = new UserFacade())
+            try
             {
-                IUser user = facade.FindUser(userId); 
-                return user;
+                using (UserFacade facade = new UserFacade())
+                {
+                    IUser user = facade.FindUser(userId);
+                    APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, new { User = user });
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                APIResponse response = new APIResponse(APIResponse.ReponseStatus.error, new { Error = ex.Message });
+                return response;
             }
         }
 
         //Create User data
         //Update User data
-        public Guid Post(User user)
+        public APIResponse Post(User user)
         {
-            using (UserFacade facade = new UserFacade())
+            try
             {
-                Guid userId;
-                if (user.ID == new Guid())
-                    userId = facade.CreateUser(user);
-                else
+                using (UserFacade facade = new UserFacade())
                 {
-                    facade.UpdateUser(user);
-                    userId = user.ID;
+                    Guid userId;
+                    if (user.ID == new Guid())
+                    {
+                        userId = facade.CreateUser(user);
+
+                        APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, new { Token = userId });
+                        return response;
+                    }
+                    else
+                    {
+                        facade.UpdateUser(user);
+                        userId = user.ID;
+
+                        APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, null);
+                        return response;
+                    }
                 }
-                return userId;
+            }
+            catch (Exception ex)
+            {
+                APIResponse response = new APIResponse(APIResponse.ReponseStatus.error, new { Error = ex.Message });
+                return response;
             }
         }      
     }

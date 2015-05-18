@@ -94,21 +94,29 @@ namespace urTribeWebAPI.Controllers
         //Return all Active events
         public APIResponse Get (Guid userId)
         {
-            using (UserFacade userFacade = new UserFacade())
+            try
             {
-                IEnumerable<IEvent> eventList = userFacade.RetrieveEventsByAttendanceStatus(userId, EventAttendantsStatus.All);
+                using (UserFacade userFacade = new UserFacade())
+                {
+                    IEnumerable<IEvent> eventList = userFacade.RetrieveEventsByAttendanceStatus(userId, EventAttendantsStatus.All);
 
-                if (eventList == null)
-                {
-                    string message = "Unable to return a list of events.";
-                    APIResponse response = new APIResponse(APIResponse.ReponseStatus.fail, new {Error = message});
-                    return response;
+                    if (eventList == null)
+                    {
+                        string message = "Unable to return a list of events.";
+                        APIResponse response = new APIResponse(APIResponse.ReponseStatus.fail, new { Error = message });
+                        return response;
+                    }
+                    else
+                    {
+                        APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, new { EventList = eventList });
+                        return response;
+                    }
                 }
-                else
-                {
-                    APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, new { EventList = eventList });
-                    return response;
-                }
+            }
+            catch (Exception ex)
+            {
+                APIResponse response = new APIResponse(APIResponse.ReponseStatus.error, new { Error = ex.Message });
+                return response;
             }
         }
 

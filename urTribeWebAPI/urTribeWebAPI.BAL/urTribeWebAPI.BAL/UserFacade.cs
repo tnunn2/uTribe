@@ -54,11 +54,12 @@ namespace urTribeWebAPI.BAL
         #region Public Methods
         public Guid CreateUser (IUser user)
         {
+
+           if (!ValidateUserRequiredFieldsAreFilled(user, true))
+                throw new UserException("Invalid IUser object passed to the CreateUser method ");
+
             try
             {
-                if (!ValidateUserRequiredFieldsAreFilled(user, true))
-                    throw new Exception("Invalid IUser object passed to the CreateUser method ");
- 
                 ((User)user).ID = Guid.NewGuid();
                 UsrRepository.Add(user);
                 return user.ID;
@@ -66,7 +67,7 @@ namespace urTribeWebAPI.BAL
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "UserFacade", FaultMethod = "CreateUser", Exception = ex };
-                return new Guid("99999999-9999-9999-9999-999999999999");
+                throw;
             }
         }
 
@@ -74,16 +75,23 @@ namespace urTribeWebAPI.BAL
         {
             try
             {
+                if (!ValidateUserRequiredFieldsAreFilled (user, false))
+                    throw new UserException("Invalid IUser object passed to the CreateUser method ");
+
                 UsrRepository.Update(user);
             }
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "UserFacade", FaultMethod = "UpdateUser", Exception = ex };
+                throw;
             }
         }
 
         public IUser FindUser (Guid userId)
         {
+            if (userId == new Guid("99999999-9999-9999-9999-999999999999") || userId == new Guid())
+                throw new InvalidUserIdException(userId);
+
             try
             {
                 var userList = UsrRepository.Find(user => user.ID == userId);
@@ -95,12 +103,18 @@ namespace urTribeWebAPI.BAL
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "UserFacade", FaultMethod = "FindUser", Exception = ex };
-                return null;
+                throw;
             }
         }
 
         public void AddContact(Guid usrId, Guid friendId)
         {
+            if (usrId == new Guid("99999999-9999-9999-9999-999999999999") || usrId == new Guid())
+                throw new InvalidUserIdException(usrId);
+
+            if (friendId == new Guid("99999999-9999-9999-9999-999999999999") || friendId == new Guid())
+                throw new InvalidUserIdException(friendId);
+
             try
             {
                 if (usrId.Equals(friendId))
@@ -113,11 +127,15 @@ namespace urTribeWebAPI.BAL
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "UserFacade", FaultMethod = "AddContact", Exception = ex };
+                throw;
             }
         }
 
         public IEnumerable<IUser> RetrieveContacts(Guid userId)
         {
+            if (userId == new Guid("99999999-9999-9999-9999-999999999999") || userId == new Guid())
+                throw new InvalidUserIdException(userId);
+
             try
             {
                 IEnumerable<IUser> userList = UsrRepository.RetrieveContacts(userId);
@@ -126,12 +144,15 @@ namespace urTribeWebAPI.BAL
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "UserFacade", FaultMethod = "RetrieveContacts", Exception = ex };
-                return null;
+                throw;
             }
         }
 
         public IEnumerable<IEvent> RetrieveEventsByAttendanceStatus(Guid usrId, EventAttendantsStatus status)
         {
+            if (usrId == new Guid("99999999-9999-9999-9999-999999999999") || usrId == new Guid())
+                throw new InvalidUserIdException(usrId);
+
             try
             {
                 IEnumerable<IEvent> evtList = UsrRepository.RetrieveAllEventsByStatus(usrId, status);
@@ -140,13 +161,19 @@ namespace urTribeWebAPI.BAL
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "UserFacade", FaultMethod = "RetrieveContacts", Exception = ex };
-                return null;
+                throw;
             }
 
         }
 
         public void RemoveContact (Guid usrId, Guid friendId)
         {
+            if (usrId == new Guid("99999999-9999-9999-9999-999999999999") || usrId == new Guid())
+                throw new InvalidUserIdException(usrId);
+
+            if (friendId == new Guid("99999999-9999-9999-9999-999999999999") || friendId == new Guid())
+                throw new InvalidUserIdException(friendId);
+
             try
             {
                     UsrRepository.RemoveContact(usrId, friendId);
@@ -154,16 +181,23 @@ namespace urTribeWebAPI.BAL
             catch (Exception ex)
             {
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "UserFacade", FaultMethod = "RemoveContract", Exception = ex };
+                throw;
             }
         }
 
         public Guid CreateEvent(Guid userId, IEvent evt)
         {
+            if (userId == new Guid("99999999-9999-9999-9999-999999999999") || userId == new Guid())
+                throw new InvalidUserIdException(userId);
+
+            if (evt == null)
+                throw new EventException("A null was passed as a event");
+
             try
             {
                 IUser user = FindUser(userId);
                 if (user == null)
-                    throw new EventException("User doesnot exist");
+                    throw new UserException("User doesnot exist");
 
                 ((ScheduledEvent)evt).ID = Guid.NewGuid();
 
@@ -188,8 +222,15 @@ namespace urTribeWebAPI.BAL
                 throw;
             }
         }
+
         public void CancelEvent (Guid userId, Guid eventId)
         {
+            if (userId == new Guid("99999999-9999-9999-9999-999999999999") || userId == new Guid())
+                throw new InvalidUserIdException(userId);
+
+            if (eventId == new Guid("99999999-9999-9999-9999-999999999999") || eventId == new Guid())
+                throw new InvalidEventIdException(eventId);
+
             try
             {
                 using (EventFacade eventFacade = new EventFacade())
@@ -215,6 +256,7 @@ namespace urTribeWebAPI.BAL
                 throw;
             }
         }
+
         public void Dispose()
         {
         }
@@ -223,9 +265,11 @@ namespace urTribeWebAPI.BAL
         #region Private Method
         private bool ValidateUserRequiredFieldsAreFilled (IUser usr, bool isNew)
         {
+            if (usr == null)
+                return false;
+
             bool passed = true;
 
-            passed &= (usr != null);
             passed &= (usr.ID != new Guid("99999999-9999-9999-9999-999999999999"));
             passed &= (isNew ^ (usr.ID != new Guid("00000000-0000-0000-0000-000000000000")));
             passed &= usr.Name != string.Empty && usr.Name != null;
