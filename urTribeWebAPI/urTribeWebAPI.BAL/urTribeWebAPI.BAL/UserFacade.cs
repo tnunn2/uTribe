@@ -236,12 +236,17 @@ namespace urTribeWebAPI.BAL
                 using (EventFacade eventFacade = new EventFacade())
                 {
                     IEvent evt = eventFacade.FindEvent(eventId);
+                    if (evt == null)
+                        throw new InvalidEventIdException(String.Format("No event associated with this EventId:{0}",eventId));
 
                     var evtRepository = Factory.Create<IEventRepository>();
-                    if (evtRepository.Guest(evt, userId))
-                        return;
+                    var ownerId = evtRepository.Owner(evt);
+                    
+                    if (ownerId != userId)
+                        throw new EventException("Only the owner of the event can cancel.");
+
                     if (evt.Active == false)
-                        return;
+                        throw new EventException("The event is already inactive.");
 
                     evt.Active = false;
                     eventFacade.UpdateEvent(userId, evt);

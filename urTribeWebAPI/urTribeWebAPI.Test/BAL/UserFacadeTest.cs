@@ -20,6 +20,18 @@ namespace urTribeWebAPI.Test.BAL
             UserRepositoryMock<User>.FriendId = new Guid();
             UserRepositoryMock<User>.ListOfUsers = null;
             UserRepositoryMock<User>.ThrowException = false;
+
+            EventRepositoryMock<ScheduledEvent>.ThrowException = false;
+            EventRepositoryMock<ScheduledEvent>.Evt = null;
+            EventRepositoryMock<ScheduledEvent>.OwnerId = new Guid();
+            EventRepositoryMock<ScheduledEvent>.EventId = new Guid();
+            EventRepositoryMock<ScheduledEvent>.IsGuest = false;
+            EventRepositoryMock<ScheduledEvent>.ListOfEvents = null;
+            EventRepositoryMock<ScheduledEvent>.ListOfUsers = null;
+            EventRepositoryMock<ScheduledEvent>.User = null;
+            EventRepositoryMock<ScheduledEvent>.UserId = new Guid();
+            EventRepositoryMock<ScheduledEvent>.AttendStatus = EventAttendantsStatus.Pending;
+
         }
 
         #region CreateUser
@@ -666,6 +678,223 @@ namespace urTribeWebAPI.Test.BAL
         #endregion
 
         #region CancelEvent
+        [Test]
+        public void CancelEventUserIdAsZerosReturnInvalidUserIdException()
+        {
+            Guid userId = new Guid();
+            Guid eventId = Guid.NewGuid();
+
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    facade.CancelEvent(userId, eventId);
+                }
+            }
+            catch (InvalidUserIdException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception happened while testing CancelEvent. Exception: {0}", ex.Message);
+            }
+
+            Assert.Fail("An InvalidUserIdException should have been thrown");
+        }
+        [Test]
+        public void CancelEventUserIdAsNinesReturnInvalidUserIdException()
+        {
+            Guid userId = new Guid("99999999-9999-9999-9999-999999999999");
+            Guid eventId = Guid.NewGuid();
+
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    facade.CancelEvent(userId, eventId);
+                }
+            }
+            catch (InvalidUserIdException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception happened while testing CancelEvent. Exception: {0}", ex.Message);
+            }
+
+            Assert.Fail("An InvalidUserIdException should have been thrown");
+        }
+        [Test]
+        public void CancelEventEventIdAsZerosReturnInvalidEventIdException()
+        {
+            Guid userId = Guid.NewGuid();
+            Guid eventId = new Guid();
+
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    facade.CancelEvent(userId, eventId);
+                }
+            }
+            catch (InvalidEventIdException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception happened while testing CancelEvent. Exception: {0}", ex.Message);
+            }
+
+            Assert.Fail("An InvalidEventIdException should have been thrown");
+        }
+        [Test]
+        public void CancelEventEventIdAsNinesReturnInvalidEventIdException()
+        {
+            Guid userId = Guid.NewGuid();
+            Guid eventId = new Guid("99999999-9999-9999-9999-999999999999");
+
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    facade.CancelEvent(userId, eventId);
+                }
+            }
+            catch (InvalidEventIdException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception happened while testing CancelEvent. Exception: {0}", ex.Message);
+            }
+
+            Assert.Fail("An InvalidEventIdException should have been thrown");
+        }
+        [Test]
+        public void CancelEventNoMatchingRecordsReturnInvalidEventIdException()
+        {
+            Guid userId = Guid.NewGuid();
+            Guid eventId = Guid.NewGuid();
+            EventRepositoryMock<ScheduledEvent>.ListOfEvents = new List<IEvent>();
+            UserRepositoryMock<User>.ThrowException = false;
+            EventRepositoryMock<ScheduledEvent>.ThrowException = false;
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    facade.CancelEvent(userId, eventId);
+                }
+            }
+            catch (InvalidEventIdException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception happened while testing CancelEvent. Exception: {0}", ex.Message);
+            }
+
+            Assert.Fail("An InvalidEventIdException should have been thrown");
+        }
+        [Test]
+        public void CancelEventUserNoOwnerReturnEventException()
+        {
+            Guid userId = Guid.NewGuid();
+            Guid eventId = Guid.NewGuid();
+            EventRepositoryMock<ScheduledEvent>.OwnerId = Guid.NewGuid();
+
+
+            var evtList = new List<IEvent>();
+            evtList.Add(new ScheduledEvent() { ID = eventId, Name = "Test Event", Active = true });
+            EventRepositoryMock<ScheduledEvent>.ListOfEvents = evtList;
+
+
+            UserRepositoryMock<User>.ThrowException = false;
+            EventRepositoryMock<ScheduledEvent>.ThrowException = false;
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    facade.CancelEvent(userId, eventId);
+                }
+            }
+            catch (EventException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception happened while testing CancelEvent. Exception: {0}", ex.Message);
+            }
+
+            Assert.Fail("An InvalidEventIdException should have been thrown");
+        }
+        [Test]
+        public void CancelEventEventNotActiveReturnEventException()
+        {
+            Guid userId = Guid.NewGuid();
+            Guid eventId = Guid.NewGuid();
+            EventRepositoryMock<ScheduledEvent>.OwnerId = userId;
+
+
+            var evtList = new List<IEvent>();
+            evtList.Add(new ScheduledEvent() { ID = eventId, Name = "Test Event", Active = false });
+            EventRepositoryMock<ScheduledEvent>.ListOfEvents = evtList;
+
+
+            UserRepositoryMock<User>.ThrowException = false;
+            EventRepositoryMock<ScheduledEvent>.ThrowException = false;
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    facade.CancelEvent(userId, eventId);
+                }
+            }
+            catch (EventException)
+            {
+                Assert.Pass();
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception happened while testing CancelEvent. Exception: {0}", ex.Message);
+            }
+
+            Assert.Fail("An InvalidEventIdException should have been thrown");
+        }
+        [Test]
+        public void CancelEventSuccessfulReturnNothing()
+        {
+            Guid userId = Guid.NewGuid();
+            Guid eventId = Guid.NewGuid();
+            EventRepositoryMock<ScheduledEvent>.OwnerId = userId;
+
+
+            var evtList = new List<IEvent>();
+            evtList.Add(new ScheduledEvent() { ID = eventId, Name = "Test Event", Active = true });
+            EventRepositoryMock<ScheduledEvent>.ListOfEvents = evtList;
+
+
+            UserRepositoryMock<User>.ThrowException = false;
+            EventRepositoryMock<ScheduledEvent>.ThrowException = false;
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    facade.CancelEvent(userId, eventId);
+                }
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected exception happened while testing CancelEvent. Exception: {0}", ex.Message);
+            }
+
+            Assert.Pass();
+        }
         #endregion
 
     }

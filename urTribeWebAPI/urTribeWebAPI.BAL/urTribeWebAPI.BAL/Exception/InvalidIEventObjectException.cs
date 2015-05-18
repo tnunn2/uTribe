@@ -5,7 +5,7 @@ namespace urTribeWebAPI.BAL
     public class InvalidIEventObjectException : Exception
     {
         #region Constant
-        private const string MESSAGE = "Invalid IEvent object passed to the UpdateEvent method.";
+        private const string MESSAGE = "Invalid IEvent object.";
         #endregion
         public InvalidIEventObjectException() : base(MESSAGE)
         {
