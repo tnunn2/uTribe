@@ -72,7 +72,7 @@ namespace urTribeWebAPI.DAL.Repositories
         public void RemoveContact(Guid usrId, Guid friendId)
         {
             _dbms.Cypher.Match("(user:User)-[rel:FRIENDS_WITH]->(friend:User)").
-                         Where((User usr) => usr.ID == usrId).
+                         Where((User user) => user.ID == usrId).
                          AndWhere((User friend) => friend.ID == friendId).
                          Delete("rel").ExecuteWithoutResults();
         }
