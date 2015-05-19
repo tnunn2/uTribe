@@ -42,7 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Concrete\Address.cs" />
     <Compile Include="Concrete\Group.cs" />
     <Compile Include="Concrete\ScheduledEvent.cs" />
     <Compile Include="Concrete\User.cs" />

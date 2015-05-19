@@ -89,8 +89,8 @@ namespace urTribeWebAPI.BAL
                 IEvent evt = FindEvent(eventId);
 
                 var ownerId = EvtRepository.Owner(evt);
-                if (userId == ownerId)
-                    throw new EventException("The owner of the event can not be assigned as a guest of the event.");
+                if (userId != ownerId)
+                    throw new EventException("Only the owner can add guest to the event.");
 
                 using (UserFacade userFacade = new UserFacade())
                 {

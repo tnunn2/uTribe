@@ -11,7 +11,11 @@ namespace urTribeWebAPI.Common
         public bool Active { get; set; } 
         public long Time { get; set; }
         public string Location { get; set; }
-        public Address LocationAddress { get; set; }
+        public string Street1 { get; set; }
+        public string Street2 { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Zip { get; set; }
 
 //        public List<IUser> invitedUsers { get; set; }
 
