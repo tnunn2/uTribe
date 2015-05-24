@@ -7,7 +7,7 @@ namespace urTribeWebAPI.Common
     {
         bool Active { get; set; }
         string Name { get; set; }
-        long Time { get; set; }
+        string Time { get; set; }
         string Location { get; set; }
         string Street1 { get; set; }
         string Street2 { get; set; }
@@ -16,5 +16,6 @@ namespace urTribeWebAPI.Common
         string Zip { get; set; }
 
 
+        DateTime TimeAsDateTime();
     }
 }

@@ -193,6 +193,10 @@ namespace urTribeWebAPI.BAL
             if (evt == null)
                 throw new EventException("A null was passed as a event");
 
+            if (evt.Time == null || evt.Time == string.Empty)
+                throw new EventException("Event.Time is in the incorrect format.");
+
+
             try
             {
                 IUser user = FindUser(userId);

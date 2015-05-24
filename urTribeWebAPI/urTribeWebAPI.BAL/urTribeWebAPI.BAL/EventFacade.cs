@@ -186,6 +186,7 @@ namespace urTribeWebAPI.BAL
             bool passed = true;
             passed &= (evt.ID != new Guid("99999999-9999-9999-9999-999999999999"));
             passed &= (isNew ^ (evt.ID != new Guid("00000000-0000-0000-0000-000000000000")));
+            passed &= (evt.Time != null && evt.Time != string.Empty);
             return passed;
         }
         #endregion
