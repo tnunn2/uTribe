@@ -36,7 +36,8 @@ namespace urTribeWebAPI.DAL.Factory
         {
             try
             {
-                string MapLocation = ConfigurationManager.AppSettings["RepositoryMapFileLocation"];
+                //string MapLocation = ConfigurationManager.AppSettings["RepositoryMapFileLocation"];
+                var MapLocation = @"C:\Program Files (x86)\Jenkins\jobs\urTribeCI-UnitTest\workspace\urTribeWebAPI\urTribeWebAPI.DAL\RepositoryMap.json";
                 using (StreamReader r = new StreamReader(MapLocation))
                 {
                     string json = r.ReadToEnd();
