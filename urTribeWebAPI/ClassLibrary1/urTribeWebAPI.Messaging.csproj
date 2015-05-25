@@ -61,12 +61,16 @@
     <Compile Include="RealTimeBroker_N.cs" />
     <Compile Include="RealTimeFrameworkConnect.cs" />
     <Compile Include="RTFHelperClasses\AuthQuery.cs" />
+    <Compile Include="RTFHelperClasses\BooleanResponse.cs" />
     <Compile Include="RTFHelperClasses\CreateTableQuery.cs" />
+    <Compile Include="RTFHelperClasses\CreationDataResponse.cs" />
+    <Compile Include="RTFHelperClasses\ErrorResponse.cs" />
     <Compile Include="RTFHelperClasses\DBPolicy.cs" />
     <Compile Include="RTFHelperClasses\Key.cs" />
     <Compile Include="RTFHelperClasses\Policy.cs" />
     <Compile Include="RTFHelperClasses\PutItemQuery.cs" />
     <Compile Include="RTFHelperClasses\RTFStringBuilder.cs" />
+    <Compile Include="RTFHelperClasses\CreationResponse.cs" />
     <Compile Include="RTFHelperClasses\TablePolicy.cs" />
     <Compile Include="RTFHelperClasses\TableSchema.cs" />
     <Compile Include="RTFHelperClasses\Throughput.cs" />

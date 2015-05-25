@@ -78,7 +78,7 @@ namespace urTribeWebAPI.Messaging
         }
 
         //Creates a User channel and authenticates. Facade will update user object
-        public BrokerResult CreateUserChannel(IUser user)
+        public string CreateUserChannel(IUser user)
         {
             string tableName = UserToTableName(user);
             string data = RTStringBuilder.MakeCreateString(tableName);
@@ -89,9 +89,9 @@ namespace urTribeWebAPI.Messaging
 
             AuthUser(new List<string>() {tableName}, user.Token);
 
-            BrokerResult result = BrokerResult.newSuccess();
-            result.Message = tableName;
-            return result;
+            //BrokerResult result = BrokerResult.newSuccess();
+            //result.Message = tableName;
+            return tableName;
         }
 
         //Does not evaluate JSON response for errors in table creation!

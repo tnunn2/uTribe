@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using urTribeWebAPI.Common;
 using urTribeWebAPI.Common.Logging;
 using urTribeWebAPI.DAL.Interfaces;
@@ -62,9 +63,7 @@ namespace urTribeWebAPI.BAL
             {
                 ((User)user).ID = Guid.NewGuid();
                 UsrRepository.Add(user);
-                user.AuthenticatedChannels = new List<string>();
-                user.UserChannel = _realTimeBroker.CreateUserChannel(user).Message;
-                user.AuthenticatedChannels.Add(user.UserChannel);
+                registerNewUserWithRTF(user);
                 return user.ID;
             }
             catch (Exception ex)
@@ -72,6 +71,21 @@ namespace urTribeWebAPI.BAL
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "UserFacade", FaultMethod = "CreateUser", Exception = ex };
                 throw;
             }
+        }
+
+        //Public so I can write a test for it
+        public string registerNewUserWithRTF(IUser user)
+        {
+            user.AuthenticatedChannels = new List<string>();
+            user.UserChannel = _realTimeBroker.CreateUserChannel(user);
+
+            //Wait until table is done 'creating'
+            Thread.Sleep(Messaging.Properties.Settings.Default.RTFCreationSleepTime);
+
+            _realTimeBroker.AuthUser(new List<string>() { user.UserChannel }, user.Token);
+
+            user.AuthenticatedChannels.Add(user.UserChannel);
+            return user.UserChannel;
         }
 
         public void UpdateUser (IUser user)

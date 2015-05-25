@@ -5,6 +5,8 @@ using urTribeWebAPI.Common;
 using urTribeWebAPI.Messaging;
 using System.Configuration;
 using System.Threading;
+using Newtonsoft.Json;
+using urTribeWebAPI.Messaging.RTFHelperClasses;
 
 namespace urTribeWebAPI.Messaging
 {
@@ -75,8 +77,9 @@ namespace urTribeWebAPI.Messaging
 
                 var AuthUrl = Properties.Settings.Default.RTFAuthURL;
                 string result = MessageConnect.SendRequest(AuthUrl, data);
-
-                return BrokerResult.newSuccess();
+                BooleanResponse response = JsonConvert.DeserializeObject<BooleanResponse>(result);
+                if (response.data) return BrokerResult.newSuccess();
+                throw new Exception("RTF returned error " + response.error.message);
             }
             catch (WebException e)
             {
@@ -99,20 +102,25 @@ namespace urTribeWebAPI.Messaging
                 return new BrokerResult { type = ResultType.createError, reason = ErrorReason.remoteCreateFailure, Message = e.Message };
             }
         }
-        public BrokerResult CreateUserChannel(IUser user)
+        //Does not authenticate or wait. Leave to facade.
+        public string CreateUserChannel(IUser user)
         {
             string tableName = UserToTableName(user);
             string data = RTStringBuilder.MakeCreateString(tableName);
             string createUrl = Properties.Settings.Default.RTFCreateURL;
-            MessageConnect.SendRequest(createUrl, data);
+            string response = MessageConnect.SendRequest(createUrl, data);
+            CreationResponse creation = JsonConvert.DeserializeObject<CreationResponse>(response);
+            try
+            {
+                if (tableName.Equals(creation.data.table)) return tableName;
+                throw new Exception("RTF returned a different table name");
+            }
+            catch (NullReferenceException e)
+            {
+                throw new Exception("RTF returned an error Message: " + creation.error.message);
+            }
 
-            Thread.Sleep(Properties.Settings.Default.RTFCreationSleepTime);
 
-            AuthUser(new List<string>() { tableName }, user.Token);
-
-            BrokerResult result = BrokerResult.newSuccess();
-            result.Message = tableName;
-            return result;
         }
         public List<string> ConvertEventToTableName(IEnumerable<IEvent> events)
         {

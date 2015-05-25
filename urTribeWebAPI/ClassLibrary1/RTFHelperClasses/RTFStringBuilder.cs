@@ -12,7 +12,7 @@ namespace urTribeWebAPI.Messaging
     public class RTFStringBuilder : IRTFStringBuilder
     {
         #region Constants
-        private const string TestRole = "testRole";
+        private const string TestRole = "TestRole";
         private const string GlobalAllow = "RU";
         private const string PrimaryKey = "id";
         private const string PrimaryKeyType = "string";
@@ -38,13 +38,7 @@ namespace urTribeWebAPI.Messaging
         #endregion
 
         #region Properties
-        /*private JavaScriptSerializer ObjectSerializer
-        {
-            get
-            {
-                return _serializer;
-            }
-        } */
+
         #endregion
 
         #region Private Method
@@ -86,7 +80,7 @@ namespace urTribeWebAPI.Messaging
                     write = WriteOps
                 }
             };
-            return JsonConvert.SerializeObject(q);  //Determine if need to use different Serializer
+            return JsonConvert.SerializeObject(q);  
         }
         public string MakeAuthString(List<string> tableNames, string userToken)
         {

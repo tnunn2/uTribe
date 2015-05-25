@@ -7,6 +7,7 @@ using System.Web.Configuration;
 using System.Web.UI.WebControls;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Core;
+using urTribeWebAPI.BAL;
 using urTribeWebAPI.Common;
 using urTribeWebAPI.Messaging;
 using urTribeWebAPI.Models;
@@ -81,6 +82,7 @@ namespace urTribeWebAPI.Test.Messaging
             List<string> names = new List<string> {tableName};
             IRTFStringBuilder sb = new RTFStringBuilder();
             string data2 = sb.MakeAuthString(names, userToken);
+            Debug.Print(data);
             Assert.AreEqual(data, data2);
         }
 
@@ -99,6 +101,23 @@ namespace urTribeWebAPI.Test.Messaging
             };
 
             Debug.Print(b.JustCreateChannel(eventTable));
+        }
+
+        [TestMethod]
+        public void TestNewUserRegistration()
+        {
+
+            Guid eventID = new Guid("7c74ac99-4cdf-4f3a-a63b-fc040f300607");
+            string eventTable = "event" + eventID;
+            UserFacade f = new UserFacade();
+            IUser creator = new User()
+            {
+                ID = new Guid("aa918dde-94e0-4323-a281-c8274d67eaca"),
+                AuthenticatedChannels = new List<string>(),
+                Name = "Catherine C"
+            };
+            string table = f.registerNewUserWithRTF(creator);
+            Assert.AreEqual(table, "user"+creator.ID);
         }
 
         [TestMethod]
@@ -125,7 +144,7 @@ namespace urTribeWebAPI.Test.Messaging
                         ID = new Guid("b40354dc-5734-432e-b6c5-24adf8890312"),
                         AuthenticatedChannels = new List<string> { eventTable}
                     });
-                invitees.ForEach(u => u.UserChannel = b.CreateUserChannel(u).Message);
+                invitees.ForEach(u => u.UserChannel = b.CreateUserChannel(u));
                 b.CreateAuthAndInvite(eventID, creator, invitees);
                 
                 b.InviteUsers(invitees, creator.Name, eventTable);

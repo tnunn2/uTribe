@@ -10,7 +10,7 @@ namespace urTribeWebAPI.Messaging
         BrokerResult CreateAuthAndInvite(Guid eventID, IUser eventCreator, IEnumerable<IUser> invitees);
         BrokerResult AddToChannel(IUser user, Guid eventId);
         BrokerResult RespondToInvite(IUser user, Guid eventID, bool accept);
-        BrokerResult CreateUserChannel(IUser user);
+        string CreateUserChannel(IUser user);
         BrokerResult InviteUsers(IEnumerable<IUser> invitees, string inviter, string tableName);
     }
 }
