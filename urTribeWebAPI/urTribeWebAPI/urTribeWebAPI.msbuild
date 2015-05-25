@@ -3,7 +3,7 @@
     <BuildArtifactsDir Include="BuildArtifacts\" />
   
     <SolutionFile Include="..\urTribeWebAPI.sln" />
-    <NUnitConsole Include="C:\Users\Administrator\Downloads\NUnit-3.0.0-alpha-5b\bin\nunit-console.exe" />
+    <NUnitConsole Include="C:\Users\Administrator\Downloads\NUnit-2.6.4\NUnit-2.6.4\bin\nunit-console.exe" />
     <UnitTestsDLL Include="BuildArtifacts\urTribeWebAPI.Test.dll" />
     
     <TestResultsPath Include="BuildArtifacts\testitt.xml" />
