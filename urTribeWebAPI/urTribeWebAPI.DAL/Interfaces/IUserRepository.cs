@@ -13,5 +13,6 @@ namespace urTribeWebAPI.DAL.Interfaces
         IEnumerable<IUser> RetrieveContacts(Guid userId);
         void RemoveContact(Guid usrId, Guid friendId);
         IEnumerable<IEvent> RetrieveAllEventsByStatus(Guid usrId, EventAttendantsStatus status);
+        EventAttendantsStatus RetrieveEventStatus (Guid usrId, Guid eventId);
     }
 }

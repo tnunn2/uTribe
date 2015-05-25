@@ -28,7 +28,24 @@ namespace urTribeWebAPI.Controllers
                 return response;
             }
         }
-
+        //Get User's Status
+        public APIResponse Get(Guid usrId, Guid eventId)
+        {
+            try
+            {
+                using (UserFacade facade = new UserFacade())
+                {
+                    EventAttendantsStatus status = facade.RetrieveUsersEventStatus(usrId, eventId);
+                    APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, new { Status = status.ToString() });
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                APIResponse response = new APIResponse(APIResponse.ReponseStatus.error, new { Error = ex.Message });
+                return response;
+            }
+        }
         //Create User data
         //Update User data
         public APIResponse Post(User user)

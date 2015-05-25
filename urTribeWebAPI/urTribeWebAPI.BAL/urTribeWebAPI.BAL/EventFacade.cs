@@ -63,6 +63,15 @@ namespace urTribeWebAPI.BAL
                 throw;
             }
         }
+        public IEvent EventDetail (Guid userId, Guid eventId)
+        {
+            IEvent evt = FindEvent(eventId);
+
+            if (!EvtRepository.Guest(evt, userId) && (userId != EvtRepository.Owner(evt)))
+                throw new EventException("User is not the owner of the event, nor an invited guest.");
+            else
+                return evt;
+        }
         public IEvent FindEvent(Guid eventId)
         {
             try

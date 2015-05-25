@@ -169,6 +169,31 @@ namespace urTribeWebAPI.BAL
 
         }
 
+        public EventAttendantsStatus RetrieveUsersEventStatus(Guid usrId, Guid eventId)
+        {
+            if (usrId == new Guid("99999999-9999-9999-9999-999999999999") || usrId == new Guid())
+                throw new InvalidUserIdException(usrId);
+
+            if (eventId == new Guid("99999999-9999-9999-9999-999999999999") || eventId == new Guid())
+                throw new InvalidEventIdException(eventId);
+
+            try
+            {
+                var status = _usrrepository.RetrieveEventStatus(usrId, eventId);
+                return status;
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Relationship Error")
+                    throw new RelationshipException();
+                else
+                {
+                    Logger.Instance.Log = new ExceptionDTO() { FaultClass = "UserFacade", FaultMethod = "RetrieveContacts", Exception = ex };
+                    throw;
+                }
+            }
+        }
+ 
         public void RemoveContact (Guid usrId, Guid friendId)
         {
             if (usrId == new Guid("99999999-9999-9999-9999-999999999999") || usrId == new Guid())

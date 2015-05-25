@@ -93,6 +93,11 @@ namespace urTribeWebAPI.Test.RepositoryMocks
 
             return ListOfEvents;
         }
+
+        public EventAttendantsStatus RetrieveEventStatus(Guid usrId, Guid eventId)
+        {
+            throw new NotImplementedException();
+        } 
         #endregion
     }
 }

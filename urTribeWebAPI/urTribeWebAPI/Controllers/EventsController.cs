@@ -120,7 +120,44 @@ namespace urTribeWebAPI.Controllers
             }
         }
 
-        //Find an event ???
+        //Return EventDetail
+        public APIResponse Get(Guid usrId, Guid eventId)
+        {
+            try
+            {
+                using (EventFacade facade = new EventFacade())
+                {
+                    IEvent evt = facade.EventDetail (usrId, eventId);
+                    APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, new { Event = evt });
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                APIResponse response = new APIResponse(APIResponse.ReponseStatus.error, new { Error = ex.Message });
+                return response;
+            }
+        }
+
+        //List Of Invited by Status
+        public APIResponse Get(Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
+        {
+            try
+            {
+                using (EventFacade facade = new EventFacade())
+                {
+                    IEnumerable<IUser> userList  = facade.InviteesByStatus(userId, eventId, attendStatus);
+                    APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, new { Users = userList });
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                APIResponse response = new APIResponse(APIResponse.ReponseStatus.error, new { Error = ex.Message });
+                return response;
+            }
+        }
+
         //InviteResponse ???
     }
 }

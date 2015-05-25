@@ -76,6 +76,21 @@ namespace urTribeWebAPI.DAL.Repositories
                          AndWhere((User friend) => friend.ID == friendId).
                          Delete("rel").ExecuteWithoutResults();
         }
+
+        public EventAttendantsStatus RetrieveEventStatus (Guid usrId, Guid eventId)
+        {
+            var relationships = _dbms.Cypher.Match("(user:User)-[rel]->(evt:Event)")
+                                   .Where((User user) => user.ID.ToString() == usrId.ToString())
+                                   .AndWhere((ScheduledEvent evt) => evt.ID.ToString() == eventId.ToString())
+                                   .Return(rel => rel.As<EventRelationship>())
+                                   .Results;
+
+            foreach (var relationship in relationships)
+                return relationship.AttendStatus;
+
+            throw new Exception ("Relationship Error");
+        }
+
         public IEnumerable<IEvent> RetrieveAllEventsByStatus(Guid usrId, EventAttendantsStatus status)
         {
             var query =  _dbms.Cypher.Match("(user:User)-[rel:EVENTOWNER]->(evt:Event)")
