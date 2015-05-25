@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30324.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "urTribeWebAPI", "urTribeWebAPI\urTribeWebAPI.csproj", "{CC26760A-E958-4AC9-8FA4-1CEC452E5DB7}"
 EndProject
@@ -9,6 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		urTribeWebAPI\urTriberServiceRegister.ps1 = urTribeWebAPI\urTriberServiceRegister.ps1
 		urTribeWebAPI\urTribeWebAPI.msbuild = urTribeWebAPI\urTribeWebAPI.msbuild
+		urTribeWebAPI\Web.config = urTribeWebAPI\Web.config
+		urTribeWebAPI\Web.Debug.config = urTribeWebAPI\Web.Debug.config
+		urTribeWebAPI\Web.Release.config = urTribeWebAPI\Web.Release.config
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "urTribeWebAPI.Test", "urTribeWebAPI.Test\urTribeWebAPI.Test.csproj", "{66859DC0-4BE4-4A9E-8F5D-79640299A1A8}"

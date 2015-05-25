@@ -8,7 +8,7 @@ namespace urTribeWebAPI.Common
         string Token { get; }
         string Name { get; set; }
         UserCurrentStatus Status { get; set; }
-        string InvitesChannel { get; set; }
-        List<string> Channels { get; }
+        string UserChannel { get; set; }
+        List<string> AuthenticatedChannels { get; set;  }
     }
 }

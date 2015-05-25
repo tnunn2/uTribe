@@ -58,23 +58,6 @@ namespace urTribeWebAPI.Controllers
             //for now assuming #6
             return eventID.ToString();
         }
-        /*
-        public string GetPretendevent(int numInvitees)
-        {
-            IMessageBroker b = new RealtimeBroker();
-            IUser creator = new User()
-            {
-                ID = Guid.NewGuid()
-            };
-            List<IUser> invitees = new List<IUser>();
-            for (int i = 0; i < numInvitees; i++)
-            {
-                invitees.Add(new User() {ID = Guid.NewGuid()}); 
-            }
-            invitees.ForEach(i => b.CreateUserChannel(i));
-            b.CreateEventChannel(Guid.NewGuid(), creator, invitees);
-            return "finished!";
-        } */
 
 
         [HttpPut]

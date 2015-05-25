@@ -27,23 +27,24 @@ namespace urTribeWebAPI.Messaging
         #endregion
 
         #region ReadOnly
-        private readonly string AppKey     = ConfigurationManager.AppSettings["RealtimeBrokerAppKey"];
-        private readonly string PrivateKey = ConfigurationManager.AppSettings["RealtimeBrokerPrivateKey"];
-        private readonly string RTtoken    = ConfigurationManager.AppSettings["RealtimeBrokerRTtoken"];
-        private readonly JavaScriptSerializer _serializer = new JavaScriptSerializer();
+        private readonly string AppKey = urTribeWebAPI.Messaging.Properties.Settings.Default.RTFAppKey;
+        private readonly string PrivateKey = urTribeWebAPI.Messaging.Properties.Settings.Default.RTFPrivateKey;
+        private readonly string RTtoken = urTribeWebAPI.Messaging.Properties.Settings.Default.RTFToken;
+        //private readonly JavaScriptSerializer _serializer = new JavaScriptSerializer();
+        //Serialization taken care of by static call to JsonConvert.SerializeObject()
         #endregion
 
         #region Member Variables        
         #endregion
 
         #region Properties
-        private JavaScriptSerializer ObjectSerializer
+        /*private JavaScriptSerializer ObjectSerializer
         {
             get
             {
                 return _serializer;
             }
-        }
+        } */
         #endregion
 
         #region Private Method
@@ -85,7 +86,7 @@ namespace urTribeWebAPI.Messaging
                     write = WriteOps
                 }
             };
-            return ObjectSerializer.Serialize(q);  //Determine if need to use different Serializer
+            return JsonConvert.SerializeObject(q);  //Determine if need to use different Serializer
         }
         public string MakeAuthString(List<string> tableNames, string userToken)
         {
