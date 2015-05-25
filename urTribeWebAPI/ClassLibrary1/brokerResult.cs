@@ -8,7 +8,7 @@ namespace urTribeWebAPI.Messaging
         #region Properties
         public ResultType type { get; set; }
         public ErrorReason reason { get; set; }
-        public string errorMessage { get; set; }
+        public string Message { get; set; }
         public List<IUser> validUsers { get; set; }
         public List<IUser> invalidUsers { get; set; }
         #endregion

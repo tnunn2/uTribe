@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="urTribeWebAPI.Messaging.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="RTFAppKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">rUaRaB</Value>
+    </Setting>
+    <Setting Name="RTFPrivateKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">O4h7dcnRUIIL</Value>
+    </Setting>
+    <Setting Name="RTFToken" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">8c01b1ae-e87e-11e4-a50b-99b8eb024984</Value>
+    </Setting>
+    <Setting Name="RTFCreateURL" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://storage-backend-prd-useast1.realtime.co/createTable</Value>
+    </Setting>
+    <Setting Name="RTFAuthURL" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://storage-backend-prd-useast1.realtime.co/authenticate</Value>
+    </Setting>
+    <Setting Name="RTFPutURL" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://storage-backend-prd-useast1.realtime.co/putItem</Value>
+    </Setting>
+    <Setting Name="RTFCreationSleepTime" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">20000</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

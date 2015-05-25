@@ -4,6 +4,7 @@ using System.Net;
 using urTribeWebAPI.Common;
 using urTribeWebAPI.Messaging;
 using System.Configuration;
+using System.Threading;
 
 namespace urTribeWebAPI.Messaging
 {
@@ -49,10 +50,10 @@ namespace urTribeWebAPI.Messaging
         public BrokerResult CreateAuthAndInvite(Guid eventID, IUser eventCreator, IEnumerable<IUser> invitees)
         {
             string tableName = EIDToEtableName(eventID);
-            BrokerResult creationRes = CreateEventChannel(tableName, eventCreator);
+            BrokerResult creationRes = CreateEventChannel(eventID, eventCreator);
             if (creationRes.ok())
             {
-                return inviteUsers(invitees, tableName);
+                return InviteUsers(invitees, eventCreator.Name, tableName);
             }
             else return creationRes;
         }
@@ -75,15 +76,89 @@ namespace urTribeWebAPI.Messaging
             if (success) return BrokerResult.newSuccess();
             else return new BrokerResult { type = ResultType.respondError, reason = ErrorReason.remoteAuthFailure };
         }
-        #endregion
 
-        #region Private Methods
-        private string CreateUserChannel(IUser user)
+        //Creates a User channel and authenticates. Facade will update user object
+        public BrokerResult CreateUserChannel(IUser user)
         {
             string tableName = UserToTableName(user);
             string data = RTStringBuilder.MakeCreateString(tableName);
-            return tableName;
+            string createUrl = Properties.Settings.Default.RTFCreateURL;
+            MessageConnect.SendRequest(createUrl, data);
+
+            Thread.Sleep(Properties.Settings.Default.RTFCreationSleepTime);
+
+            AuthUser(new List<string>() {tableName}, user.Token);
+
+            BrokerResult result = BrokerResult.newSuccess();
+            result.Message = tableName;
+            return result;
         }
+
+        //Does not evaluate JSON response for errors in table creation!
+        //doesn't invite!
+        public BrokerResult InviteUsers(IEnumerable<IUser> invitees, string inviter, string tableName)
+        {
+            BrokerResult invitesResult = BrokerResult.newInviteResult();
+            foreach (IUser invitee in invitees)
+            {
+                bool success = AuthenticateAndUpdateUser(invitee, tableName);
+                if (success)
+                {
+                    PutInvite(invitee, tableName, inviter);
+                    invitesResult.validUsers.Add(invitee);
+                }
+                else
+                    invitesResult.invalidUsers.Add(invitee);
+            }
+
+            if (invitesResult.invalidUsers.Count > 0)
+            {
+                invitesResult.type = ResultType.sufficientSuccess;
+                if (invitesResult.validUsers.Count == 0)
+                {
+                    invitesResult.type = ResultType.inviteError;
+                    invitesResult.reason = ErrorReason.remoteAuthFailure;
+                }
+            }
+            return invitesResult;
+        }
+
+        public BrokerResult CreateEventChannel(Guid eventID, IUser eventCreator)
+        {
+            string tableName = EIDToEtableName(eventID);
+            string data = RTStringBuilder.MakeCreateString(tableName);
+
+            try
+            {
+                var CreateUrl = Properties.Settings.Default.RTFCreateURL;
+
+                string creationResult = MessageConnect.SendRequest(CreateUrl, data);
+            }
+            catch (WebException e)
+            {
+                return new BrokerResult { type = ResultType.createError, reason = ErrorReason.remoteCreateFailure, Message = e.Message };
+            }
+
+            bool creatorOK = AuthenticateAndUpdateUser(eventCreator, tableName);
+            if (creatorOK)
+            {
+                return BrokerResult.newSuccess();
+            }
+            else return new BrokerResult { type = ResultType.createError, reason = ErrorReason.remoteAuthFailure };
+        }
+
+
+        public string JustCreateChannel(string tableName)
+        {
+            string data = RTStringBuilder.MakeCreateString(tableName);
+            var CreateUrl = Properties.Settings.Default.RTFCreateURL;
+
+            return MessageConnect.SendRequest(CreateUrl, data);
+        }
+        #endregion
+
+        #region Private Methods
+        
 
         /*TODO: 
          * 1)DONE
@@ -99,82 +174,39 @@ namespace urTribeWebAPI.Messaging
                 //bool busy = true;
                 string data = RTStringBuilder.MakeAuthString(tableNames, userToken);
 
-                var AuthUrl = ConfigurationManager.AppSettings["RealtimeBrokerAuthUrl"];
+                var AuthUrl = Properties.Settings.Default.RTFAuthURL;
                 string result = MessageConnect.SendRequest(AuthUrl, data); 
 
                 return BrokerResult.newSuccess();
             }
             catch (WebException e)
             { 
-                return new BrokerResult { type = ResultType.authError, errorMessage = e.Message }; 
+                return new BrokerResult { type = ResultType.authError, Message = e.Message }; 
             }
 
         }
-        private BrokerResult CreateEventChannel(string tableName, IUser eventCreator)
-        {
-            string data = RTStringBuilder.MakeCreateString(tableName);
-
-            try 
-            {
-                var CreateUrl = ConfigurationManager.AppSettings["RealtimeBrokerCreateUrl"];
-                string creationResult = MessageConnect.SendRequest(CreateUrl, data);
-            } 
-            catch (WebException e) 
-            { 
-                return new BrokerResult { type = ResultType.createError, reason = ErrorReason.remoteCreateFailure, errorMessage = e.Message };
-            }
-
-            bool creatorOK = AuthenticateAndUpdateUser(eventCreator, tableName);
-            if (creatorOK)
-            {
-                return BrokerResult.newSuccess();
-            }
-            else return new BrokerResult { type = ResultType.createError, reason = ErrorReason.remoteAuthFailure};
-        }
+       
         private BrokerResult PutInvite(IUser user, string eventTable, string invitedBy)
         {
             string userToken = user.Token;
-            string userTableName = user.InvitesChannel;
+            string userTableName = user.UserChannel;
             string data = RTStringBuilder.MakeInviteString(userToken, userTableName, eventTable, invitedBy);
 
-            var putItemURL = ConfigurationManager.AppSettings["RealtimeBrokerPutItemURL"];
+            var putItemURL = Properties.Settings.Default.RTFPutURL;
             string result = MessageConnect.SendRequest(putItemURL, data);
 
             return new BrokerResult { type = ResultType.fullsuccess }; ;
         }
         private bool AuthenticateAndUpdateUser(IUser user, string tableName)
         {
-            List<string> tableNames = user.Channels;
+            List<string> tableNames = user.AuthenticatedChannels;
             tableNames.Add(tableName);
             string userToken = user.Token;
             BrokerResult result = AuthUser(tableNames, userToken);
-            if (result.ok()) user.Channels.Add(tableName);
+            if (result.ok()) user.AuthenticatedChannels.Add(tableName);
             return result.ok();
         }
-        //Does not evaluate JSON response for errors in table creation!
-        //doesn't invite!
-        private BrokerResult inviteUsers(IEnumerable<IUser> invitees, string tableName) {
-            BrokerResult invitesResult = BrokerResult.newInviteResult();
-            foreach (IUser invitee in invitees)
-            { 
-                bool success = AuthenticateAndUpdateUser(invitee, tableName);
-                if (success) 
-                    invitesResult.validUsers.Add(invitee);
-                else 
-                    invitesResult.invalidUsers.Add(invitee);
-            }
 
-            if (invitesResult.invalidUsers.Count > 0)
-            {
-                invitesResult.type = ResultType.sufficientSuccess;
-                if (invitesResult.validUsers.Count == 0)
-                {
-                    invitesResult.type = ResultType.inviteError;
-                    invitesResult.reason = ErrorReason.remoteAuthFailure;
-                }
-            }
-            return invitesResult;
-        }
         private string EIDToEtableName(Guid eventID)
         {
             string tableName = "event" + eventID;

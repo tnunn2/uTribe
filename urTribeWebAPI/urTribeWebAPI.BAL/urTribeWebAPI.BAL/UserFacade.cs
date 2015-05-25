@@ -62,6 +62,9 @@ namespace urTribeWebAPI.BAL
             {
                 ((User)user).ID = Guid.NewGuid();
                 UsrRepository.Add(user);
+                user.AuthenticatedChannels = new List<string>();
+                user.UserChannel = _realTimeBroker.CreateUserChannel(user).Message;
+                user.AuthenticatedChannels.Add(user.UserChannel);
                 return user.ID;
             }
             catch (Exception ex)

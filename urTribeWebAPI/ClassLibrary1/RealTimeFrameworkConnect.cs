@@ -14,7 +14,7 @@ namespace urTribeWebAPI.Messaging
         public string SendRequest(string url, string data)
         {
             WebRequest myRequest = WebRequest.Create(url);
-            myRequest.Method = "PUT";
+            myRequest.Method = "POST";
             myRequest.ContentType = TypeJson;
 
             UTF8Encoding enc = new UTF8Encoding();

@@ -35,15 +35,15 @@ namespace urTribeWebAPI.Common
             get { return ID.ToString(); }
         }
 
-        //Used to put out invitation to an event???
-        public string InvitesChannel 
+        //Invites and Contact Requests go here
+        public string UserChannel 
         { 
             get; 
             set; 
         }
 
-        //List of Events???  Is this necessary???
-        public List<string> Channels 
+        //We have to keep a list of the channels they're authenticated on, because RTF.
+        public List<string> AuthenticatedChannels 
         { 
             get; 
             set; 
