@@ -58,7 +58,7 @@ namespace urTribeWebAPI.Test.BAL
             EventRepositoryMock<ScheduledEvent>.OwnerId = userId;
             EventRepositoryMock<ScheduledEvent>.Evt = null;
 
-            IEvent evt = new ScheduledEvent() { ID = mockEventId, Name = "Test Update", Active = true };
+            IEvent evt = new ScheduledEvent() { ID = mockEventId, Name = "Test Update", Time = "2015-05-24T17:02:39Z", Active = true };
 
             try
             {

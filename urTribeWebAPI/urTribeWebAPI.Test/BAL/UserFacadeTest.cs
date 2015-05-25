@@ -875,7 +875,7 @@ namespace urTribeWebAPI.Test.BAL
 
 
             var evtList = new List<IEvent>();
-            evtList.Add(new ScheduledEvent() { ID = eventId, Name = "Test Event", Active = true });
+            evtList.Add(new ScheduledEvent() { ID = eventId, Name = "Test Event", Time = "2015-05-24T17:02:39Z", Active = true });
             EventRepositoryMock<ScheduledEvent>.ListOfEvents = evtList;
 
 
