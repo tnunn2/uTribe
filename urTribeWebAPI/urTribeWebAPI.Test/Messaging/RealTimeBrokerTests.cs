@@ -66,7 +66,7 @@ namespace urTribeWebAPI.Test.Messaging
             // ReSharper disable once ConvertToConstant.Local
             string tableName = "test001";
             string userToken = "testToken";
-            string TestRole = "testRole";
+            string TestRole = "TestRole";
             long OneYearInMilliseconds = 31536000000;
 
             string data = "{\"applicationKey\":\"" + AppKey + "\",";
@@ -86,7 +86,7 @@ namespace urTribeWebAPI.Test.Messaging
             Assert.AreEqual(data, data2);
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public void TestActualCreation()
         {
             Guid eventID = new Guid("7c74ac99-4cdf-4f3a-a63b-fc040f300607");
@@ -119,7 +119,7 @@ namespace urTribeWebAPI.Test.Messaging
             string table = f.registerNewUserWithRTF(creator);
             Assert.AreEqual(table, "user"+creator.ID);
         }
-
+        
         [TestMethod]
         public void TestPresentationEvent()
         {
@@ -155,7 +155,7 @@ namespace urTribeWebAPI.Test.Messaging
                Debug.Print(e.Message);
                Assert.Fail();
             }
-        }
+        } */
         //mks was here
         /*[TestMethod]
         public void testPutItem()
