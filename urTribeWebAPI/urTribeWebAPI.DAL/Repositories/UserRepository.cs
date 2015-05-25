@@ -16,7 +16,7 @@ namespace urTribeWebAPI.DAL.Repositories
         #region Constructor
         public UserRepository ()
         {
-             string neo4jLocation  = ConfigurationManager.AppSettings["Neo4jLocation"];
+            string neo4jLocation = Properties.Settings.Default.Neo4jLocation;
              _dbms = new GraphClient(new Uri(neo4jLocation));
              _dbms.Connect();
         }
