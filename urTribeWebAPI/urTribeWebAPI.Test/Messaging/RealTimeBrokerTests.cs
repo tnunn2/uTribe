@@ -102,78 +102,105 @@ namespace urTribeWebAPI.Test.Messaging
 
             Debug.Print(b.JustCreateChannel(eventTable));
         }
-
+        */
         [TestMethod]
         public void TestNewUserRegistration()
         {
 
-            Guid eventID = new Guid("7c74ac99-4cdf-4f3a-a63b-fc040f300607");
-            string eventTable = "event" + eventID;
-            UserFacade f = new UserFacade();
-            IUser creator = new User()
+            
+            //UserFacade f = new UserFacade();
+            /*IUser creator = new User()
             {
                 ID = new Guid("aa918dde-94e0-4323-a281-c8274d67eaca"),
                 AuthenticatedChannels = new List<string>(),
                 Name = "Catherine C"
+            }; 
+            IUser invitee = new User()
+            {
+                Name = "Benjamin D",
+                AuthenticatedChannels = new List<string>(),
+                ID = new Guid("b40354dc-5734-432e-b6c5-24adf8890312")
+            };*/
+            IUser user3 = new User()
+            {
+                ID = new Guid("bc7b0d2f-6e80-430e-b096-6cb8fa06c2b2"),
+                AuthenticatedChannels = new List<string>(),
+                Name = "User 3"
             };
-            string table = f.registerNewUserWithRTF(creator);
-            Assert.AreEqual(table, "user"+creator.ID);
+            string table = UserFacade.registerNewUserWithRTF(user3);
+            Assert.AreEqual(table, "user"+user3.ID);
         }
+
         
         [TestMethod]
-        public void TestPresentationEvent()
+        public void testPutInvite()
         {
-            try
+            Guid eventID = new Guid("7c74ac99-4cdf-4f3a-a63b-fc040f300607");
+            string eventTable = "event" + eventID;
+            //EventFacade ef = new EventFacade();
+            //UserFacade uf = new UserFacade();
+            IUser creator = new User()
             {
-                int numInvitees = 1;
-                Guid eventID = new Guid("7c74ac99-4cdf-4f3a-a63b-fc040f300607");
-                string eventTable = "event" + eventID;
-                RealTimeBroker b = new RealTimeBroker();
-                
-                IUser creator = new User()
-                {
-                    ID = new Guid("aa918dde-94e0-4323-a281-c8274d67eaca"),
-                    AuthenticatedChannels = new List<string>() { eventTable},
-                    Name = "Catherine C"
-                };
-                
-                List<IUser> invitees = new List<IUser>();
-                invitees.Add(new User
-                    {
-                        Name = "Benjamin D",
-                        ID = new Guid("b40354dc-5734-432e-b6c5-24adf8890312"),
-                        AuthenticatedChannels = new List<string> { eventTable}
-                    });
-                invitees.ForEach(u => u.UserChannel = b.CreateUserChannel(u));
-                b.CreateAuthAndInvite(eventID, creator, invitees);
-                
-                b.InviteUsers(invitees, creator.Name, eventTable);
-
-            }
-            catch (Exception e)
-            {
-               Debug.Print(e.Message);
-               Assert.Fail();
-            }
-        } */
-        //mks was here
-        /*[TestMethod]
-        public void testPutItem()
-        {
-            IUser u = new User()
-            {
-                ID = new Guid("d19fc3d0-f7d0-4f4c-b0e4-5681afb0bde9"),
-                UserChannel = "userd19fc3d0-f7d0-4f4c-b0e4-5681afb0bde9",
-                AuthenticatedChannels = new List<string>
-                {
-                    "userd19fc3d0-f7d0-4f4c-b0e4-5681afb0bde9",
-                    "event1"
-                }
+                ID = new Guid("aa918dde-94e0-4323-a281-c8274d67eaca"),
+                Name = "Catherine C",
+                AuthenticatedChannels = new List<string>(),
+                UserChannel = "useraa918dde-94e0-4323-a281-c8274d67eaca"
             };
-            RealtimeBroker b = new RealtimeBroker();
-            b.AuthenticateUser(u, u.UserChannel);
-            b.PutInvite(u, "event1");
+            IUser invitee = new User()
+            {
+                Name = "Benjamin D",
+                AuthenticatedChannels = new List<string>(),
+                ID = new Guid("b40354dc-5734-432e-b6c5-24adf8890312"),
+                UserChannel = "userb40354dc-5734-432e-b6c5-24adf8890312"
+            };
+            //string table = UserFacade.registerNewUserWithRTF(invitee);
+            //Assert.AreEqual(table, "user" + invitee.ID);
+            
+            RealTimeBroker_N b = new RealTimeBroker_N();
+            List<string> tables = new List<string>() {invitee.UserChannel, eventTable};
+            Assert.IsTrue(b.AuthUser(tables, invitee.Token).ok());
+            b.SendInvite(invitee, eventTable, creator.Name);
 
-        }*/
+
+
+        }
+
+        /*
+[TestMethod]
+public void TestPresentationEvent()
+{
+    try
+    {
+        int numInvitees = 1;
+        Guid eventID = new Guid("7c74ac99-4cdf-4f3a-a63b-fc040f300607");
+        string eventTable = "event" + eventID;
+        RealTimeBroker b = new RealTimeBroker();
+                
+        IUser creator = new User()
+        {
+            ID = new Guid("aa918dde-94e0-4323-a281-c8274d67eaca"),
+            AuthenticatedChannels = new List<string>() { eventTable},
+            Name = "Catherine C"
+        };
+                
+        List<IUser> invitees = new List<IUser>();
+        invitees.Add(new User
+            {
+                Name = "Benjamin D",
+                ID = new Guid("b40354dc-5734-432e-b6c5-24adf8890312"),
+                AuthenticatedChannels = new List<string> { eventTable}
+            });
+        invitees.ForEach(u => u.UserChannel = b.CreateUserChannel(u));
+        b.CreateAuthAndInvite(eventID, creator, invitees);
+                
+        b.InviteUsers(invitees, creator.Name, eventTable);
+
+    }
+    catch (Exception e)
+    {
+       Debug.Print(e.Message);
+       Assert.Fail();
+    }
+} */
     }
 }
