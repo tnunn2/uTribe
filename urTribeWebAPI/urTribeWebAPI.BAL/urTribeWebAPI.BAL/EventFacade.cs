@@ -108,10 +108,10 @@ namespace urTribeWebAPI.BAL
 
                     foreach (var contactId in contactList)
                     {
-                        if (!EvtRepository.Guest(evt, contactId))
+                        if (EvtRepository.Guest(evt, contactId))
                             continue;
 
-                        IUser contact = userFacade.FindUser(userId);
+                        IUser contact = userFacade.FindUser(contactId);
                         if (contact != null)
                         {
                             EvtRepository.LinkToEvent(contact, evt);

@@ -108,7 +108,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="RepositoryMapMock.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
