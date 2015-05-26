@@ -4,6 +4,7 @@ using System.Net;
 using urTribeWebAPI.Common;
 using urTribeWebAPI.Messaging;
 using System.Configuration;
+using System.Diagnostics;
 using System.Threading;
 using Newtonsoft.Json;
 using urTribeWebAPI.Messaging.RTFHelperClasses;
@@ -113,22 +114,29 @@ namespace urTribeWebAPI.Messaging
             try
             {
                 if (tableName.Equals(creation.data.table)) return tableName;
-                throw new Exception("RTF returned a different table name");
+                throw new Exception("RTF returned table name " + creation.data.table);
             }
             catch (NullReferenceException e)
             {
-                throw new Exception("RTF returned an error Message: " + creation.error.message);
+                throw new Exception("RTF returned an error Message during table creation: " + creation.error.code + creation.error.message);
             }
 
 
         }
-        public List<string> ConvertEventToTableName(IEnumerable<IEvent> events)
+        //deprecated
+        public List<string> ConvertEventsToTableNames(IEnumerable<IEvent> events)
         {
             var newEventList = new List<string>();
             foreach (var evt in events)
-                newEventList.Add(evt.ID.ToString());
+                newEventList.Add("event" + evt.ID.ToString());
             return newEventList;
         }
+
+        public string ConvertEventToTableName(IEvent e)
+        {
+            return "event" + e.ID;
+        }
+
         public BrokerResult SendInvite(IUser user, string eventTable, string invitedBy)
         {
             string userToken = user.Token;
@@ -137,8 +145,8 @@ namespace urTribeWebAPI.Messaging
 
             var putItemURL = Properties.Settings.Default.RTFPutURL;
             string result = MessageConnect.SendRequest(putItemURL, data);
-
-            return new BrokerResult { type = ResultType.fullsuccess }; ;
+            Debug.Print(result);
+            return new BrokerResult { type = ResultType.fullsuccess };
         }
         #endregion
 
