@@ -54,7 +54,7 @@ namespace urTribeWebAPI
             config.Routes.MapHttpRoute(
                 name: "UsersTestMethod",
                 routeTemplate: "api/Users/{i}",
-                defaults: new { controller = "users", i = RouteParameter.Optional }
+                defaults: new { controller = "Users", i = 999 }
             );
 
 
