@@ -36,7 +36,8 @@ namespace urTribeWebAPI.DAL.Factory
         {
             try
             {
-                string MapLocation = Properties.Settings.Default.RepositoryMapFileLocation;
+                //string MapLocation = Properties.Settings.Default.RepositoryMapFileLocation;
+                string MapLocation = ConfigurationManager.AppSettings["RepositoryMapFileLocation"];
                 //var MapLocation = @"C:\Program Files (x86)\Jenkins\jobs\urTribeCI-UnitTest\workspace\urTribeWebAPI\urTribeWebAPI\BuildArtifacts\RepositoryMapMock.json";
                 using (StreamReader r = new StreamReader(MapLocation))
                 {
