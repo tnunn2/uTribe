@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using urTribeWebAPI.Common;
 using urTribeWebAPI.Common.Logging;
 using urTribeWebAPI.DAL.Interfaces;
@@ -117,11 +118,10 @@ namespace urTribeWebAPI.BAL
                             EvtRepository.LinkToEvent(contact, evt);
 
                             //Here Add code for Real Time Framework
-                            var invitesChannel = RTBroker.CreateUserChannel(contact);
-
                             var eventList = userFacade.RetrieveEventsByAttendanceStatus(contactId, EventAttendantsStatus.All);
-                            var convertedEventList = RTBroker.ConvertEventToTableName(eventList);  //Do we have to redo all events or just the one added?
-                            RTBroker.AuthUser(convertedEventList, contact.Token);
+                            var channelsList = new List<string>() { contact.UserChannel };
+                            channelsList.AddRange(eventList.Select(e => RTBroker.ConvertEventToTableName(e)));
+                            RTBroker.AuthUser(channelsList, contact.Token);
                             RTBroker.SendInvite(contact, evt.ID.ToString(), owner.Name);
                         }
                     }
@@ -133,6 +133,8 @@ namespace urTribeWebAPI.BAL
                 throw;
             }
         }
+
+
         public void ChangeContactAttendanceStatus(Guid userId, Guid eventId, EventAttendantsStatus attendStatus)
         {
             try

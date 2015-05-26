@@ -74,15 +74,17 @@ namespace urTribeWebAPI.BAL
         }
 
         //Public so I can write a test for it
-        public string registerNewUserWithRTF(IUser user)
+        //made static because errors with creating repositories
+        public static string registerNewUserWithRTF(IUser user)
         {
+            RealTimeBroker_N b = new RealTimeBroker_N();
             user.AuthenticatedChannels = new List<string>();
-            user.UserChannel = _realTimeBroker.CreateUserChannel(user);
+            user.UserChannel = b.CreateUserChannel(user);
 
             //Wait until table is done 'creating'
             Thread.Sleep(Messaging.Properties.Settings.Default.RTFCreationSleepTime);
-
-            _realTimeBroker.AuthUser(new List<string>() { user.UserChannel }, user.Token);
+           
+            b.AuthUser(new List<string>() { user.UserChannel }, user.Token);
 
             user.AuthenticatedChannels.Add(user.UserChannel);
             return user.UserChannel;
@@ -256,7 +258,7 @@ namespace urTribeWebAPI.BAL
                 if (result.ok())
                 {
                     var eventList = RetrieveEventsByAttendanceStatus(userId, EventAttendantsStatus.All);
-                    var convertedEventList = RTBroker.ConvertEventToTableName(eventList);
+                    var convertedEventList = RTBroker.ConvertEventsToTableNames(eventList);
                     result = RTBroker.AuthUser(convertedEventList, user.Token);
                 }
 
