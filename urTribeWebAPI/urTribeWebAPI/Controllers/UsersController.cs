@@ -78,7 +78,7 @@ namespace urTribeWebAPI.Controllers
                 return response;
             }
         }
-
+        [HttpPut]
         public APIResponse Put(int i)
         {
             try
