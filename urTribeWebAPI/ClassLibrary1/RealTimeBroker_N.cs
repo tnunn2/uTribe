@@ -17,6 +17,7 @@ namespace urTribeWebAPI.Messaging
         #region ReadOnly
         private readonly IRTFStringBuilder _rtfStringBuilder;
         private readonly IMessageConnect _messageConnect;
+        private IMessageConnect RTFconnection;
         #endregion
 
         #region Properties
@@ -47,6 +48,11 @@ namespace urTribeWebAPI.Messaging
         {
             _messageConnect = new RealTimeFrameworkConnect(); 
             _rtfStringBuilder = new RTFStringBuilder();
+        }
+
+        public RealTimeBroker_N(IMessageConnect RTFconnection)
+        {
+            _messageConnect = RTFconnection;
         }
         #endregion
 

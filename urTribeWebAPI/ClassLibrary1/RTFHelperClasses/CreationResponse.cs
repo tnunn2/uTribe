@@ -7,7 +7,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace urTribeWebAPI.Messaging.RTFHelperClasses
 {
-    class CreationResponse
+    public class CreationResponse
     {
         public CreationDataResponse data { get; set; }
         public ErrorResponse error { get; set; }
