@@ -51,12 +51,6 @@ namespace urTribeWebAPI
                 defaults: new { controller = "users", user = RouteParameter.Optional }
             );
 
-            config.Routes.MapHttpRoute(
-                name: "UsersTestMethod",
-                routeTemplate: "api/Users/{i}",
-                defaults: new { controller = "users", i = RouteParameter.Optional }
-            );
-
 
 
             // Uncomment the following line of code to enable query support for actions with an IQueryable or IQueryable<T> return type.
