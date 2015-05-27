@@ -38,7 +38,6 @@ namespace urTribeWebAPI.Test.BAL
             EventRepositoryMock<ScheduledEvent>.User = null;
             EventRepositoryMock<ScheduledEvent>.UserId = new Guid();
             EventRepositoryMock<ScheduledEvent>.AttendStatus = EventAttendantsStatus.Invited;
-            EventRepositoryMock<ScheduledEvent>.AttendStatus = EventAttendantsStatus.Pending;
 
 
             mockConnect = new Mock<IMessageConnect>();
