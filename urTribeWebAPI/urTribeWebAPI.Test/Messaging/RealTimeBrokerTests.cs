@@ -22,17 +22,18 @@ namespace urTribeWebAPI.Test.Messaging
     [TestClass]
     public class RealTimeBrokerTests
     {
-        private static IUser creator;
+        private static IUser _creator;
         private static IUser invitee;
         private static IUser user3;
+        private static IEvent _event1;
 
         [SetUp]
         public void Init()
         {
-            creator = new User()
+            _creator = new User()
             {
                 ID = new Guid("aa918dde-94e0-4323-a281-c8274d67eaca"),
-                //AuthenticatedChannels = new List<string>(),
+                UserChannel = "useraa918dde-94e0-4323-a281-c8274d67eaca",
                 Name = "Catherine C"
             };
             invitee = new User()
@@ -47,6 +48,13 @@ namespace urTribeWebAPI.Test.Messaging
                 //AuthenticatedChannels = new List<string>(),
                 Name = "User 3"
             };
+            _event1 = new ScheduledEvent()
+            {
+                Time = "2015-05-24T17:04:31Z",
+                Name = "Suffering",
+                ID = new Guid("7c74ac99-4cdf-4f3a-a63b-fc040f300607")
+            };
+
         }
 
 
@@ -113,21 +121,32 @@ namespace urTribeWebAPI.Test.Messaging
             Debug.Print(data);
             Assert.AreEqual(data, data2);
         }
-        /*
+        
         [TestMethod]
         public void TestActualCreation()
         {
             UserFacade f = new UserFacade();
-
-            Guid creatorID = f.CreateUser(new User() { Name = "HH Holmes"});
-            Debug.Print(creatorID + "");
-            IEvent evt = new ScheduledEvent()
+            IUser creator = new User()
             {
-                Time = "June 14, 2015",
-                Name = "Graduation"
+                ID = new Guid("aa918dde-94e0-4323-a281-c8274d67eaca"),
+                UserChannel = "useraa918dde-94e0-4323-a281-c8274d67eaca",
+                Name = "Catherine C"
             };
-            Debug.Print(f.CreateEvent(creatorID, evt) + "");
-        } */
+            IEvent event1 = new ScheduledEvent()
+            {
+                Time = "2015-05-24T17:04:31Z",
+                Name = "Suffering",
+                ID = new Guid("11111111-4cdf-4f3a-a63b-fc040f300607")
+            };
+            Debug.Print(creator.UserChannel);
+            Debug.Print("event" + event1.ID);
+            List<string> tables = new List<string>()
+            {
+                creator.UserChannel,
+                "event" + event1.ID
+            };
+            Assert.IsTrue(f.RegisterEventAtRTF(creator, tables, event1));
+        } 
         /*
         [TestMethod]
         public void TestNewUserRegistration()

@@ -270,17 +270,13 @@ namespace urTribeWebAPI.BAL
                 evtRepository.Add(user, evt);
 
                 //RTF code
-                var result = RTBroker.CreateEventChannel(evt, user);
+                var eventList = RetrieveEventsByAttendanceStatus(user.ID, EventAttendantsStatus.All);
+                Debug.Assert(eventList.Contains(evt));
+                var channelsList = new List<string>() { user.UserChannel };
+                channelsList.AddRange(eventList.Select(e => RTBroker.ConvertEventToTableName(e)));
+               
+                RegisterEventAtRTF(user, channelsList, evt);
                 
-                if (result.ok())
-                {
-                    Thread.Sleep(RTBroker.CreationSleepTime());
-                    var eventList = RetrieveEventsByAttendanceStatus(user.ID, EventAttendantsStatus.All);
-                    Debug.Assert(eventList.Contains(evt));
-                    var channelsList = new List<string>() { user.UserChannel };
-                    channelsList.AddRange(eventList.Select(e => RTBroker.ConvertEventToTableName(e)));
-                    RTBroker.AuthUser(channelsList, user.Token);
-                }
 
                 return ((ScheduledEvent)evt).ID;
             }
@@ -289,6 +285,20 @@ namespace urTribeWebAPI.BAL
                 Logger.Instance.Log = new ExceptionDTO() { FaultClass = "EventFacade", FaultMethod = "CreateEvent", Exception = ex };
                 throw;
             }
+        }
+
+        public bool RegisterEventAtRTF(IUser user, List<string> channelsList, IEvent evt)
+        {
+            var result = RTBroker.CreateEventChannel(evt, user);
+
+            if (result.ok())
+            {
+                Thread.Sleep(RTBroker.CreationSleepTime());
+                RTBroker.AuthUser(channelsList, user.Token);
+                return true;
+            }
+            else return false;
+
         }
 
         public void CancelEvent (Guid userId, Guid eventId)
