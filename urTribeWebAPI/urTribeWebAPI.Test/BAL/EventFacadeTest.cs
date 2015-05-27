@@ -40,12 +40,7 @@ namespace urTribeWebAPI.Test.BAL
             EventRepositoryMock<ScheduledEvent>.AttendStatus = EventAttendantsStatus.Invited;
 
 
-            mockConnect = new Mock<IMessageConnect>();
-            ErrorResponse error = new ErrorResponse() { code = "-1", message = "unhelpful error message" };
-            string serializedError = JsonConvert.SerializeObject(error);
-            mockConnect.Setup(foo => foo.SendRequest(It.IsAny<string>(), null)).Returns(serializedError);
-            mockConnect.Setup(foo => foo.SendRequest(null, It.IsAny<string>())).Returns(serializedError);
-            mockConnect.Setup(foo => foo.CreationSleepTime()).Returns(0);
+            mockConnect = ConnectMockFactory.newMock();
         }
 
         #region UpdateEvent

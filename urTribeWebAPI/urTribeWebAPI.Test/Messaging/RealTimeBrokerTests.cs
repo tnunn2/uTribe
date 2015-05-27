@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Configuration;
 using System.Diagnostics;
 using System.Threading;
@@ -20,28 +21,30 @@ namespace urTribeWebAPI.Test.Messaging
 {
     [TestClass]
     public class RealTimeBrokerTests
-        
     {
+        private static IUser creator;
+        private static IUser invitee;
+        private static IUser user3;
 
         [SetUp]
         public void Init()
         {
-            IUser creator = new User()
+            creator = new User()
             {
                 ID = new Guid("aa918dde-94e0-4323-a281-c8274d67eaca"),
-                AuthenticatedChannels = new List<string>(),
+                //AuthenticatedChannels = new List<string>(),
                 Name = "Catherine C"
             };
-            IUser invitee = new User()
+            invitee = new User()
             {
                 Name = "Benjamin D",
-                AuthenticatedChannels = new List<string>(),
+                //AuthenticatedChannels = new List<string>(),
                 ID = new Guid("b40354dc-5734-432e-b6c5-24adf8890312")
             };
-            IUser user3 = new User()
+            user3 = new User()
             {
                 ID = new Guid("bc7b0d2f-6e80-430e-b096-6cb8fa06c2b2"),
-                AuthenticatedChannels = new List<string>(),
+                //AuthenticatedChannels = new List<string>(),
                 Name = "User 3"
             };
         }
@@ -110,24 +113,22 @@ namespace urTribeWebAPI.Test.Messaging
             Debug.Print(data);
             Assert.AreEqual(data, data2);
         }
-
-        /*[TestMethod]
+        /*
+        [TestMethod]
         public void TestActualCreation()
         {
-            Guid eventID = new Guid("7c74ac99-4cdf-4f3a-a63b-fc040f300607");
-            string eventTable = "event" + eventID;
-            RealTimeBroker b = new RealTimeBroker();
-                
-            IUser creator = new User()
-            {
-                ID = new Guid("aa918dde-94e0-4323-a281-c8274d67eaca"),
-                AuthenticatedChannels = new List<string>() { eventTable},
-                Name = "Catherine C"
-            };
+            UserFacade f = new UserFacade();
 
-            Debug.Print(b.JustCreateChannel(eventTable));
-        }
-        
+            Guid creatorID = f.CreateUser(new User() { Name = "HH Holmes"});
+            Debug.Print(creatorID + "");
+            IEvent evt = new ScheduledEvent()
+            {
+                Time = "June 14, 2015",
+                Name = "Graduation"
+            };
+            Debug.Print(f.CreateEvent(creatorID, evt) + "");
+        } */
+        /*
         [TestMethod]
         public void TestNewUserRegistration()
         {

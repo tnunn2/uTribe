@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="BAL\EventFacadeTest.cs" />
     <Compile Include="BAL\UserFacadeTest.cs" />
+    <Compile Include="ConnectMockFactory.cs" />
     <Compile Include="DAL\FactoryTest.cs" />
     <Compile Include="Messaging\RealTimeBrokerTests.cs" />
     <Compile Include="RepositoryMocks\EventRepositoryMock.cs" />
