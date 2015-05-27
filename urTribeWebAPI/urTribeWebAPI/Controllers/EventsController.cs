@@ -121,13 +121,13 @@ namespace urTribeWebAPI.Controllers
         }
 
         //Return EventDetail
-        public APIResponse Get(Guid usrId, Guid eventId)
+        public APIResponse Get(Guid userId, Guid eventId)
         {
             try
             {
                 using (EventFacade facade = new EventFacade())
                 {
-                    IEvent evt = facade.EventDetail (usrId, eventId);
+                    IEvent evt = facade.EventDetail (userId, eventId);
                     APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, new { Event = evt });
                     return response;
                 }

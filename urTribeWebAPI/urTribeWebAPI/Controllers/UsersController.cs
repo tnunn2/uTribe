@@ -29,13 +29,13 @@ namespace urTribeWebAPI.Controllers
             }
         }
         //Get User's Status
-        public APIResponse Get(Guid usrId, Guid eventId)
+        public APIResponse Get(Guid eventId, Guid userId)
         {
             try
             {
                 using (UserFacade facade = new UserFacade())
                 {
-                    EventAttendantsStatus status = facade.RetrieveUsersEventStatus(usrId, eventId);
+                    EventAttendantsStatus status = facade.RetrieveUsersEventStatus(userId, eventId);
                     APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, new { Status = status.ToString() });
                     return response;
                 }
