@@ -27,6 +27,12 @@ namespace urTribeWebAPI.Messaging
             StreamReader reader = new StreamReader(receiveStream, Encoding.UTF8);
             return reader.ReadToEnd();
         }
+
+        public int CreationSleepTime()
+        {
+            return Properties.Settings.Default.RTFCreationSleepTime;
+        }
+
         #endregion
     }
 }

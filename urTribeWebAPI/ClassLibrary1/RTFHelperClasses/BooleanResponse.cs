@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace urTribeWebAPI.Messaging.RTFHelperClasses
 {
-    class BooleanResponse
+    public class BooleanResponse
     {
         public bool data { get; set; }
         public ErrorResponse error { get; set; }

@@ -17,7 +17,6 @@ namespace urTribeWebAPI.Messaging
         #region ReadOnly
         private readonly IRTFStringBuilder _rtfStringBuilder;
         private readonly IMessageConnect _messageConnect;
-        private IMessageConnect RTFconnection;
         #endregion
 
         #region Properties
@@ -53,6 +52,7 @@ namespace urTribeWebAPI.Messaging
         public RealTimeBroker_N(IMessageConnect RTFconnection)
         {
             _messageConnect = RTFconnection;
+            _rtfStringBuilder = new RTFStringBuilder();
         }
         #endregion
 
@@ -94,15 +94,25 @@ namespace urTribeWebAPI.Messaging
             }
 
         }
-        public BrokerResult CreateEventChannel(string tableName, IUser eventCreator)
+        public BrokerResult CreateEventChannel(IEvent theEvent, IUser eventCreator)
         {
+            string tableName = ConvertEventToTableName(theEvent);
             string data = RTStringBuilder.MakeCreateString(tableName);
 
             try
             {
                 var CreateUrl = Properties.Settings.Default.RTFCreateURL;
-                string creationResult = MessageConnect.SendRequest(CreateUrl, data);
-                return BrokerResult.newSuccess();
+                string response = MessageConnect.SendRequest(CreateUrl, data);
+                CreationResponse creation = JsonConvert.DeserializeObject<CreationResponse>(response);
+                try
+                {
+                    if (tableName.Equals(creation.data.table)) return BrokerResult.newSuccess();
+                    throw new Exception("RTF returned table name " + creation.data.table);
+                }
+                catch (NullReferenceException e)
+                {
+                    throw new Exception("RTF returned an error Message during table creation: " + creation.error.code + creation.error.message);
+                }
             }
             catch (WebException e)
             {
@@ -129,14 +139,16 @@ namespace urTribeWebAPI.Messaging
 
 
         }
-        //deprecated
-        public List<string> ConvertEventsToTableNames(IEnumerable<IEvent> events)
+        
+        //deprecated because this method would encourage someone to leave 
+        //out user channel when authenticating, and a single event method is necessary.
+        /*public List<string> ConvertEventsToTableNames(IEnumerable<IEvent> events)
         {
             var newEventList = new List<string>();
             foreach (var evt in events)
-                newEventList.Add("event" + evt.ID.ToString());
+                newEventList.Add("event" + evt.ID);
             return newEventList;
-        }
+        } */
 
         public string ConvertEventToTableName(IEvent e)
         {
@@ -156,6 +168,12 @@ namespace urTribeWebAPI.Messaging
         }
         #endregion
 
+        //Used to allow non-wait during unit tests
+        public int CreationSleepTime()
+        {
+            return MessageConnect.CreationSleepTime();
+        }
+        
         private string UserToTableName(IUser user)
         {
             return "user" + user.ID;

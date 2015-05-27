@@ -41,6 +41,14 @@ namespace urTribeWebAPI.BAL
 
             _realTimeBroker = new RealTimeBroker_N();
         }
+
+        public EventFacade(IMessageConnect RTFConnection)
+        {
+            var factory = RepositoryFactory.Instance;
+            _repository = factory.Create<IEventRepository>();
+
+            _realTimeBroker = new RealTimeBroker_N(RTFConnection);
+        }
         #endregion
 
         #region Public Methods
@@ -102,7 +110,7 @@ namespace urTribeWebAPI.BAL
                 if (userId != ownerId)
                     throw new EventException("Only the owner can add guest to the event.");
 
-                using (UserFacade userFacade = new UserFacade())
+                using (UserFacade userFacade = new UserFacade(_realTimeBroker))
                 {
 
                     var owner = userFacade.FindUser(ownerId);

@@ -6,12 +6,25 @@ using urTribeWebAPI.DAL.Factory;
 using urTribeWebAPI.DAL.Interfaces;
 using urTribeWebAPI.Test.RepositoryMocks;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using Moq;
+using Newtonsoft.Json;
+using urTribeWebAPI.Messaging;
+using urTribeWebAPI.Messaging.RTFHelperClasses;
 
 namespace urTribeWebAPI.Test.BAL
 {
     [TestFixture]
     class EventFacadeTest
+
     {
+        private static Mock<IMessageConnect> mockConnect;
+        private static string creationURL = urTribeWebAPI.Messaging.Properties.Settings.Default.RTFCreateURL;
+        private static Expression<Func<string, bool>> isCreation = url => url.Equals(creationURL);
+        private static string authURL = urTribeWebAPI.Messaging.Properties.Settings.Default.RTFAuthURL;
+        private static Func<string, bool> isAuth = (url => url.Equals(authURL));
+
+
         [SetUp]
         public void Init()
         {
@@ -25,6 +38,14 @@ namespace urTribeWebAPI.Test.BAL
             EventRepositoryMock<ScheduledEvent>.User = null;
             EventRepositoryMock<ScheduledEvent>.UserId = new Guid();
             EventRepositoryMock<ScheduledEvent>.AttendStatus = EventAttendantsStatus.Pending;
+
+
+            mockConnect = new Mock<IMessageConnect>();
+            ErrorResponse error = new ErrorResponse() { code = "-1", message = "unhelpful error message" };
+            string serializedError = JsonConvert.SerializeObject(error);
+            mockConnect.Setup(foo => foo.SendRequest(It.IsAny<string>(), null)).Returns(serializedError);
+            mockConnect.Setup(foo => foo.SendRequest(null, It.IsAny<string>())).Returns(serializedError);
+            mockConnect.Setup(foo => foo.CreationSleepTime()).Returns(0);
         }
 
         #region UpdateEvent
@@ -35,7 +56,7 @@ namespace urTribeWebAPI.Test.BAL
             Guid userId = Guid.NewGuid ();
             try
             {
-                using (EventFacade facade = new EventFacade())
+                using (EventFacade facade = new EventFacade(mockConnect.Object))
                 {
                     IEvent evt = new ScheduledEvent() { ID = Guid.NewGuid(), Name = "Test Update", Active = true };
                     facade.UpdateEvent(userId, evt);
@@ -62,7 +83,7 @@ namespace urTribeWebAPI.Test.BAL
 
             try
             {
-                using (EventFacade facade = new EventFacade())
+                using (EventFacade facade = new EventFacade(mockConnect.Object))
                 facade.UpdateEvent(userId, evt);
 
             }
@@ -83,7 +104,7 @@ namespace urTribeWebAPI.Test.BAL
             EventRepositoryMock<ScheduledEvent>.Evt = null;
             try
             {
-                using (EventFacade facade = new EventFacade())
+                using (EventFacade facade = new EventFacade(mockConnect.Object))
                 {
                     IEvent evt = null;
                     facade.UpdateEvent(userId, evt);
@@ -110,7 +131,7 @@ namespace urTribeWebAPI.Test.BAL
 
             try
             {
-                using (EventFacade facade = new EventFacade())
+                using (EventFacade facade = new EventFacade(mockConnect.Object))
                 {
                     IEvent evt = new ScheduledEvent() { ID = new Guid(), Name = "Test Update", Active = true };
                     facade.UpdateEvent(userId, evt);
@@ -135,7 +156,7 @@ namespace urTribeWebAPI.Test.BAL
             EventRepositoryMock<ScheduledEvent>.OwnerId = userId;
             try
             {
-                using (EventFacade facade = new EventFacade())
+                using (EventFacade facade = new EventFacade(mockConnect.Object))
                 {
                     IEvent evt = new ScheduledEvent() { ID = new Guid("99999999-9999-9999-9999-999999999999"), Name = "Test Update", Active = true };
                     facade.UpdateEvent(userId, evt);
@@ -307,7 +328,7 @@ namespace urTribeWebAPI.Test.BAL
 
             try
             {
-                using (EventFacade facade = new EventFacade())
+                using (EventFacade facade = new EventFacade(mockConnect.Object))
                 {
                     facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.All);
                 }
@@ -332,7 +353,7 @@ namespace urTribeWebAPI.Test.BAL
 
             try
             {
-                using (EventFacade facade = new EventFacade())
+                using (EventFacade facade = new EventFacade(mockConnect.Object))
                 {
                     facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Cancel);
                     Assert.Fail("An InvalidEventStatusException should have been thrown.");
@@ -358,7 +379,7 @@ namespace urTribeWebAPI.Test.BAL
 
             try
             {
-                using (EventFacade facade = new EventFacade())
+                using (EventFacade facade = new EventFacade(mockConnect.Object))
                 {
                     facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.All);
                 }
@@ -378,7 +399,7 @@ namespace urTribeWebAPI.Test.BAL
 
             try
             {
-                using (EventFacade facade = new EventFacade())
+                using (EventFacade facade = new EventFacade(mockConnect.Object))
                 {
                     facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Cancel);
                 }
@@ -401,7 +422,7 @@ namespace urTribeWebAPI.Test.BAL
 
             try
             {
-                using (EventFacade facade = new EventFacade())
+                using (EventFacade facade = new EventFacade(mockConnect.Object))
                 {
                     facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
                     Assert.Fail("An EventException should have been thrown.");
@@ -430,7 +451,7 @@ namespace urTribeWebAPI.Test.BAL
 
             try
             {
-                using (EventFacade facade = new EventFacade())
+                using (EventFacade facade = new EventFacade(mockConnect.Object))
                 {
                     facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
                     Assert.Fail("An EventException should have been thrown.");
@@ -459,7 +480,7 @@ namespace urTribeWebAPI.Test.BAL
 
             try
             {
-                using (EventFacade facade = new EventFacade())
+                using (EventFacade facade = new EventFacade(mockConnect.Object))
                 {
                     facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
                 }
@@ -484,7 +505,7 @@ namespace urTribeWebAPI.Test.BAL
 
             try
             {
-                using (EventFacade facade = new EventFacade())
+                using (EventFacade facade = new EventFacade(mockConnect.Object))
                 {
                     facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
                 }

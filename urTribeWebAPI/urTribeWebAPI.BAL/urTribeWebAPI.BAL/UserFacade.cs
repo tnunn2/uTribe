@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using urTribeWebAPI.Common;
 using urTribeWebAPI.Common.Logging;
@@ -58,6 +60,14 @@ namespace urTribeWebAPI.BAL
 
             _realTimeBroker = new RealTimeBroker_N(RTFconnection);
         }
+
+        public UserFacade(RealTimeBroker_N broker)
+        {
+            _factory = RepositoryFactory.Instance;
+            _usrrepository = _factory.Create<IUserRepository>();
+
+            _realTimeBroker = broker;
+        }
         #endregion
 
         #region Public Methods
@@ -85,14 +95,14 @@ namespace urTribeWebAPI.BAL
         //made static because errors with creating repositories
         public string registerNewUserWithRTF(IUser user)
         {
-            RealTimeBroker_N b = new RealTimeBroker_N();
+           
             user.AuthenticatedChannels = new List<string>();
-            user.UserChannel = b.CreateUserChannel(user);
+            user.UserChannel = _realTimeBroker.CreateUserChannel(user);
 
             //Wait until table is done 'creating'
-            Thread.Sleep(Messaging.Properties.Settings.Default.RTFCreationSleepTime);
+            Thread.Sleep(_realTimeBroker.CreationSleepTime());
            
-            b.AuthUser(new List<string>() { user.UserChannel }, user.Token);
+            _realTimeBroker.AuthUser(new List<string>() { user.UserChannel }, user.Token);
 
             user.AuthenticatedChannels.Add(user.UserChannel);
             return user.UserChannel;
@@ -248,7 +258,6 @@ namespace urTribeWebAPI.BAL
             if (evt.Time == null || evt.Time == string.Empty)
                 throw new EventException("Event.Time is in the incorrect format.");
 
-
             try
             {
                 IUser user = FindUser(userId);
@@ -260,14 +269,17 @@ namespace urTribeWebAPI.BAL
                 var evtRepository = Factory.Create<IEventRepository>();
                 evtRepository.Add(user, evt);
 
-                //Here Add Code to insert create a new event in the real time framework.
-                var result = RTBroker.CreateEventChannel(evt.ID.ToString(), user);
-
+                //RTF code
+                var result = RTBroker.CreateEventChannel(evt, user);
+                
                 if (result.ok())
                 {
-                    var eventList = RetrieveEventsByAttendanceStatus(userId, EventAttendantsStatus.All);
-                    var convertedEventList = RTBroker.ConvertEventsToTableNames(eventList);
-                    result = RTBroker.AuthUser(convertedEventList, user.Token);
+                    Thread.Sleep(RTBroker.CreationSleepTime());
+                    var eventList = RetrieveEventsByAttendanceStatus(user.ID, EventAttendantsStatus.All);
+                    Debug.Assert(eventList.Contains(evt));
+                    var channelsList = new List<string>() { user.UserChannel };
+                    channelsList.AddRange(eventList.Select(e => RTBroker.ConvertEventToTableName(e)));
+                    RTBroker.AuthUser(channelsList, user.Token);
                 }
 
                 return ((ScheduledEvent)evt).ID;
