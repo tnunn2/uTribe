@@ -50,6 +50,11 @@ namespace urTribeWebAPI
                 routeTemplate: "api/Users/{user}",
                 defaults: new { controller = "users", user = RouteParameter.Optional }
             );
+           config.Routes.MapHttpRoute(
+               name: "Userss2Api",
+               routeTemplate: "api/events/{eventId}/Users/{userId}/Status/{AttendStatus}",
+               defaults: new { controller = "users", AttendStatus = RouteParameter.Optional }
+           );
 
 
 

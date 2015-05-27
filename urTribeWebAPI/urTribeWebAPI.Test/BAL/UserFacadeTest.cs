@@ -43,7 +43,7 @@ namespace urTribeWebAPI.Test.BAL
             EventRepositoryMock<ScheduledEvent>.ListOfUsers = null;
             EventRepositoryMock<ScheduledEvent>.User = null;
             EventRepositoryMock<ScheduledEvent>.UserId = new Guid();
-            EventRepositoryMock<ScheduledEvent>.AttendStatus = EventAttendantsStatus.Pending;
+            EventRepositoryMock<ScheduledEvent>.AttendStatus = EventAttendantsStatus.Invited;
 
             mockConnect = new Mock<IMessageConnect>();
             ErrorResponse error = new ErrorResponse() {code = "-1", message = "unhelpful error message"};

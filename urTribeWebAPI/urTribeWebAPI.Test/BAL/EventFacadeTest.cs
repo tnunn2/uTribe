@@ -24,7 +24,7 @@ namespace urTribeWebAPI.Test.BAL
             EventRepositoryMock<ScheduledEvent>.ListOfUsers = null;
             EventRepositoryMock<ScheduledEvent>.User = null;
             EventRepositoryMock<ScheduledEvent>.UserId = new Guid();
-            EventRepositoryMock<ScheduledEvent>.AttendStatus = EventAttendantsStatus.Pending;
+            EventRepositoryMock<ScheduledEvent>.AttendStatus = EventAttendantsStatus.Invited;
         }
 
         #region UpdateEvent
@@ -403,7 +403,7 @@ namespace urTribeWebAPI.Test.BAL
             {
                 using (EventFacade facade = new EventFacade())
                 {
-                    facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
+                    facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Going);
                     Assert.Fail("An EventException should have been thrown.");
                 }
             }
@@ -432,7 +432,7 @@ namespace urTribeWebAPI.Test.BAL
             {
                 using (EventFacade facade = new EventFacade())
                 {
-                    facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
+                    facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Going);
                     Assert.Fail("An EventException should have been thrown.");
                 }
             }
@@ -461,7 +461,7 @@ namespace urTribeWebAPI.Test.BAL
             {
                 using (EventFacade facade = new EventFacade())
                 {
-                    facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
+                    facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Going);
                 }
             }
             catch (Exception)
@@ -486,7 +486,7 @@ namespace urTribeWebAPI.Test.BAL
             {
                 using (EventFacade facade = new EventFacade())
                 {
-                    facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Attending);
+                    facade.ChangeContactAttendanceStatus(userId, eventId, EventAttendantsStatus.Going);
                 }
             }
             catch (Exception ex)

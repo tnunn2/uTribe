@@ -26,7 +26,7 @@ namespace urTribeWebAPI.DAL.Repositories
         #region Public Methods
         public void Add(IUser usr, IEvent evt)
         {
-            EventRelationship rel = new EventRelationship { AttendStatus = EventAttendantsStatus.Attending};
+            EventRelationship rel = new EventRelationship { AttendStatus = EventAttendantsStatus.Going};
 
             _dbms.Cypher.Match("(inviter:User)")
                 .Where((User inviter) => inviter.ID.ToString() == usr.ID.ToString()).Create("inviter-[rel:EVENTOWNER]->(event:Event {evt})")
@@ -44,7 +44,7 @@ namespace urTribeWebAPI.DAL.Repositories
         }
         public void LinkToEvent(IUser usr, IEvent evt)
         {
-            EventRelationship rel = new EventRelationship { AttendStatus = EventAttendantsStatus.Pending};
+            EventRelationship rel = new EventRelationship { AttendStatus = EventAttendantsStatus.Invited};
 
             _dbms.Cypher
                  .Match("(user:User)", "(evtImp:Event)")
@@ -87,7 +87,7 @@ namespace urTribeWebAPI.DAL.Repositories
         {
             var query = _dbms.Cypher.Match("(user:User)-[rel]->(evt:Event)")
                          .Where((ScheduledEvent evt) => evt.ID.ToString() == eventId.ToString())
-                         .AndWhere((EventRelationship rel) => rel.AttendStatus == status || status == EventAttendantsStatus.All)
+                         .AndWhere((EventRelationship rel) => rel.AttendStatus == status || status.ToString() == EventAttendantsStatus.All.ToString())
                          .Return(user => user.As<User>())
                          .Results;
 
