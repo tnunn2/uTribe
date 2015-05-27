@@ -50,6 +50,14 @@ namespace urTribeWebAPI.BAL
 
                 _realTimeBroker = new RealTimeBroker_N ();
         }
+
+        public UserFacade(IMessageConnect RTFconnection)
+        {
+            _factory = RepositoryFactory.Instance;
+            _usrrepository = _factory.Create<IUserRepository>();
+
+            _realTimeBroker = new RealTimeBroker_N(RTFconnection);
+        }
         #endregion
 
         #region Public Methods
@@ -75,7 +83,7 @@ namespace urTribeWebAPI.BAL
 
         //Public so I can write a test for it
         //made static because errors with creating repositories
-        public static string registerNewUserWithRTF(IUser user)
+        public string registerNewUserWithRTF(IUser user)
         {
             RealTimeBroker_N b = new RealTimeBroker_N();
             user.AuthenticatedChannels = new List<string>();

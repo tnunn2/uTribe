@@ -5,7 +5,7 @@ using System.Text;
 
 namespace urTribeWebAPI.Messaging.RTFHelperClasses
 {
-    class ErrorResponse
+    public class ErrorResponse
     {
         public string code { get; set; }
         public string message { get; set; }

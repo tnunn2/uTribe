@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace urTribeWebAPI.Messaging.RTFHelperClasses
 {
-    class CreationDataResponse
+    public class CreationDataResponse
     {
         public string table { get; set; }
         public string creationDate { get; set; }
