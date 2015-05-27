@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Security.Policy;
-using Moq;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using urTribeWebAPI.BAL;
 using urTribeWebAPI.Common;
 using urTribeWebAPI.DAL.Factory;
 using urTribeWebAPI.DAL.Interfaces;
-using urTribeWebAPI.Messaging;
-using urTribeWebAPI.Messaging.RTFHelperClasses;
 using urTribeWebAPI.Test.RepositoryMocks;
 
 namespace urTribeWebAPI.Test.BAL
@@ -18,13 +12,6 @@ namespace urTribeWebAPI.Test.BAL
     [TestFixture]
     class UserFacadeTest
     {
-        private static Mock<IMessageConnect> mockConnect;
-        private static string creationURL = urTribeWebAPI.Messaging.Properties.Settings.Default.RTFCreateURL;
-        private static Expression<Func<string, bool>> isCreation = url => url.Equals(creationURL);
-        private static string authURL = urTribeWebAPI.Messaging.Properties.Settings.Default.RTFAuthURL;
-        private static Func<string, bool> isAuth = (url => url.Equals(authURL));
-
-
         [SetUp]
         public void Init()
         {
@@ -45,23 +32,6 @@ namespace urTribeWebAPI.Test.BAL
             EventRepositoryMock<ScheduledEvent>.UserId = new Guid();
             EventRepositoryMock<ScheduledEvent>.AttendStatus = EventAttendantsStatus.Pending;
 
-            mockConnect = new Mock<IMessageConnect>();
-            ErrorResponse error = new ErrorResponse() {code = "-1", message = "unhelpful error message"};
-            string serializedError = JsonConvert.SerializeObject(error);
-            mockConnect.Setup(foo => foo.SendRequest(It.IsAny<string>(), null)).Returns(serializedError);
-            mockConnect.Setup(foo => foo.SendRequest(null, It.IsAny<string>())).Returns(serializedError);
-
-
-            string cr = JsonConvert.SerializeObject(new CreationResponse()
-            {
-                data = new CreationDataResponse()
-                {
-                    table = null,
-                    creationDate = "some day",
-                    status = "Creating"
-                }
-            });
-            mockConnect.Setup(foo => foo.SendRequest(It.Is(isCreation), It.IsAny<string>())).Returns(cr);
         }
 
         #region CreateUser
@@ -70,7 +40,7 @@ namespace urTribeWebAPI.Test.BAL
         {
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     IUser user = new User();
                     facade.CreateUser(user);
@@ -92,7 +62,7 @@ namespace urTribeWebAPI.Test.BAL
         {
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     IUser user = null;
                     facade.CreateUser(user);
@@ -112,7 +82,7 @@ namespace urTribeWebAPI.Test.BAL
         {
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     IUser user = new User() { Name = "Kevin Arnold", ID =  Guid.NewGuid() };
                     facade.CreateUser(user);
@@ -132,7 +102,7 @@ namespace urTribeWebAPI.Test.BAL
         {
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     IUser user = new User() { Name = "Kevin Arnold", ID = new Guid("99999999-9999-9999-9999-999999999999") };
                     facade.CreateUser(user);
@@ -155,7 +125,7 @@ namespace urTribeWebAPI.Test.BAL
             Guid userId = new Guid();
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     IUser user = new User() { Name = "Kevin Arnold" };
                     userId = facade.CreateUser(user);
@@ -170,7 +140,7 @@ namespace urTribeWebAPI.Test.BAL
         [Test]
         public void CreateUserWithRequiredFieldReturnsUserId()
         {
-            using (UserFacade facade = new UserFacade(mockConnect.Object))
+            using (UserFacade facade = new UserFacade())
             {
                 IUser user = new User() { Name = "Kevin Arnold" };
                 Guid userId = facade.CreateUser(user);
@@ -187,7 +157,7 @@ namespace urTribeWebAPI.Test.BAL
         {
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     IUser user = null;
                     facade.UpdateUser(user);
@@ -208,7 +178,7 @@ namespace urTribeWebAPI.Test.BAL
         {
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     IUser user = new User() { Name = "Kevin Arnold", ID = new Guid() };
                     facade.UpdateUser(user);
@@ -229,7 +199,7 @@ namespace urTribeWebAPI.Test.BAL
         {
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     IUser user = new User() { Name = "Kevin Arnold", ID = new Guid("99999999-9999-9999-9999-999999999999") };
                     facade.UpdateUser(user);
@@ -251,7 +221,7 @@ namespace urTribeWebAPI.Test.BAL
             UserRepositoryMock<User>.ThrowException = true;
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     IUser user = new User() { Name = "Kevin Arnold", ID = Guid.NewGuid () };
                     facade.UpdateUser(user);
@@ -270,7 +240,7 @@ namespace urTribeWebAPI.Test.BAL
             IUser user = null;
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     user = new User() { Name = "Kevin Arnold", ID = Guid.NewGuid() };
                     facade.UpdateUser(user);
@@ -297,7 +267,7 @@ namespace urTribeWebAPI.Test.BAL
 
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     user = facade.FindUser(usrId);
                 }
@@ -320,7 +290,7 @@ namespace urTribeWebAPI.Test.BAL
 
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     user = facade.FindUser(usrId);
                 }
@@ -347,7 +317,7 @@ namespace urTribeWebAPI.Test.BAL
 
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     user = facade.FindUser(usrId);
                 }
@@ -371,7 +341,7 @@ namespace urTribeWebAPI.Test.BAL
 
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     user = facade.FindUser(usrId);
                 }
@@ -391,7 +361,7 @@ namespace urTribeWebAPI.Test.BAL
 
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     user = facade.FindUser(usrId);
                 }
@@ -410,7 +380,7 @@ namespace urTribeWebAPI.Test.BAL
         {
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     Guid userId = new Guid();
                     Guid friendId = Guid.NewGuid();
@@ -433,7 +403,7 @@ namespace urTribeWebAPI.Test.BAL
         {
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     Guid userId = new Guid("99999999-9999-9999-9999-999999999999");
                     Guid friendId = Guid.NewGuid();
@@ -456,7 +426,7 @@ namespace urTribeWebAPI.Test.BAL
         {
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     Guid userId = Guid.NewGuid();
                     Guid friendId = new Guid();
@@ -479,7 +449,7 @@ namespace urTribeWebAPI.Test.BAL
         {
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     Guid userId = Guid.NewGuid();
                     Guid friendId = new Guid("99999999-9999-9999-9999-999999999999");
@@ -502,7 +472,7 @@ namespace urTribeWebAPI.Test.BAL
         {
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     Guid userId = Guid.NewGuid();
                     Guid friendId = Guid.NewGuid();
@@ -523,7 +493,7 @@ namespace urTribeWebAPI.Test.BAL
             UserRepositoryMock<User>.ThrowException = true;
             try
             {
-                using (UserFacade facade = new UserFacade(mockConnect.Object))
+                using (UserFacade facade = new UserFacade())
                 {
                     Guid userId = Guid.NewGuid();
                     Guid friendId = Guid.NewGuid();

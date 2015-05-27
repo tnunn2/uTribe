@@ -7,7 +7,6 @@ using System.Web.Configuration;
 using System.Web.UI.WebControls;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Core;
-using NUnit.Framework;
 using urTribeWebAPI.BAL;
 using urTribeWebAPI.Common;
 using urTribeWebAPI.Messaging;
@@ -22,30 +21,6 @@ namespace urTribeWebAPI.Test.Messaging
     public class RealTimeBrokerTests
         
     {
-
-        [SetUp]
-        public void Init()
-        {
-            IUser creator = new User()
-            {
-                ID = new Guid("aa918dde-94e0-4323-a281-c8274d67eaca"),
-                AuthenticatedChannels = new List<string>(),
-                Name = "Catherine C"
-            };
-            IUser invitee = new User()
-            {
-                Name = "Benjamin D",
-                AuthenticatedChannels = new List<string>(),
-                ID = new Guid("b40354dc-5734-432e-b6c5-24adf8890312")
-            };
-            IUser user3 = new User()
-            {
-                ID = new Guid("bc7b0d2f-6e80-430e-b096-6cb8fa06c2b2"),
-                AuthenticatedChannels = new List<string>(),
-                Name = "User 3"
-            };
-        }
-
 
         [TestMethod]
         public void TestConfig()
@@ -127,7 +102,7 @@ namespace urTribeWebAPI.Test.Messaging
 
             Debug.Print(b.JustCreateChannel(eventTable));
         }
-        
+        */
         [TestMethod]
         public void TestNewUserRegistration()
         {
@@ -145,7 +120,7 @@ namespace urTribeWebAPI.Test.Messaging
                 Name = "Benjamin D",
                 AuthenticatedChannels = new List<string>(),
                 ID = new Guid("b40354dc-5734-432e-b6c5-24adf8890312")
-            };
+            };*/
             IUser user3 = new User()
             {
                 ID = new Guid("bc7b0d2f-6e80-430e-b096-6cb8fa06c2b2"),
@@ -154,9 +129,9 @@ namespace urTribeWebAPI.Test.Messaging
             };
             string table = UserFacade.registerNewUserWithRTF(user3);
             Assert.AreEqual(table, "user"+user3.ID);
-        } */
+        }
 
-        /*
+        
         [TestMethod]
         public void testPutInvite()
         {
@@ -186,7 +161,9 @@ namespace urTribeWebAPI.Test.Messaging
             Assert.IsTrue(b.AuthUser(tables, invitee.Token).ok());
             b.SendInvite(invitee, eventTable, creator.Name);
 
-        } */
+
+
+        }
 
         /*
 [TestMethod]

@@ -122,7 +122,6 @@ namespace urTribeWebAPI.Messaging
                 {
                     { PrimaryKey, eventTableName },
                     { SecondaryKey, GetTimestamp(DateTime.Now)},
-                    { "Notification Type", "Event Invite"},
                     {"Invited By", invitedBy}
                 }
             };
