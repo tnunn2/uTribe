@@ -77,20 +77,6 @@ namespace urTribeWebAPI.Controllers
                 APIResponse response = new APIResponse(APIResponse.ReponseStatus.error, new { Error = ex.Message });
                 return response;
             }
-        }
-
-        public APIResponse Put(int i)
-        {
-            try
-            {
-                APIResponse response = new APIResponse(APIResponse.ReponseStatus.success, new {param = 1});
-                return response;
-            }
-            catch (Exception e)
-            {
-                APIResponse response = new APIResponse(APIResponse.ReponseStatus.error, new {error = e.Message});
-                return response;
-            }
-        }
+        }      
     }
 }
