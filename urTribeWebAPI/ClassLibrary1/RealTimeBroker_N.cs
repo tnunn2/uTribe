@@ -123,7 +123,7 @@ namespace urTribeWebAPI.Messaging
         //Does not authenticate or wait. Leave to facade.
         public string CreateUserChannel(IUser user)
         {
-            string tableName = UserToTableName(user);
+            string tableName = ConvertUserToTableName(user);
             string data = RTStringBuilder.MakeCreateString(tableName);
             string createUrl = Properties.Settings.Default.RTFCreateURL;
             string response = MessageConnect.SendRequest(createUrl, data);
@@ -175,7 +175,7 @@ namespace urTribeWebAPI.Messaging
             return MessageConnect.CreationSleepTime();
         }
         
-        private string UserToTableName(IUser user)
+        public string ConvertUserToTableName(IUser user)
         {
             return "user" + user.ID;
         }
