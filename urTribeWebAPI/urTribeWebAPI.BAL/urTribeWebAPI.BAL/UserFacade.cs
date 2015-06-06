@@ -97,7 +97,7 @@ namespace urTribeWebAPI.BAL
         {
            
             user.UserChannel = _realTimeBroker.CreateUserChannel(user);
-
+            if (user.UserChannel == null) throw new Exception("user channel was null");
             //Wait until table is done 'creating'
             //Thread.Sleep(_realTimeBroker.CreationSleepTime());
 
@@ -272,6 +272,7 @@ namespace urTribeWebAPI.BAL
                 IUser user = FindUser(userId);
                 if (user == null)
                     throw new UserException("User does not exist");
+                if (user.UserChannel == null) throw new Exception("User channel must not be null");
 
                 ((ScheduledEvent)evt).ID = Guid.NewGuid();
 
