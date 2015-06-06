@@ -58,7 +58,34 @@ namespace urTribeWebAPI.Test.Messaging
             };
 
         }
-
+        [TestMethod]
+        public void TestUserChannel()
+        {
+            _creator = new User()
+            {
+                ID = new Guid("aa918dde-94e0-4323-a281-c8274d67eaca"),
+                UserChannel = "useraa918dde-94e0-4323-a281-c8274d67eaca",
+                Name = "Catherine C"
+            };
+            invitee = new User()
+            {
+                Name = "Benjamin D",
+                //AuthenticatedChannels = new List<string>(),
+                ID = new Guid("b40354dc-5734-432e-b6c5-24adf8890312")
+            };
+            user3 = new User()
+            {
+                ID = new Guid("bc7b0d2f-6e80-430e-b096-6cb8fa06c2b2"),
+                //AuthenticatedChannels = new List<string>(),
+                Name = "User 3"
+            };
+            Assert.NotNull(_creator.UserChannel);
+            Assert.NotNull(invitee.UserChannel);
+            Assert.AreEqual(invitee.UserChannel, "user" + invitee.ID);
+            user3.UserChannel = "bogus channel";
+            Assert.NotNull(user3.UserChannel);
+            Assert.AreNotEqual(user3.UserChannel, "user" + user3.ID);
+        }
 
         [TestMethod]
         public void TestConfig()

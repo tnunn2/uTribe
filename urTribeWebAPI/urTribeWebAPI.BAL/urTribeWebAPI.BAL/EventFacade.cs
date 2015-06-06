@@ -114,10 +114,10 @@ namespace urTribeWebAPI.BAL
                 {
 
                     var owner = userFacade.FindUser(ownerId);
-                    if (owner.UserChannel == null)
+                    /*if (owner.UserChannel == null)
                     {
                         owner.UserChannel = _realTimeBroker.ConvertUserToTableName(owner);
-                    }
+                    }*/
 
                     foreach (var contactId in contactList)
                     {
@@ -127,10 +127,10 @@ namespace urTribeWebAPI.BAL
                         IUser contact = userFacade.FindUser(contactId);
                         if (contact != null)
                         {
-                            if (contact.UserChannel == null)
+                            /*if (contact.UserChannel == null)
                             {
                                 contact.UserChannel = _realTimeBroker.ConvertUserToTableName(contact);
-                            }
+                            } */
                             EvtRepository.LinkToEvent(contact, evt);
 
                             //Here Add code for Real Time Framework

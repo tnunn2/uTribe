@@ -272,12 +272,12 @@ namespace urTribeWebAPI.BAL
                 IUser user = FindUser(userId);
                 if (user == null)
                     throw new UserException("User does not exist");
-                if (user.UserChannel == null)
+                /*if (user.UserChannel == null)
                 {
                     //This line would need to change if we abandoned the 
                     //Real Time Framework
                     user.UserChannel = _realTimeBroker.ConvertUserToTableName(user);
-                }
+                } */
                 ((ScheduledEvent)evt).ID = Guid.NewGuid();
 
                 var evtRepository = Factory.Create<IEventRepository>();

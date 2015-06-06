@@ -8,6 +8,7 @@ namespace urTribeWebAPI.Common
     {
 
         #region Member Variables
+        private string invitesChannel;
         #endregion
 
         #region Properties
@@ -38,11 +39,15 @@ namespace urTribeWebAPI.Common
         //Invites and Contact Requests go here
         public string UserChannel 
         { 
-            get; 
-            set; 
+            get {
+            if (invitesChannel == null) return "user"+ID;
+            else return invitesChannel;
+            }
+            set { invitesChannel = value; } 
         }
 
         //We have to keep a list of the channels they're authenticated on, because RTF.
+        //Deprecated. From now on will get events instead.
         public List<string> AuthenticatedChannels 
         { 
             get; 
