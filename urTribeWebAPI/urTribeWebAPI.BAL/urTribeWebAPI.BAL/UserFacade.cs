@@ -96,16 +96,25 @@ namespace urTribeWebAPI.BAL
         public string registerNewUserWithRTF(IUser user)
         {
            
-            user.AuthenticatedChannels = new List<string>();
             user.UserChannel = _realTimeBroker.CreateUserChannel(user);
 
             //Wait until table is done 'creating'
-            Thread.Sleep(_realTimeBroker.CreationSleepTime());
-           
-            _realTimeBroker.AuthUser(new List<string>() { user.UserChannel }, user.Token);
+            //Thread.Sleep(_realTimeBroker.CreationSleepTime());
 
-            user.AuthenticatedChannels.Add(user.UserChannel);
-            return user.UserChannel;
+            if (_realTimeBroker.AuthUser(new List<string>() { user.UserChannel }, user.Token).ok())
+            {
+                return user.UserChannel;
+            }
+            else
+            {
+                Thread.Sleep(_realTimeBroker.CreationSleepTime());
+                if (_realTimeBroker.AuthUser(new List<string>() { user.UserChannel }, user.Token).ok())
+                {
+                    return user.UserChannel;
+                }
+                throw new Exception("authentication failed");
+            }
+            
         }
 
         public void UpdateUser (IUser user)
@@ -262,7 +271,7 @@ namespace urTribeWebAPI.BAL
             {
                 IUser user = FindUser(userId);
                 if (user == null)
-                    throw new UserException("User doesnot exist");
+                    throw new UserException("User does not exist");
 
                 ((ScheduledEvent)evt).ID = Guid.NewGuid();
 
@@ -274,11 +283,12 @@ namespace urTribeWebAPI.BAL
                 Debug.Assert(eventList.Contains(evt));
                 var channelsList = new List<string>() { user.UserChannel };
                 channelsList.AddRange(eventList.Select(e => RTBroker.ConvertEventToTableName(e)));
-               
-                RegisterEventAtRTF(user, channelsList, evt);
-                
 
-                return ((ScheduledEvent)evt).ID;
+                if (RegisterEventAtRTF(user, channelsList, evt))
+                {
+                    return ((ScheduledEvent)evt).ID;
+                }
+                else throw new Exception("RTF Creation failed.");
             }
             catch (Exception ex)
             {
@@ -293,9 +303,16 @@ namespace urTribeWebAPI.BAL
 
             if (result.ok())
             {
-                Thread.Sleep(RTBroker.CreationSleepTime());
-                RTBroker.AuthUser(channelsList, user.Token);
-                return true;
+                //Thread.Sleep(RTBroker.CreationSleepTime());
+                if (RTBroker.AuthUser(channelsList, user.Token).ok())
+                {
+                    return true;
+                }
+                else
+                {
+                    Thread.Sleep(RTBroker.CreationSleepTime());
+                    return RTBroker.AuthUser(channelsList, user.Token).ok();
+                }
             }
             else return false;
 

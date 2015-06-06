@@ -84,6 +84,7 @@ namespace urTribeWebAPI.Messaging
 
                 var AuthUrl = Properties.Settings.Default.RTFAuthURL;
                 string result = MessageConnect.SendRequest(AuthUrl, data);
+                Debug.Print(result);
                 BooleanResponse response = JsonConvert.DeserializeObject<BooleanResponse>(result);
                 if (response.data) return BrokerResult.newSuccess();
                 throw new Exception("RTF returned error " + response.error.message);
