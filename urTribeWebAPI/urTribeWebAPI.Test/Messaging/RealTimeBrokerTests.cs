@@ -124,7 +124,7 @@ namespace urTribeWebAPI.Test.Messaging
             Assert.AreEqual(data, data2);
         }
         
-        
+        /*
         [TestMethod]
         public void TestActualCreation()
         {
@@ -149,7 +149,7 @@ namespace urTribeWebAPI.Test.Messaging
                 "event" + event1.ID
             };
             Assert.IsTrue(f.RegisterEventAtRTF(creator, tables, event1));
-        } 
+        } */
         /*
         [TestMethod]
         public void TestNewUserRegistration()
